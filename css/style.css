@@ -5519,7 +5519,7 @@ h3 .listing-price i {
 }
 
 @media (min-width: 1367px) {
-	.add-sub-rating { width: 25%; }
+	.add-sub-rating { width: 35%; }
 }
 
 @media (max-width: 768px) {
