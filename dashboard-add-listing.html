@@ -172,7 +172,7 @@
 						<div class="row with-forms">
 							<div class="col-md-12">
 								<h5>Title <i class="tip" data-tip-content="Name of your Recipe"></i></h5>
-								<input class="search-field" type="text" value=""/>
+								<input class="search-field" type="text" id="recipe-title" value=""/>
 							</div>
 						</div>
 
@@ -182,18 +182,18 @@
 							<!-- Status -->
 							<div class="col-md-6">
 								<h5>Category</h5>
-								<select class="chosen-select-no-single" >
+								<select id="category" class="chosen-select-no-single" >
 									<option label="blank">Select Category</option>	
-									<option>African</option>
-									<option>Asian</option>
-									<option>Spanish</option>
+									<option value="African">African</option>
+									<option value="Asian">Asian</option>
+									<option value="Spanish">Spanish</option>
 								</select>
 							</div>
 
 							<!-- Type -->
 							<div class="col-md-6">
 								<h5>Tags/Keywords <i class="tip" data-tip-content="Maximum of 15 keywords related with your recipe"></i></h5>
-								<input type="text" placeholder="Keywords should be separated by commas">
+								<input type="text" id="keywords" placeholder="Keywords should be separated by commas">
 							</div>
 
 						</div>
@@ -217,13 +217,13 @@
 								<!-- Address -->
 								<div class="col-md-6">
 									<h5>Primary Location</h5>
-									<input type="text" placeholder="Laurel, MD 20708">
+									<input id="location" type="text" placeholder="Laurel, MD 20708">
 								</div>
 
 								<!-- City -->
 								<div class="col-md-6">
 									<h5>Radius</h5>
-									<input type="text" placeholder="50miles">
+									<input type="text" id="radius" placeholder="50miles">
 								</div>
 
 							</div>
@@ -244,7 +244,7 @@
 
 						<!-- Dropzone -->
 						<div class="submit-section">
-							<form action="/file-upload" class="dropzone" ></form>
+							<form action="/file-upload" id="dropzone" class="dropzone" ></form>
 						</div>
 
 					</div>
@@ -271,19 +271,19 @@
 							<!-- Phone -->
 							<div class="col-md-4">
 								<h5>Phone <span>(optional)</span></h5>
-								<input type="text">
+								<input id="phone-optional" type="text">
 							</div>
 
 							<!-- Website -->
 							<div class="col-md-4">
 								<h5>Website <span>(optional)</span></h5>
-								<input type="text">
+								<input id="website-optional" type="text">
 							</div>
 
 							<!-- Email Address -->
 							<div class="col-md-4">
 								<h5>E-mail <span>(optional)</span></h5>
-								<input type="text">
+								<input id="email-optional" type="email">
 							</div>
 
 						</div>
@@ -1030,7 +1030,7 @@
 					<!-- Section / End -->
 
 
-					<a href="#" class="button preview">Preview <i class="fa fa-arrow-circle-right"></i></a>
+					<a href="#" id="post-recipe" class="button preview">Post Recipe <i class="fa fa-arrow-circle-right"></i></a>
 
 				</div>
 			</div>
@@ -1067,7 +1067,7 @@
 <script type="text/javascript" src="scripts/counterup.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
 <script type="text/javascript" src="scripts/tooltips.min.js"></script>
-<script type="text/javascript" src="scripts/custom.js"></script>
+<script type="text/javascript" src="scripts/custom/index.js"></script>
 
 
 <!-- Opening hours added via JS (this is only for demo purpose) -->

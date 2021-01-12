@@ -17,6 +17,7 @@ if (passwordToggle) {
 }
 
 const baseURL = 'https://thepotters-api.herokuapp.com/api/v1';
+// const axios = require('axios');
 
 const handleLogin = (e) => {
   e.preventDefault();
@@ -127,10 +128,11 @@ const handleSignup = (e, user) => {
   }
   axios.post(`${baseURL}/signup/${user}`, data).then((res) => {
     console.log(res);
-    sendOTP(email, user);
+    // sendOTP(email, user);
     // verifyOTP(e, user);
     button.innerHTML = 'Register';
     button.removeAttribute('disabled');
+    location.href = '/login.html';
   }).catch((err) => {
     button.removeAttribute('disabled');
     if (err.response && err.response.data) {
@@ -148,6 +150,40 @@ const handleUserSignup = (e, person) => {
 }
 const handleChefSignup = (e, person) => {
   handleSignup(e, person)
+}
+
+// ADD NEW RECIPE
+const recipeBtn = document.querySelector('#post-recipe');
+if(recipeBtn) {
+  recipeBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    console.log('recipe button clicked!');
+    const name = document.querySelector('#recipe-title').value;
+    const category = document.querySelector('#category').value;
+    const keywords = document.querySelector('#keywords').value;
+    const tags = keywords.split(',');
+    const location = document.querySelector('#location').value;
+    const radius = document.querySelector('#radius').value;
+    const dropzone = document.querySelector('#dropzone').value;
+    const overview = document.querySelector('#summary').value;
+    const phoneOptional = document.querySelector('#phone-optional').value;
+    const websiteOptional = document.querySelector('#website-optional').value;
+    const emailOptional = document.querySelector('#email-optional');
+
+    const data = {
+      name,
+      category,
+      tags,
+      location,
+      radius,
+      dropzone,
+      overview,
+      phoneOptional,
+      websiteOptional,
+      emailOptional
+    }
+    console.log(data);
+  })
 }
 
 
