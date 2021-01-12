@@ -70,9 +70,9 @@ const validateSignupForm = () => {
   });
 
   // Format phone number as you type
-  phone.addEventListener('input', (e) => {
-    phone.value = new libphonenumber.AsYouType('US').input(e.target.value);
-  });
+  // phone.addEventListener('input', (e) => {
+  //   phone.value = new libphonenumber.AsYouType('US').input(e.target.value);
+  // });
 };
 
 const validateOTPForm = () => {
@@ -98,7 +98,7 @@ const validateOTPForm = () => {
 const { pathname } = location;
 if (pathname === '/login.html') {
   validateLoginForm();
-} else if (pathname === '/signup.html') {
+} else if (pathname === '/signup.html' || pathname === '/become-a-chef.html') {
   validateSignupForm();
-  validateOTPForm();
+  // validateOTPForm();
 }
