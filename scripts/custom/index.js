@@ -61,13 +61,13 @@ const sendOTP = (email, user) => {
   const data = {
     email
   };
-  // $.magnificPopup.open({
-  //   items: {
-  //     src: '#otp-dialog', // can be a HTML string, jQuery object, or CSS selector
-  //     type: 'inline'
-  //   }
-  // });
-  // document.querySelector('#otp').focus();
+  $.magnificPopup.open({
+    items: {
+      src: '#otp-dialog', // can be a HTML string, jQuery object, or CSS selector
+      type: 'inline'
+    }
+  });
+  document.querySelector('#otp').focus();
   axios.post(`${baseURL}/${user}/verify-number/request`, data).then((res) => {
     console.log(res);
   }).catch((err) => {
@@ -128,8 +128,8 @@ const handleSignup = (e, user) => {
   }
   axios.post(`${baseURL}/signup/${user}`, data).then((res) => {
     console.log(res);
-    // sendOTP(email, user);
-    // verifyOTP(e, user);
+    sendOTP(email, user);
+    verifyOTP(e, user);
     button.innerHTML = 'Register';
     button.removeAttribute('disabled');
     location.href = '/login.html';
@@ -148,8 +148,53 @@ const handleSignup = (e, user) => {
 const handleUserSignup = (e, person) => {
   handleSignup(e, person)
 }
-const handleChefSignup = (e, person) => {
-  handleSignup(e, person)
+const handleChefSignup = (e, user) => {
+  // handleSignup(e, person)
+  e.preventDefault();
+  let name = document.querySelector('#name').value;
+  let email = document.querySelector('#email2').value;
+  let username = document.querySelector('#username2').value;
+  let password = document.querySelector('#password1').value;
+  let phoneNumber = document.querySelector('#number').value;
+  let button = document.querySelector('#signup-btn');
+  let form = document.querySelector('.sign-up-form');
+  let message = document.querySelector('.success-message');
+
+  button.innerHTML = '<div class="loader"></div>';
+  button.setAttribute('disabled', true);
+
+  const data = {
+    fullname: name,
+    username,
+    email,
+    password,
+    phoneNumber
+    // phoneNumber: new libphonenumber.parsePhoneNumber(phone).number
+  }
+  axios.post(`${baseURL}/signup/${user}`, data).then((res) => {
+    console.log(res);
+    // sendOTP(email, user);
+    // verifyOTP(e, user);
+    // button.innerHTML = 'Register';
+    // button.removeAttribute('disabled');
+    // location.href = '/login.html';
+    form.classList.add('display-none');
+    message.classList.remove('display-none');
+    name = '';
+    email = '';
+    username = '';
+    phoneNumber = '';
+    
+  }).catch((err) => {
+    button.removeAttribute('disabled');
+    if (err.response && err.response.data) {
+      toastr.error(err.response.data.error.message);
+    } else {
+      toastr.error('Something went wrong, please try again');
+    }
+    console.log(err.response);
+    button.innerHTML = 'Register';
+  });
 }
 
 // ADD NEW RECIPE
@@ -232,4 +277,12 @@ if(recipeBtn) {
         button.setAttribute('disabled', true);
       }
     }) 
+  }
+
+  const mondaySlot = document.querySelector('#addMondaySlot');
+  if (mondaySlot) {
+    mondaySlot.addEventListener('click', (e) => {
+      e.preventDefault();
+      console.log('clicked');
+    })
   }

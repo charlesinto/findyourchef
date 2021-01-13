@@ -14,58 +14,62 @@
 
 <body>
     <div class="container">
-        <div class="sign-up-form sign-in-form">
-            <h2>Create account</h2>
-            <form class="signup" onsubmit="handleChefSignup(event, 'chef')">
+      <div class="sign-up-form sign-in-form">
+          <h2>Create account</h2>
+          <form class="signup" onsubmit="handleChefSignup(event, 'chef')">
 
-                <p class="form-row form-row-wide">
-                    <label for="name">Full Name:
-            <i class="im im-icon-Profile"></i>
-            <input type="text" class="input-text" name="name" id="name" value="" />
-          </label>
-                </p>
+              <p class="form-row form-row-wide">
+                  <label for="name">Full Name:
+          <i class="im im-icon-Profile"></i>
+          <input type="text" class="input-text" name="name" id="name" value="" />
+        </label>
+              </p>
 
-                <p class="form-row form-row-wide">
-                    <label for="username2">Username:
-            <i class="im im-icon-Male"></i>
-            <input type="text" class="input-text" name="username" id="username2" value="" />
-          </label>
-                </p>
+              <p class="form-row form-row-wide">
+                  <label for="username2">Username:
+          <i class="im im-icon-Male"></i>
+          <input type="text" class="input-text" name="username" id="username2" value="" />
+        </label>
+              </p>
 
-                <p class="form-row form-row-wide">
-                    <label for="email2">Email Address:
-            <i class="im im-icon-Mail"></i>
-            <input type="text" class="input-text" name="email" id="email2" value="" />
-          </label>
-                </p>
+              <p class="form-row form-row-wide">
+                  <label for="email2">Email Address:
+          <i class="im im-icon-Mail"></i>
+          <input type="text" class="input-text" name="email" id="email2" value="" />
+        </label>
+              </p>
 
-                <p class="form-row form-row-wide">
-                    <label for="password1">Password:
-            <i class="im im-icon-Lock-2"></i>
-            <input class="input-text" type="password" name="password" id="password1" />
-            <button class="toggle-password" type="button" title="View password">
-              <i class="fa fa-eye"></i>
-            </button>
-          </label>
-                </p>
+              <p class="form-row form-row-wide">
+                  <label for="password1">Password:
+          <i class="im im-icon-Lock-2"></i>
+          <input class="input-text" type="password" name="password" id="password1" />
+          <button class="toggle-password" type="button" title="View password">
+            <i class="fa fa-eye"></i>
+          </button>
+        </label>
+              </p>
 
-                <p class="form-row form-row-wide">
-                    <label for="number">Phone Number:
-            <i class="im im-icon-Phone"></i>
-            <input class="input-text" type="tel" name="phone" id="number" />
-          </label>
-                    <div class="lost_password">
-                        Already have an account?
-                        <a href="login.html">Login</a>
-                    </div>
-                </p>
+              <p class="form-row form-row-wide">
+                  <label for="number">Phone Number:
+          <i class="im im-icon-Phone"></i>
+          <input class="input-text" type="tel" name="phone" id="number" />
+        </label>
+                  <div class="lost_password">
+                      Already have an account?
+                      <a href="login.html">Login</a>
+                  </div>
+              </p>
 
-                <button id="signup-btn" type="submit" class="button border fw margin-top-10">
-          Register
-        </button>
+              <button id="signup-btn" type="submit" class="button border fw margin-top-10">
+        Register
+      </button>
 
-            </form>
-        </div>
+          </form>
+      </div>
+      <div class="success-message display-none text-center">
+        <h3>Registration successful</h3>
+        <p>Please check your email, a verification link has been sent to your email.</p>
+      </div>
         <!-- <div id="otp-dialog" class="zoom-anim-dialog mfp-hide">
       <div class="small-dialog-header">
         <h3>Verify OTP</h3>

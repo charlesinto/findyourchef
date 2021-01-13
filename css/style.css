@@ -18315,6 +18315,25 @@ body .category-box-btn:hover {
 
 	#style-switcher { display: none; }
 
+/* SUCCESS MESSAGE ON CHEF SIGNUP PAGE */
+	.display-none {
+		display: none;
+	}
+	.success-message {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 50%;
+		border: 1px solid silver;
+		border-radius: 10px;
+		padding: 20px;
+		box-shadow: -1px 1px 36px 0px rgba(192,192,192,0.74);
+	-webkit-box-shadow: -1px 1px 36px 0px rgba(192,192,192,0.74);
+	-moz-box-shadow: -1px 1px 36px 0px rgba(192,192,192,0.74);
+	}
+
+/* PASSBASE BUTTON STYLE */
 	.passbase-container {
 		position: relative;
 	}
