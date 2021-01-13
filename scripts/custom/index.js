@@ -168,7 +168,7 @@ if(recipeBtn) {
     const overview = document.querySelector('#summary').value;
     const phoneOptional = document.querySelector('#phone-optional').value;
     const websiteOptional = document.querySelector('#website-optional').value;
-    const emailOptional = document.querySelector('#email-optional');
+    const emailOptional = document.querySelector('#email-optional').value;
 
     const data = {
       name,
@@ -183,45 +183,53 @@ if(recipeBtn) {
       emailOptional
     }
     console.log(data);
+    const token = localStorage.getItem('fyc-token');
+    console.log(token);
   })
 }
 
-
-/*(function() {
   const element = document.getElementById("passbase-button")
-  const apiKey = "LzvZi2zh1EZ0gYWhkOjW6PLYbEQPvtE7thucHOBxkdX82YEcT3aV9uDUqzhmT7oM"
-  const button = document.querySelector('#signup-btn');
-  const email = document.querySelector('#email2').value;
-  
-  Passbase.renderButton(element, apiKey, {
-    onFinish: (identityAccessKey) => {
-      const data = {
-        email,
-        key: String(identityAccessKey)
+  if(element) {
+    const apiKey = "LzvZi2zh1EZ0gYWhkOjW6PLYbEQPvtE7thucHOBxkdX82YEcT3aV9uDUqzhmT7oM"
+    // const button = document.querySelector('#signup-btn');
+    const email = localStorage.getItem('fyc-email');
+    const token = localStorage.getItem('fyc-token');
+    
+    Passbase.renderButton(element, apiKey, {
+      onFinish: (identityAccessKey) => {
+        const data = {
+          email,
+          key: identityAccessKey,
+        }
+        console.log("identityAccessKey is => ", identityAccessKey, typeof(identityAccessKey));
+        axios.post(`${baseURL}/chef/verify-key`, data, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+        }).then((res) => {
+          // button.innerHTML = 'Verify';
+          button.removeAttribute('disabled');
+          // toastr.success('OTP verification successful');
+          // location.href = '/login.html';
+          console.log(res);
+        }).catch((err) => {
+          // button.innerHTML = 'Verify';
+          // button.removeAttribute('disabled');
+          // if (err.response && err.response.data) {
+          //   toastr.error(err.response.data.error.message);
+          // } else {
+          //   toastr.error('Something went wrong, please try again');
+          // }
+        });
+      },
+      onError: (errorCode) => {
+        console.log("an error occured => ", errorCode);
+      },
+      onStart: () => {
+        console.log("Verification Starting...");
+        console.log(axios);
+
+        button.setAttribute('disabled', true);
       }
-      console.log("identityAccessKey is => ", identityAccessKey, typeof(identityAccessKey));
-      axios.post(`${baseURL}/chef/verify-key`, data).then((res) => {
-        // button.innerHTML = 'Verify';
-        button.removeAttribute('disabled');
-        // toastr.success('OTP verification successful');
-        // location.href = '/login.html';
-        console.log(res);
-      }).catch((err) => {
-        // button.innerHTML = 'Verify';
-        // button.removeAttribute('disabled');
-        // if (err.response && err.response.data) {
-        //   toastr.error(err.response.data.error.message);
-        // } else {
-        //   toastr.error('Something went wrong, please try again');
-        // }
-      });
-    },
-    onError: (errorCode) => {
-      console.log("an error occured => ", errorCode);
-    },
-    onStart: () => {
-      console.log("Verification Starting...");
-      button.setAttribute('disabled', true);
-    }
-  }) 
-})();*/
+    }) 
+  }
