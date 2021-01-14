@@ -214,22 +214,137 @@ if(recipeBtn) {
     const phoneOptional = document.querySelector('#phone-optional').value;
     const websiteOptional = document.querySelector('#website-optional').value;
     const emailOptional = document.querySelector('#email-optional').value;
+    const coords = "39.7993942,-78.9658362";
+    const perimeter = ["1.02433,0.84950", "2.4923,1.490493"];
+    const price = "40";
+    const availability = {
+      "monday": [
+        {
+            "startHours": 1,
+            "startMinutes": 30,
+            "endHours": 2,
+            "endMinutes": 30
+        },
+        {
+            "startHours": 12,
+            "startMinutes": 25,
+            "endHours": 16,
+            "endMinutes": 50
+        }
+    ],
+    "tuesday": [
+        {
+            "startHours": 1,
+            "startMinutes": 30,
+            "endHours": 2,
+            "endMinutes": 30
+        },
+        {
+            "startHours": 12,
+            "startMinutes": 25,
+            "endHours": 16,
+            "endMinutes": 50
+        }
+    ],
+    "wednesday": [
+        {
+            "startHours": 1,
+            "startMinutes": 30,
+            "endHours": 2,
+            "endMinutes": 30
+        },
+        {
+            "startHours": 12,
+            "startMinutes": 25,
+            "endHours": 16,
+            "endMinutes": 50
+        }
+    ],
+    "thursday": [
+        {
+            "startHours": 1,
+            "startMinutes": 30,
+            "endHours": 2,
+            "endMinutes": 30
+        },
+        {
+            "startHours": 12,
+            "startMinutes": 25,
+            "endHours": 16,
+            "endMinutes": 50
+        }
+    ],
+    "friday": [
+        {
+            "startHours": 1,
+            "startMinutes": 30,
+            "endHours": 2,
+            "endMinutes": 30
+        },
+        {
+            "startHours": 12,
+            "startMinutes": 25,
+            "endHours": 16,
+            "endMinutes": 50
+        }
+    ],
+    "saturday": [
+        {
+            "startHours": 1,
+            "startMinutes": 30,
+            "endHours": 2,
+            "endMinutes": 30
+        },
+        {
+            "startHours": 12,
+            "startMinutes": 25,
+            "endHours": 16,
+            "endMinutes": 50
+        }
+    ],
+    "sunday": [
+        {
+            "startHours": 1,
+            "startMinutes": 30,
+            "endHours": 2,
+            "endMinutes": 30
+        },
+        {
+            "startHours": 12,
+            "startMinutes": 25,
+            "endHours": 16,
+            "endMinutes": 50
+        }
+    ]
+    };
 
     const data = {
       name,
-      category,
-      tags,
       location,
-      radius,
-      dropzone,
+      price,
+      coords,
       overview,
-      phoneOptional,
-      websiteOptional,
-      emailOptional
+      category,
+      perimeter,
+      tags,
+      availability
     }
     console.log(data);
     const token = localStorage.getItem('fyc-token');
     console.log(token);
+    axios.post(`${baseURL}/chef/recipe`, data, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    }).then((res) => {
+      console.log(res);
+    }).catch((err) => {
+      if (err.response && err.response.data) {
+        toastr.error(err.response.data.error.message);
+      } else {
+        toastr.error('Something went wrong, please try again');
+      }
+    });
   })
 }
 
@@ -260,11 +375,11 @@ if(recipeBtn) {
         }).catch((err) => {
           // button.innerHTML = 'Verify';
           // button.removeAttribute('disabled');
-          // if (err.response && err.response.data) {
-          //   toastr.error(err.response.data.error.message);
-          // } else {
-          //   toastr.error('Something went wrong, please try again');
-          // }
+          if (err.response && err.response.data) {
+            toastr.error(err.response.data.error.message);
+          } else {
+            toastr.error('Something went wrong, please try again');
+          }
         });
       },
       onError: (errorCode) => {
@@ -279,10 +394,23 @@ if(recipeBtn) {
     }) 
   }
 
-  const mondaySlot = document.querySelector('#addMondaySlot');
-  if (mondaySlot) {
-    mondaySlot.addEventListener('click', (e) => {
-      e.preventDefault();
-      console.log('clicked');
-    })
-  }
+  // const mondaySlot = document.querySelector('#addMondaySlot');
+  // if (mondaySlot) {
+  //   mondaySlot.addEventListener('click', (e) => {
+  //     e.preventDefault();
+  //     console.log('clicked');
+  //   })
+  // }
+
+  if (location.href.endsWith('/dashboard.html')) {
+    const userData = JSON.parse(localStorage.getItem('fyc-user'));
+    if (userData.emailVerified === false ) {
+      toastr.error('Please verify your Email Address!');
+    }
+    if (userData.numberVerified === false ) {
+      toastr.error('Please verify your Phone Number!');
+    }
+    if (userData.IDVerified === false ) {
+      toastr.error('Please verify your ID!');
+    }
+  };
