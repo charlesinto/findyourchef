@@ -11,6 +11,7 @@
 ================================================== -->
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/main-color.css" id="colors">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 </head>
 
@@ -114,7 +115,7 @@
 			<ul data-submenu-title="Recipe">
 				<li><a><i class="sl sl-icon-layers"></i> My Recipes</a>
 					<ul>
-						<li><a href="dashboard-my-listings.html">Active <span class="nav-tag green">6</span></a></li>
+						<li><a id="activerecipe" href="#">Active <span class="nav-tag green">6</span></a></li>
 						<li><a href="dashboard-my-listings.html">Pending <span class="nav-tag yellow">1</span></a></li>
 					</ul>	
 				</li>
@@ -162,7 +163,7 @@
 			<ul data-submenu-title="Listings">
 				<li class="active"><a><i class="sl sl-icon-layers"></i> My Listings</a>
 					<ul>
-						<li><a href="dashboard-my-listings.html">Active <span class="nav-tag green">6</span></a></li>
+						<li><a id="activerecipe" href="#">Active <span class="nav-tag green">6</span></a></li>
 						<li><a href="dashboard-my-listings.html">Pending <span class="nav-tag yellow">1</span></a></li>
 						<li><a href="dashboard-my-listings.html">Expired <span class="nav-tag red">2</span></a></li>
 					</ul>	
@@ -301,10 +302,38 @@
 <script type="text/javascript" src="scripts/rangeslider.min.js"></script>
 <script type="text/javascript" src="scripts/magnific-popup.min.js"></script>
 <script type="text/javascript" src="scripts/waypoints.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script type="text/javascript" src="scripts/counterup.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
 <script type="text/javascript" src="scripts/tooltips.min.js"></script>
 <script type="text/javascript" src="scripts/custom.js"></script>
+<script>
+	window.addEventListener('load', function() {
+    console.log('get recipes');
+		
+    const chefID = localStorage.getItem('fyc-id');
+		const token = localStorage.getItem('fyc-token');
+		const baseURL = 'https://thepotters-api.herokuapp.com/api/v1';
+    const data = {
+      chefID,
+    }
+    axios.post(`${baseURL}/chef/recipe/list?status=active&page=1`, data, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    }).then((res) => {
+      console.log(res);
+      const recipes = res.payload.data;
+    }).catch((err) => {
+      if (err.response && err.response.data) {
+        toastr.error(err.response.data.error.message);
+      } else {
+        toastr.error('Something went wrong, please try again');
+      }
+    });
+	});
+</script>
 
 
 </body>

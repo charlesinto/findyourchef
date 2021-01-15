@@ -18325,7 +18325,6 @@ body .category-box-btn:hover {
 		left: 50%;
 		transform: translate(-50%, -50%);
 		width: 50%;
-		border: 1px solid silver;
 		border-radius: 10px;
 		padding: 20px;
 		box-shadow: -1px 1px 36px 0px rgba(192,192,192,0.74);

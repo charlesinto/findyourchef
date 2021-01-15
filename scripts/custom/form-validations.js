@@ -95,10 +95,79 @@ const validateOTPForm = () => {
  * End of Signup Form Validation
  ********************************/
 
+
+/*******************************
+ * Add Recipe Form Validation
+ ********************************/
+
+const validateAddRecipeForm = () => {
+  const name = document.querySelector('#recipe-title')
+  const category = document.querySelector('#category')
+  const keywords = document.querySelector('#keywords')
+  const location = document.querySelector('#location')
+  const radius = document.querySelector('#radius')
+  const dropzone = document.querySelector('#dropzone')
+  const overview = document.querySelector('#summary')
+  // const phoneOptional = document.querySelector('#phone-optional')
+  // const websiteOptional = document.querySelector('#website-optional')
+  // const emailOptional = document.querySelector('#email-optional')
+  // const coords = "39.7993942,-78.9658362";
+  // const perimeter = ["1.02433,0.84950", "2.4923,1.490493"];
+  // const price = "40";
+  const button = document.querySelector('#post-recipe');
+
+  // Initially disable the button
+  if (
+    name.value.length < 1 ||
+    category.value.length < 1 ||
+    keywords.value.length < 1 ||
+    location.value.length < 1 ||
+    radius.value.length < 1 ||
+    dropzone.value.length < 1 ||
+    overview.value.length < 1 ||
+    coords.value.length < 1 ||
+    perimeter.value.length < 1 ||
+    price.value.length < 1
+  ) {
+    button.setAttribute('disabled', true);
+  }
+
+  const fields = [name, category, keywords, location, radius, dropzone, overview, coords, perimeter, price];
+
+  fields.forEach((field) => {
+    field.addEventListener('input', (el) => {
+      if (
+        name.value &&
+        category.value &&
+        keywords.value &&
+        location.value &&
+        radius.value &&
+        dropzone.value &&
+        overview.value &&
+        coords.value &&
+        perimeter.value &&
+        price.value
+      ) {
+        button.removeAttribute('disabled');
+      }
+    });
+  });
+
+  // Format phone number as you type
+  // phone.addEventListener('input', (e) => {
+  //   phone.value = new libphonenumber.AsYouType('US').input(e.target.value);
+  // });
+};
+
+/*******************************
+ * End of Add Recipe Form Validation
+ ********************************/
+
+
 const { pathname } = location;
 if (pathname === '/login.html') {
   validateLoginForm();
-} else if (pathname === '/signup.html' || pathname === '/become-a-chef.html') {
+} else if (pathname === '/signup.html' || pathname === '/become-a-chef/onboard.html') {
   validateSignupForm();
   // validateOTPForm();
 }

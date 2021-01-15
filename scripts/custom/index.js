@@ -56,7 +56,7 @@ const handleLogin = (e) => {
   });
 }
 
-const sendOTP = (email, user) => {
+const sendOTP = (user) => {
   localStorage.setItem('fyc-email', email);
   const data = {
     email
@@ -67,6 +67,29 @@ const sendOTP = (email, user) => {
       type: 'inline'
     }
   });
+  document.querySelector('#otp').focus();
+  axios.post(`${baseURL}/${user}/verify-number/request`, data).then((res) => {
+    console.log(res);
+  }).catch((err) => {
+    if (err.response && err.response.data) {
+      toastr.error(err.response.data.error.message);
+    } else {
+      toastr.error('Something went wrong, please try again');
+    }
+  })
+}
+
+const sendChefOTP = (user) => {
+  const data = {
+    email: localStorage.getItem('fyc-email'),
+  };
+  $.magnificPopup.open({
+    items: {
+      src: '#otp-dialog', // can be a HTML string, jQuery object, or CSS selector
+      type: 'inline'
+    }
+  });
+  console.log(data);
   document.querySelector('#otp').focus();
   axios.post(`${baseURL}/${user}/verify-number/request`, data).then((res) => {
     console.log(res);
@@ -178,6 +201,7 @@ const handleChefSignup = (e, user) => {
     // button.innerHTML = 'Register';
     // button.removeAttribute('disabled');
     // location.href = '/login.html';
+    localStorage.setItem('fyc-email', email);
     form.classList.add('display-none');
     message.classList.remove('display-none');
     name = '';
@@ -202,9 +226,9 @@ const recipeBtn = document.querySelector('#post-recipe');
 if(recipeBtn) {
   recipeBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    console.log('recipe button clicked!');
     const name = document.querySelector('#recipe-title').value;
-    const category = document.querySelector('#category').value;
+    // const category = document.querySelector('#category').value;
+    const category = "Beverage"
     const keywords = document.querySelector('#keywords').value;
     const tags = keywords.split(',');
     const location = document.querySelector('#location').value;
@@ -337,7 +361,8 @@ if(recipeBtn) {
         'Authorization': `Bearer ${token}`
       },
     }).then((res) => {
-      console.log(res);
+      const fycId = res.data.payload.data._id;
+      localStorage.setItem('fyc-id', fycId);
     }).catch((err) => {
       if (err.response && err.response.data) {
         toastr.error(err.response.data.error.message);
@@ -402,15 +427,59 @@ if(recipeBtn) {
   //   })
   // }
 
+
+  /* DASHBOARD ACCOUNT VERIFICATION */
+
   if (location.href.endsWith('/dashboard.html')) {
     const userData = JSON.parse(localStorage.getItem('fyc-user'));
+    const verifyPhoneBtn = document.querySelector('#verify-phone');
     if (userData.emailVerified === false ) {
       toastr.error('Please verify your Email Address!');
     }
     if (userData.numberVerified === false ) {
       toastr.error('Please verify your Phone Number!');
+      verifyPhoneBtn.classList.remove('display-none');
     }
+    verifyPhoneBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      sendChefOTP('chef');
+    })
     if (userData.IDVerified === false ) {
       toastr.error('Please verify your ID!');
     }
   };
+
+
+  /* GET RECIPES */
+
+  const activerecipe = document.querySelector('#activerecipe');
+  activerecipe.addEventListener('click', (e) =>  {
+    e.preventDefault();
+    location.href = '/dashboard-my-listings.html';
+  })
+  
+  function getRecipes() {
+    console.log('get recipes');
+  }
+  if (location.href.endsWith('/dashboard-my-listings.html')) {
+    console.log('get recipes');
+    const chefID = localStorage.getItem('fyc-id');
+    const token = localStorage.getItem('fyc-token');
+    const data = {
+      chefID,
+    }
+    axios.post(`${baseURL}/chef/recipe/list?status=active&page=1`, data, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    }).then((res) => {
+      console.log(res);
+      const recipes = res.payload.data;
+    }).catch((err) => {
+      if (err.response && err.response.data) {
+        toastr.error(err.response.data.error.message);
+      } else {
+        toastr.error('Something went wrong, please try again');
+      }
+    });
+  }

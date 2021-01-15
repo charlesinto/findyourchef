@@ -152,6 +152,13 @@
 					</nav>
 				</div>
 			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<button id="verify-phone" type="submit" class="button border fw margin-top-10 display-none">
+						Verify Phone number
+					</button>
+				</div>
+			</div>
 		</div>
 
 		<!-- Notice -->
@@ -319,7 +326,37 @@
 </div>
 <!-- Dashboard / End -->
 
+  <div id="otp-dialog" class="zoom-anim-dialog mfp-hide">
+		<div class="small-dialog-header">
+			<h3>Verify OTP</h3>
+		</div>
 
+		Tabs
+		<div class="sign-in-form style-1">
+			<h5>Enter the 4-digit code sent to your device</h5>
+			<div class="tabs-container alt">
+				<div class="tab-content">
+					<form class="login" onsubmit="verifyOTP(event)">
+
+						<p class="form-row form-row-wide">
+							<label for="otp">OTP:
+								<i class="im im-icon-Phone"></i>
+								<input type="text" class="input-text" name="otp" id="otp" />
+							</label>
+						</p>
+
+						<div class="form-row">
+							<button id="otp-btn" type="submit" class="button border margin-top-5">
+								Verify
+							</button>
+						</div>
+						
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
 </div>
 <!-- Wrapper / End -->
 
@@ -334,6 +371,7 @@
 <script type="text/javascript" src="scripts/rangeslider.min.js"></script>
 <script type="text/javascript" src="scripts/magnific-popup.min.js"></script>
 <script type="text/javascript" src="scripts/waypoints.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script type="text/javascript" src="scripts/counterup.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
