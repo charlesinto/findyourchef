@@ -129,6 +129,62 @@ const verifyOTP = (e, user) => {
   });
 }
 
+const resetOTP = (e) => {
+  e.preventDefault();
+  const email = document.querySelector('#email').value;
+  localStorage.setItem('fyc-email', email);
+  const data = {
+    email
+  };
+  $.magnificPopup.open({
+    items: {
+      src: '#otp-dialog', // can be a HTML string, jQuery object, or CSS selector
+      type: 'inline'
+    }
+  });
+  document.querySelector('#otp').focus();
+  axios.post(`${baseURL}/request-verification`, data).then((res) => {
+    console.log(res);
+    toastr.success('OTP verification sent');
+  }).catch((err) => {
+    if (err.response && err.response.data) {
+      toastr.error(err.response.data.error.message);
+    } else {
+      toastr.error('Something went wrong, please try again');
+    }
+  })
+}
+
+
+const verifypasswordOTP = (e) => {
+  const data = {
+    email: localStorage.getItem('fyc-email'),
+    otp: document.querySelector('#otp').value,
+    password: document.querySelector('#password').value
+  }
+  localStorage.removeItem('fyc-email');
+  e.preventDefault();
+  const button = document.querySelector('#otp-btn');
+
+  button.innerHTML = '<div class="loader"></div>';
+  button.setAttribute('disabled', true);
+  axios.post(`${baseURL}/reset-password`, data).then((res) => {
+    button.innerHTML = 'Verify';
+    button.removeAttribute('disabled');
+    toastr.success('OTP verification successful');
+    location.href = '/login.html';
+  }).catch((err) => {
+    button.innerHTML = 'Verify';
+    button.removeAttribute('disabled');
+    if (err.response && err.response.data) {
+      toastr.error(err.response.data.error.message);
+    } else {
+      toastr.error('Something went wrong, please try again');
+    }
+  });
+}
+
+
 const handleSignup = (e, user) => {
   e.preventDefault();
   const name = document.querySelector('#name').value;
@@ -452,34 +508,43 @@ if(recipeBtn) {
 
   /* GET RECIPES */
 
-  const activerecipe = document.querySelector('#activerecipe');
-  activerecipe.addEventListener('click', (e) =>  {
-    e.preventDefault();
-    location.href = '/dashboard-my-listings.html';
-  })
-  
-  function getRecipes() {
-    console.log('get recipes');
+  // function getRecipes() {
+  //   console.log('get recipes');
+  // }
+  // if (location.href.endsWith('/dashboard-my-listings.html')) {
+  //   console.log('get recipes');
+  //   const chefID = localStorage.getItem('fyc-id');
+  //   const token = localStorage.getItem('fyc-token');
+  //   const data = {
+  //     chefID,
+  //   }
+  //   axios.post(`${baseURL}/chef/recipe/list?status=active&page=1`, data, {
+  //     headers: {
+  //       'Authorization': `Bearer ${token}`
+  //     },
+  //   }).then((res) => {
+  //     console.log(res);
+  //     const recipes = res.payload.data;
+  //   }).catch((err) => {
+  //     if (err.response && err.response.data) {
+  //       toastr.error(err.response.data.error.message);
+  //     } else {
+  //       toastr.error('Something went wrong, please try again');
+  //     }
+  //   });
+  // }
+
+  /* SHOW USER'S NAME WHEN THEY LOGIN */
+
+  const username = document.querySelector('.logged-username');
+  if (username) {
+    const userData = JSON.parse(localStorage.getItem('fyc-user'));
+    const user = userData.username;
+    username.innerHTML = `<span><img src="images/dashboard-avatar.jpg" alt=""></span>Hi, ${user}!`;
   }
-  if (location.href.endsWith('/dashboard-my-listings.html')) {
-    console.log('get recipes');
-    const chefID = localStorage.getItem('fyc-id');
-    const token = localStorage.getItem('fyc-token');
-    const data = {
-      chefID,
-    }
-    axios.post(`${baseURL}/chef/recipe/list?status=active&page=1`, data, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-    }).then((res) => {
-      console.log(res);
-      const recipes = res.payload.data;
-    }).catch((err) => {
-      if (err.response && err.response.data) {
-        toastr.error(err.response.data.error.message);
-      } else {
-        toastr.error('Something went wrong, please try again');
-      }
-    });
+  const headername = document.querySelector('.header-name');
+  if (headername) {
+    const userData = JSON.parse(localStorage.getItem('fyc-user'));
+    const user = userData.username;
+    headername.innerHTML = `Howdy, ${user}!`;
   }
