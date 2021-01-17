@@ -416,8 +416,10 @@ if(recipeBtn) {
         'Authorization': `Bearer ${token}`
       },
     }).then((res) => {
-      const fycId = res.data.payload.data._id;
-      localStorage.setItem('fyc-id', fycId);
+      const fycChefId = res.data.payload.data.chefID;
+      const fyc_Id = res.data.payload.data._id;
+      localStorage.setItem('fyc-chef-id', fycChefId);
+      localStorage.setItem('fyc-id', fyc_Id);
       console.log(res);
     }).catch((err) => {
       if (err.response && err.response.data) {
@@ -505,34 +507,68 @@ if(recipeBtn) {
     }
   };
 
+  /* GET RECIPE */
+  const loadActiveRecipe = () => {
+    console.log('get recipes');
+    const chefID = localStorage.getItem('fyc-id');
+		const token = localStorage.getItem('fyc-token');
+    const userData = JSON.parse(localStorage.getItem('fyc-user'));
+		const baseURL = 'https://thepotters-api.herokuapp.com/api/v1';
+    const data = {
+      chefID,
+		};
+		// if (userData.emailVerified && userData.IDVerified) {
+			axios.post(`${baseURL}/chef/recipe/list?status=active&page=1`, data, {
+				headers: {
+					'Authorization': `Bearer ${token}`
+				},
+			}).then((res) => {
+				console.log(res);
+				const recipes = res.data.payload.data;
+				popRecipe(recipes);
+			}).catch((err) => {
+				if (err.response && err.response.data) {
+					toastr.error(err.response.data.error.message);
+				} else {
+					toastr.error('Something went wrong, please try again');
+				}
+			});	
+		// } else {
+		// 	false;
+		// };
+	};
+	const popRecipe = (recipes) => {
+		console.log(recipes);
+		const listParent = document.querySelector('#recipe-list');
+		listParent.innerHTML = "";
+		recipes.forEach(recipe => {
+			const name = recipe.name;
+			const location = recipe.location;
+			const image = recipe.image;
+			let list = `
+			<li>
+				<div class="list-box-listing">
+					<div class="list-box-listing-img"><a href="#"><img src="${image}" alt=""></a></div>
+					<div class="list-box-listing-content">
+						<div class="inner">
+							<h3><a href="#">${name}</a></h3>
+							<span>${location}</span>
+							<div class="star-rating" data-rating="5">
+								<div class="rating-counter">(12 reviews)</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="buttons-to-right">
+					<a class="edit-recipe" href="#" class="button gray"><i class="sl sl-icon-note"></i> Edit</a>
+					<a class="delete-recipe" href="#" class="button gray"><i class="sl sl-icon-close"></i> Delete</a>
+				</div>
+			</li>
+			`;
+			listParent.innerHTML += list;
+		});
 
-  /* GET RECIPES */
-
-  // function getRecipes() {
-  //   console.log('get recipes');
-  // }
-  // if (location.href.endsWith('/dashboard-my-listings.html')) {
-  //   console.log('get recipes');
-  //   const chefID = localStorage.getItem('fyc-id');
-  //   const token = localStorage.getItem('fyc-token');
-  //   const data = {
-  //     chefID,
-  //   }
-  //   axios.post(`${baseURL}/chef/recipe/list?status=active&page=1`, data, {
-  //     headers: {
-  //       'Authorization': `Bearer ${token}`
-  //     },
-  //   }).then((res) => {
-  //     console.log(res);
-  //     const recipes = res.payload.data;
-  //   }).catch((err) => {
-  //     if (err.response && err.response.data) {
-  //       toastr.error(err.response.data.error.message);
-  //     } else {
-  //       toastr.error('Something went wrong, please try again');
-  //     }
-  //   });
-  // }
+  }
 
   /* SHOW USER'S NAME WHEN THEY LOGIN */
 
@@ -547,4 +583,14 @@ if(recipeBtn) {
     const userData = JSON.parse(localStorage.getItem('fyc-user'));
     const user = userData.username;
     headername.innerHTML = `Howdy, ${user}!`;
+  }
+
+  /* DELETE RECIPES */
+  const deleteRecipeBtn = document.querySelector('.delete-recipe');
+  if(deleteRecipeBtn) {
+    console.log('its present');
+    deleteRecipeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.target.parentElement.parentElement.remove;
+    })
   }
