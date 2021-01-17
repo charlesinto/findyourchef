@@ -12,7 +12,16 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/main-color.css" id="colors">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-
+<!-- PAGE RESTRICTION TO LOGGED IN USERS -->
+<script>
+	const token = localStorage.getItem('fyc-token');
+	if (!token) {
+		window.location.href = '/index.html';
+		console.log('token detected');
+	} else {
+		false;
+	}
+</script>
 </head>
 
 <body>

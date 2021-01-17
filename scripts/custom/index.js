@@ -409,7 +409,6 @@ if(recipeBtn) {
       tags,
       availability
     }
-    console.log(data);
     const token = localStorage.getItem('fyc-token');
     console.log(token);
     axios.post(`${baseURL}/chef/recipe`, data, {
@@ -419,6 +418,7 @@ if(recipeBtn) {
     }).then((res) => {
       const fycId = res.data.payload.data._id;
       localStorage.setItem('fyc-id', fycId);
+      console.log(res);
     }).catch((err) => {
       if (err.response && err.response.data) {
         toastr.error(err.response.data.error.message);
