@@ -662,3 +662,23 @@ if(recipeBtn) {
       console.log(Monday);
     });
   }
+
+  /* REMOVE SIGN IN BUTTON IF THE USER IS SIGNED IN */
+
+  adjacentElement = document.querySelector('.with-icon');
+  if (adjacentElement) {
+    const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
+    let targetElement = document.createElement('a');
+    if (token) {
+      // targetElement = `<a href="dashboard.html"><i class="sl sl-icon-settings"></i> Dashboard</a>`;
+      targetElement.href = "dashboard.html";
+      targetElement.classList.add('dynamic-dashboard');
+      targetElement.innerHTML = '<i class="sl sl-icon-settings"></i> Dashboard';
+    } else {
+      // targetElement = `<a href="login.html" class="sign-in popup-with-zoom-anim"><i class="sl sl-icon-login"></i> Sign In</a>`;
+      targetElement.href = "login.html";
+      targetElement.classList.add('sign-in', 'popup-with-zoom-anim');
+      targetElement.innerHTML = '<i class="sl sl-icon-login"></i> Sign In';
+    }
+    adjacentElement.insertAdjacentElement('beforebegin', targetElement);
+  }
