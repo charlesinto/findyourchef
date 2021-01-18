@@ -80,7 +80,7 @@ const sendOTP = () => {
 }
 
 const sendChefOTP = (user) => {
-  const userData = JSON.parse(localStorage.getItem('fyc-user'));
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   const data = {
     email: userData.email,
   };
@@ -409,7 +409,7 @@ if(recipeBtn) {
       tags,
       availability
     }
-    const token = localStorage.getItem('fyc-token');
+    const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
     console.log(token);
     axios.post(`${baseURL}/chef/recipe`, data, {
       headers: {
@@ -435,8 +435,9 @@ if(recipeBtn) {
   if(element) {
     const apiKey = "LzvZi2zh1EZ0gYWhkOjW6PLYbEQPvtE7thucHOBxkdX82YEcT3aV9uDUqzhmT7oM"
     // const button = document.querySelector('#signup-btn');
-    const email = localStorage.getItem('fyc-email');
-    const token = localStorage.getItem('fyc-token');
+    const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+    const email = userData.email;
+    const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
     
     Passbase.renderButton(element, apiKey, {
       onFinish: (identityAccessKey) => {
@@ -489,7 +490,7 @@ if(recipeBtn) {
   /* DASHBOARD ACCOUNT VERIFICATION */
 
   if (location.href.endsWith('/dashboard.html')) {
-    const userData = JSON.parse(localStorage.getItem('fyc-user'));
+    const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
     const verifyPhoneBtn = document.querySelector('#verify-phone');
     if (userData.emailVerified === false ) {
       toastr.error('Please verify your Email Address!');
@@ -511,14 +512,14 @@ if(recipeBtn) {
 
   const username = document.querySelector('.logged-username');
   if (username) {
-    const userData = JSON.parse(localStorage.getItem('fyc-user'));
+    const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
     const user = userData.username;
     const image = userData.image;
     username.innerHTML = `<span><img src="${image}" alt=""></span>Hi, ${user}!`;
   }
   const headername = document.querySelector('.header-name');
   if (headername) {
-    const userData = JSON.parse(localStorage.getItem('fyc-user'));
+    const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
     const user = userData.username;
     headername.innerHTML = `Howdy, ${user}!`;
   }
@@ -527,7 +528,7 @@ if(recipeBtn) {
   const loadActiveRecipe = () => {
     console.log('get recipes');
     const chefID = localStorage.getItem('fyc-id');
-		const token = localStorage.getItem('fyc-token');
+		const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
 		const baseURL = 'https://thepotters-api.herokuapp.com/api/v1';
     const data = {
       chefID,
@@ -592,7 +593,7 @@ if(recipeBtn) {
   //     if (actionBtn.className === "delete-recipe") {
     const deleteRecipe = (event, chefID, recipeID) => {
       // e.preventDefault();
-		  const token = localStorage.getItem('fyc-token');
+		  const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
       const data = {
         chefID,
         recipeID
