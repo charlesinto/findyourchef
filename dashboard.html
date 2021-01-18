@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <!-- PAGE RESTRICTION TO LOGGED IN USERS -->
 <script>
-	const token = localStorage.getItem('fyc-token');
+	const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
 	if (!token) {
 		window.location.href = '/index.html';
 		console.log('token detected');

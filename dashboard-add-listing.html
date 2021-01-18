@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <!-- PAGE RESTRICTION TO LOGGED IN USERS -->
 <script>
-	const token = localStorage.getItem('fyc-token');
+	const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
 	if (!token) {
 		window.location.href = '/index.html';
 		console.log('token detected');
@@ -431,17 +431,17 @@
 										<!-- Add Slot -->
 										<div class="add-slot">
 											<div class="add-slot-inputs">
-        										<input type="time" class="time-slot-start" min="00:00" max="12:00"/>
-												<select class="time-slot-start twelve-hr" id="">
-													<option>am</option>
-													<option>pm</option>
+        										<input id="start-monday-input" type="time" class="time-slot-start" min="00:00" max="12:00"/>
+												<select class="time-slot-start twelve-hr" id="start-monday-select">
+													<option value="am">am</option>
+													<option value="pm">pm</option>
 												</select>
         										<span>-</span>
 
-   												<input type="time" class="time-slot-end" min="00:00" max="12:00"/>
-												<select class="time-slot-end twelve-hr" id="">
-													<option>am</option>
-													<option>pm</option>
+   												<input id="end-monday-input" type="time" class="time-slot-end" min="00:00" max="12:00"/>
+												<select class="time-slot-end twelve-hr" id="end-monday-select">
+													<option value="am">am</option>
+													<option value="pm">pm</option>
 												</select>
 											</div>
 											<div class="add-slot-btn">

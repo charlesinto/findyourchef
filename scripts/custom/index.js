@@ -630,3 +630,34 @@ if(recipeBtn) {
   //     e.target.parentElement.parentElement.remove;
   //   })
   // }
+
+  const slots = document.querySelector('.availability-slots');
+  if (slots) {
+    let availability = {};
+    let Monday = [];
+    document.querySelector('#addMondaySlot').addEventListener('click', () => {
+      const startInput = document.querySelector('#start-monday-input').value;
+      let startArr = startInput.split(':');
+      let arrStart = [];
+      startArr.forEach(item => {
+        let timeVal = parseInt(item);
+        arrStart.push(timeVal);
+      });
+      const endInput = document.querySelector('#end-monday-input').value;
+      let endArr = endInput.split(':');
+      let arrEnd = [];
+      endArr.forEach(item => {
+        let timeVal = parseInt(item);
+        arrEnd.push(timeVal);
+      })
+      const dayID = Math.random()*Date.now();
+      Monday.push({
+        startHours: arrStart[0],
+        startMinutes: arrStart[1],
+        endHours: arrEnd[0],
+        endMinutes: arrEnd[1],
+        id: dayID
+      })
+      console.log(Monday);
+    });
+  }

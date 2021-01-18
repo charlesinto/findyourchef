@@ -14,7 +14,7 @@
 <script type="text/javascript" src="https://unpkg.com/@passbase/button@v3/button.js"></script>
 <!-- PAGE RESTRICTION TO LOGGED IN USERS -->
 <script>
-	const token = localStorage.getItem('fyc-token');
+	const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
 	if (!token) {
 		window.location.href = '/index.html';
 		console.log('token detected');
