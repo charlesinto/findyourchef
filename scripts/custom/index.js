@@ -56,7 +56,7 @@ const handleLogin = (e) => {
   });
 }
 
-const sendOTP = (user) => {
+const sendOTP = () => {
   localStorage.setItem('fyc-email', email);
   const data = {
     email
@@ -68,7 +68,7 @@ const sendOTP = (user) => {
     }
   });
   document.querySelector('#otp').focus();
-  axios.post(`${baseURL}/${user}/verify-number/request`, data).then((res) => {
+  axios.post(`${baseURL}/user/verify-number/request`, data).then((res) => {
     console.log(res);
   }).catch((err) => {
     if (err.response && err.response.data) {
@@ -80,8 +80,9 @@ const sendOTP = (user) => {
 }
 
 const sendChefOTP = (user) => {
+  const userData = JSON.parse(localStorage.getItem('fyc-user'));
   const data = {
-    email: localStorage.getItem('fyc-email'),
+    email: userData.email,
   };
   $.magnificPopup.open({
     items: {
@@ -102,7 +103,7 @@ const sendChefOTP = (user) => {
   })
 }
 
-const verifyOTP = (e, user) => {
+const verifyOTP = (e) => {
   const data = {
     email: localStorage.getItem('fyc-email'),
     otp: document.querySelector('#otp').value
@@ -113,7 +114,7 @@ const verifyOTP = (e, user) => {
 
   button.innerHTML = '<div class="loader"></div>';
   button.setAttribute('disabled', true);
-  axios.post(`${baseURL}/${user}/verify-number`, data).then((res) => {
+  axios.post(`${baseURL}/user/verify-number`, data).then((res) => {
     button.innerHTML = 'Verify';
     button.removeAttribute('disabled');
     toastr.success('OTP verification successful');
@@ -185,7 +186,7 @@ const verifypasswordOTP = (e) => {
 }
 
 
-const handleSignup = (e, user) => {
+const handleUserSignup = (e) => {
   e.preventDefault();
   const name = document.querySelector('#name').value;
   const email = document.querySelector('#email2').value;
@@ -205,13 +206,15 @@ const handleSignup = (e, user) => {
     phoneNumber
     // phoneNumber: new libphonenumber.parsePhoneNumber(phone).number
   }
-  axios.post(`${baseURL}/signup/${user}`, data).then((res) => {
+  axios.post(`${baseURL}/signup/user`, data).then((res) => {
     console.log(res);
-    sendOTP(email, user);
-    verifyOTP(e, user);
+    sendOTP(email);
+    verifyOTP(e);
     button.innerHTML = 'Register';
     button.removeAttribute('disabled');
-    location.href = '/login.html';
+    // location.href = '/login.html';
+    // form.classList.add('display-none');
+    // message.classList.remove('display-none');
   }).catch((err) => {
     button.removeAttribute('disabled');
     if (err.response && err.response.data) {
@@ -224,9 +227,6 @@ const handleSignup = (e, user) => {
   });
 }
 
-const handleUserSignup = (e, person) => {
-  handleSignup(e, person)
-}
 const handleChefSignup = (e, user) => {
   // handleSignup(e, person)
   e.preventDefault();
@@ -506,18 +506,32 @@ if(recipeBtn) {
       toastr.error('Please verify your ID!');
     }
   };
+  
+  /* SHOW USER'S NAME WHEN THEY LOGIN */
+
+  const username = document.querySelector('.logged-username');
+  if (username) {
+    const userData = JSON.parse(localStorage.getItem('fyc-user'));
+    const user = userData.username;
+    const image = userData.image;
+    username.innerHTML = `<span><img src="${image}" alt=""></span>Hi, ${user}!`;
+  }
+  const headername = document.querySelector('.header-name');
+  if (headername) {
+    const userData = JSON.parse(localStorage.getItem('fyc-user'));
+    const user = userData.username;
+    headername.innerHTML = `Howdy, ${user}!`;
+  }
 
   /* GET RECIPE */
   const loadActiveRecipe = () => {
     console.log('get recipes');
     const chefID = localStorage.getItem('fyc-id');
 		const token = localStorage.getItem('fyc-token');
-    const userData = JSON.parse(localStorage.getItem('fyc-user'));
 		const baseURL = 'https://thepotters-api.herokuapp.com/api/v1';
     const data = {
       chefID,
 		};
-		// if (userData.emailVerified && userData.IDVerified) {
 			axios.post(`${baseURL}/chef/recipe/list?status=active&page=1`, data, {
 				headers: {
 					'Authorization': `Bearer ${token}`
@@ -532,19 +546,18 @@ if(recipeBtn) {
 				} else {
 					toastr.error('Something went wrong, please try again');
 				}
-			});	
-		// } else {
-		// 	false;
-		// };
+			});
 	};
 	const popRecipe = (recipes) => {
-		console.log(recipes);
 		const listParent = document.querySelector('#recipe-list');
 		listParent.innerHTML = "";
 		recipes.forEach(recipe => {
 			const name = recipe.name;
 			const location = recipe.location;
-			const image = recipe.image;
+      const image = recipe.image;
+      const recipeID = recipe._id;
+      const chefID = recipe.chefID
+      const event = window.Event;
 			let list = `
 			<li>
 				<div class="list-box-listing">
@@ -560,8 +573,8 @@ if(recipeBtn) {
 					</div>
 				</div>
 				<div class="buttons-to-right">
-					<a class="edit-recipe" href="#" class="button gray"><i class="sl sl-icon-note"></i> Edit</a>
-					<a class="delete-recipe" href="#" class="button gray"><i class="sl sl-icon-close"></i> Delete</a>
+					<div class="edit-recipe"><a onclick="editRecipe()" href="#" class="button gray"><i class="sl sl-icon-note"></i> Edit</a></div>
+					<div onclick="deleteRecipe(event, '${chefID}', '${recipeID}')" class="delete-recipe"><a href="#" class="button gray"><i class="sl sl-icon-close"></i> Delete</a></div>
 				</div>
 			</li>
 			`;
@@ -570,27 +583,50 @@ if(recipeBtn) {
 
   }
 
-  /* SHOW USER'S NAME WHEN THEY LOGIN */
+  /* EDIT &/ DELETE RECIPE */
+  // const recipeList = document.querySelector('#recipe-list');
+  // if (recipeList) {
+  //   recipeList.addEventListener('click', (e) => {
+  //     e.preventDefault();
+  //     const actionBtn = e.target.parentElement;
+  //     if (actionBtn.className === "delete-recipe") {
+    const deleteRecipe = (event, chefID, recipeID) => {
+      // e.preventDefault();
+		  const token = localStorage.getItem('fyc-token');
+      const data = {
+        chefID,
+        recipeID
+      };
+      const actionBtn = event.target.parentElement;
+      actionBtn.parentElement.parentElement.remove();
+      axios.delete(`${baseURL}/chef/recipe`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      }, data).then((res) => {
+        console.log(res);
+        toastr.success(res.data.payload.data.message);
+      }).catch((err) => {
+        if (err.response && err.response.data) {
+          toastr.error(err.response.data.error.message);
+        } else {
+          toastr.error('Something went wrong, please try again');
+        }
+      });      
+    }
 
-  const username = document.querySelector('.logged-username');
-  if (username) {
-    const userData = JSON.parse(localStorage.getItem('fyc-user'));
-    const user = userData.username;
-    username.innerHTML = `<span><img src="images/dashboard-avatar.jpg" alt=""></span>Hi, ${user}!`;
-  }
-  const headername = document.querySelector('.header-name');
-  if (headername) {
-    const userData = JSON.parse(localStorage.getItem('fyc-user'));
-    const user = userData.username;
-    headername.innerHTML = `Howdy, ${user}!`;
-  }
+  //     }
+  //   })
+  // }
+
+
 
   /* DELETE RECIPES */
-  const deleteRecipeBtn = document.querySelector('.delete-recipe');
-  if(deleteRecipeBtn) {
-    console.log('its present');
-    deleteRecipeBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.target.parentElement.parentElement.remove;
-    })
-  }
+  // const deleteRecipeBtn = document.querySelector('.delete-recipe');
+  // if(deleteRecipeBtn) {
+  //   console.log('its present');
+  //   deleteRecipeBtn.addEventListener('click', (e) => {
+  //     e.preventDefault();
+  //     e.target.parentElement.parentElement.remove;
+  //   })
+  // }

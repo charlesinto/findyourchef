@@ -18342,3 +18342,10 @@ body .category-box-btn:hover {
 		top: 8px;
 		right: 0;
 	}
+
+	/* EDIT & DELETE RECIPE BTN */
+
+	.edit-recipe,
+	.delete-recipe {
+		display: inline-block;
+	}
