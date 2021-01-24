@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="css/main-color.css" id="colors">
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjbSwlaIqraERZQGoSOPEnPspCgPsE8y8" defer ></script>
 
 </head>
 
@@ -242,13 +244,13 @@
                                 <!-- Box -->
                                 <a href="listings-half-screen-map-list.html" class="highlighted-category">
                                     <i class="im im-icon-Home"></i>
-                                    <h4>Home Cooked</h4>
+                                    <h4>Chinese</h4>
                                 </a>
 
                                 <!-- Box -->
                                 <a href="listings-half-screen-map-list.html" class="highlighted-category">
                                     <i class="im im-icon-Electric-Guitar"></i>
-                                    <h4>Private Party</h4>
+                                    <h4>Barbecue</h4>
                                 </a>
                             </div>
 
@@ -677,6 +679,7 @@
     <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
     <script type="text/javascript" src="scripts/tooltips.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript" src="scripts/maps.js"></script>
     <script type="text/javascript" src="scripts/custom.js"></script>
 
 
@@ -692,7 +695,6 @@
     <script src="scripts/leaflet-autocomplete.js"></script>
     <script src="scripts/leaflet-control-geocoder.js"></script>
 
-
     <!-- Typed Script -->
     <script type="text/javascript" src="scripts/typed.js"></script>
     <script>
@@ -706,8 +708,12 @@
             showCursor: true
         });
     </script>
-
-
+    <script>
+    /* GET CURRENT POSITION */
+    window.addEventListener('load', function() {
+        navigator.geolocation.getCurrentPosition(getLocation);
+    });
+    </script>
     <!-- Style Switcher
 ================================================== -->
     <script src="scripts/switcher.js"></script>

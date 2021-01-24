@@ -566,12 +566,8 @@ if (adjacentElement) {
 const findChef = () => {
   // e.preventDefault();
   const searchInput = document.querySelector('.search-input').value;
-  const searchLocation = document.querySelector('#autocomplete-input').value;
-  const searchParam = {
-    searchInput,
-    searchLocation
-  }
-  sessionStorage.setItem('fyc-search', JSON.stringify(searchParam));
+
+  sessionStorage.setItem('fyc-input', searchInput);
   location.href='/explore.html';
 }
 
@@ -632,7 +628,7 @@ const popAllRecipes = (recipes) => {
   const recipeContainer = document.querySelector('.recipe-container');
   const resultsFound = document.querySelector('.results-found');
   resultsFound.innerHTML = `<p class="showing-results">${length} ${result} Found </p>`
-  recipeContainer.innerHTML = "";
+  // recipeContainer.innerHTML = "";
   recipes.forEach(recipe => {
     const name = recipe.name;
     const category = recipe.category;
@@ -736,9 +732,9 @@ const popRecipeData = (data) => {
   // const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   // const email = userData.email;
   // const phone = userData.phoneNumber;
+  // const userImage = userData.image;
   const email = "rexitodo@gmail.com";
   const phone = "+2349035858578";
-  // const chefImage = userData.image;
   const slider = document.querySelector('.listing-slider');
   slider.innerHTML = `
                   <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 1"></a>
@@ -809,7 +805,7 @@ const popRecipeData = (data) => {
   const hostedTitle = document.querySelector('.hosted-by-title');
   hostedTitle.innerHTML = `
                         <h4><span>Recipe by</span> <a href="pages-user-profile.html">${chefName}</a></h4>
-                        <a href="pages-user-profile.html" class="hosted-by-avatar"><img src="#" alt=""></a>
+                        <a href="pages-user-profile.html" class="hosted-by-avatar"><img src="" alt=""></a>
   `;
   const listingDetails = document.querySelector('.listing-details-sidebar');
   listingDetails.innerHTML = `
@@ -1007,10 +1003,27 @@ if (bookmark) {
   })
 }
 
-const getLocation = () => {
-  if (navigator.getlocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
+const getLocation = (showPosition) => {
+  const lat = showPosition.coords.latitude;
+  const lng = showPosition.coords.longitude;
+  const latlng = {
+    lat,
+    lng
   }
+  const geocoder = new google.maps.Geocoder();
+  geocoder.geocode({location: latlng}, (results, status) => {
+    if (status === "OK") {
+      if (results[0]) {
+        const address = results[2].formatted_address;
+        const locationInput = document.querySelector('#autocomplete-input');
+        locationInput.value = address;
+      } else {
+        window.alert("No results found");
+      }
+    } else {
+      window.alert(`Geocoder failed due to ${status}`);
+    }
+  });
 }
 
 
@@ -1043,84 +1056,84 @@ $(window).on('resize', function() {
 });
 
 
-/*----------------------------------------------------*/
-/*  Ratings Script
-/*----------------------------------------------------*/
+// /*----------------------------------------------------*/
+// /*  Ratings Script
+// /*----------------------------------------------------*/
 
-/*  Numerical Script
-/*--------------------------*/
-function numericalRating(ratingElem) {
+// /*  Numerical Script
+// /*--------------------------*/
+// function numericalRating(ratingElem) {
 
-	$(ratingElem).each(function() {
-		var dataRating = $(this).attr('data-rating');
+// 	$(ratingElem).each(function() {
+// 		var dataRating = $(this).attr('data-rating');
 
-		// Rules
-	    if (dataRating >= 4.0) {
-	        $(this).addClass('high');
-	    } else if (dataRating >= 3.0) {
-	        $(this).addClass('mid');
-	    } else if (dataRating < 3.0) {
-	        $(this).addClass('low');
-	    }
+// 		// Rules
+// 	    if (dataRating >= 4.0) {
+// 	        $(this).addClass('high');
+// 	    } else if (dataRating >= 3.0) {
+// 	        $(this).addClass('mid');
+// 	    } else if (dataRating < 3.0) {
+// 	        $(this).addClass('low');
+// 	    }
 
-	});
+// 	});
 
-} numericalRating('.numerical-rating');
+// } numericalRating('.numerical-rating');
 
 
-/*  Star Rating
-/*--------------------------*/
-function starRating(ratingElem) {
+// /*  Star Rating
+// /*--------------------------*/
+// function starRating(ratingElem) {
 
-	$(ratingElem).each(function() {
+// 	$(ratingElem).each(function() {
 
-		var dataRating = $(this).attr('data-rating');
+// 		var dataRating = $(this).attr('data-rating');
 
-		// Rating Stars Output
-		function starsOutput(firstStar, secondStar, thirdStar, fourthStar, fifthStar) {
-			return(''+
-				'<span class="'+firstStar+'"></span>'+
-				'<span class="'+secondStar+'"></span>'+
-				'<span class="'+thirdStar+'"></span>'+
-				'<span class="'+fourthStar+'"></span>'+
-				'<span class="'+fifthStar+'"></span>');
-		}
+// 		// Rating Stars Output
+// 		function starsOutput(firstStar, secondStar, thirdStar, fourthStar, fifthStar) {
+// 			return(''+
+// 				'<span class="'+firstStar+'"></span>'+
+// 				'<span class="'+secondStar+'"></span>'+
+// 				'<span class="'+thirdStar+'"></span>'+
+// 				'<span class="'+fourthStar+'"></span>'+
+// 				'<span class="'+fifthStar+'"></span>');
+// 		}
 
-		var fiveStars = starsOutput('star','star','star','star','star');
+// 		var fiveStars = starsOutput('star','star','star','star','star');
 
-		var fourHalfStars = starsOutput('star','star','star','star','star half');
-		var fourStars = starsOutput('star','star','star','star','star empty');
+// 		var fourHalfStars = starsOutput('star','star','star','star','star half');
+// 		var fourStars = starsOutput('star','star','star','star','star empty');
 
-		var threeHalfStars = starsOutput('star','star','star','star half','star empty');
-		var threeStars = starsOutput('star','star','star','star empty','star empty');
+// 		var threeHalfStars = starsOutput('star','star','star','star half','star empty');
+// 		var threeStars = starsOutput('star','star','star','star empty','star empty');
 
-		var twoHalfStars = starsOutput('star','star','star half','star empty','star empty');
-		var twoStars = starsOutput('star','star','star empty','star empty','star empty');
+// 		var twoHalfStars = starsOutput('star','star','star half','star empty','star empty');
+// 		var twoStars = starsOutput('star','star','star empty','star empty','star empty');
 
-		var oneHalfStar = starsOutput('star','star half','star empty','star empty','star empty');
-		var oneStar = starsOutput('star','star empty','star empty','star empty','star empty');
+// 		var oneHalfStar = starsOutput('star','star half','star empty','star empty','star empty');
+// 		var oneStar = starsOutput('star','star empty','star empty','star empty','star empty');
 
-		// Rules
-        if (dataRating >= 4.75) {
-            $(this).append(fiveStars);
-        } else if (dataRating >= 4.25) {
-            $(this).append(fourHalfStars);
-        } else if (dataRating >= 3.75) {
-            $(this).append(fourStars);
-        } else if (dataRating >= 3.25) {
-            $(this).append(threeHalfStars);
-        } else if (dataRating >= 2.75) {
-            $(this).append(threeStars);
-        } else if (dataRating >= 2.25) {
-            $(this).append(twoHalfStars);
-        } else if (dataRating >= 1.75) {
-            $(this).append(twoStars);
-        } else if (dataRating >= 1.25) {
-            $(this).append(oneHalfStar);
-        } else if (dataRating < 1.25) {
-            $(this).append(oneStar);
-        }
+// 		// Rules
+//         if (dataRating >= 4.75) {
+//             $(this).append(fiveStars);
+//         } else if (dataRating >= 4.25) {
+//             $(this).append(fourHalfStars);
+//         } else if (dataRating >= 3.75) {
+//             $(this).append(fourStars);
+//         } else if (dataRating >= 3.25) {
+//             $(this).append(threeHalfStars);
+//         } else if (dataRating >= 2.75) {
+//             $(this).append(threeStars);
+//         } else if (dataRating >= 2.25) {
+//             $(this).append(twoHalfStars);
+//         } else if (dataRating >= 1.75) {
+//             $(this).append(twoStars);
+//         } else if (dataRating >= 1.25) {
+//             $(this).append(oneHalfStar);
+//         } else if (dataRating < 1.25) {
+//             $(this).append(oneStar);
+//         }
 
-	});
+// 	});
 
-} starRating('.star-rating');
+// } starRating('.star-rating');

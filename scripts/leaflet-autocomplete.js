@@ -121,8 +121,7 @@ $(document).ready(function(){
           }
           var query = $(this).val();
       if(query){
-          geocoder.geocode(query, function(results) { 
-            
+          geocoder.geocode(query, function(results) {
             for (var i = 0; i < results.length; i++) {
               
               output.push('<li data-latitude="'+results[i].center.lat+'" data-longitude="'+results[i].center.lng+'" >'+results[i].name+'</li>');
@@ -149,6 +148,7 @@ $(document).ready(function(){
       $('#autocomplete-container').removeClass("osm-dropdown-active");
       
       var newLatLng = new L.LatLng($(this).data('latitude'), $(this).data('longitude'));
+      sessionStorage.setItem('fyc-address', newLatLng);
       if(document.getElementById("map") !== null && map){
         map.flyTo(newLatLng, 10);
       }
@@ -156,8 +156,7 @@ $(document).ready(function(){
 
   if($("#autocomplete-input").val()) {
     var query = $("#autocomplete-input").val()
-    geocoder.geocode(query, function(results) { 
-      console.log(results[0].center);
+    geocoder.geocode(query, function(results) {
       if(map){
         map.flyTo(results[0].center, 10);  
       }
