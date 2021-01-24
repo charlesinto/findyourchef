@@ -628,7 +628,7 @@ const popAllRecipes = (recipes) => {
   const recipeContainer = document.querySelector('.recipe-container');
   const resultsFound = document.querySelector('.results-found');
   resultsFound.innerHTML = `<p class="showing-results">${length} ${result} Found </p>`
-  // recipeContainer.innerHTML = "";
+  recipeContainer.innerHTML = "";
   recipes.forEach(recipe => {
     const name = recipe.name;
     const category = recipe.category;
