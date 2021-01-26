@@ -75,12 +75,12 @@ var infoBox_ratingType = 'star-rating';
         var scrollEnabled = false;
       }
 
-
+      const addressMap = JSON.parse(sessionStorage.getItem('fyc-address'));
       // Main Map
       var map = new google.maps.Map(document.getElementById('map'), {
         zoom: zoomLevel,
         scrollwheel: scrollEnabled,
-        center: new google.maps.LatLng(40.80, -73.70),
+        center: new google.maps.LatLng(addressMap.lat, addressMap.lng),
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         zoomControl: false,
         mapTypeControl: false,

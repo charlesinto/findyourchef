@@ -146,9 +146,12 @@ $(document).ready(function(){
       $("#autocomplete-input").val($(this).text());
       $("#leaflet-geocode-cont").removeClass('active');
       $('#autocomplete-container').removeClass("osm-dropdown-active");
-      
+      const address = {
+        lat : $(this).data('latitude'),
+        lng : $(this).data('longitude')
+      }
+      sessionStorage.setItem('fyc-address', JSON.stringify(address));
       var newLatLng = new L.LatLng($(this).data('latitude'), $(this).data('longitude'));
-      sessionStorage.setItem('fyc-address', newLatLng);
       if(document.getElementById("map") !== null && map){
         map.flyTo(newLatLng, 10);
       }

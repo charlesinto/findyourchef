@@ -80,7 +80,7 @@ const sendOTP = (email) => {
   })
 }
 
-const sendChefOTP = (user) => {
+const sendChefOTP = () => {
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   const data = {
     email: userData.email,
@@ -91,9 +91,12 @@ const sendChefOTP = (user) => {
       type: 'inline'
     }
   });
-  console.log(data);
   document.querySelector('#otp').focus();
-  axios.post(`${baseURL}/${user}/verify-number/request`, data).then((res) => {
+  axios.post(`${baseURL}/chef/verify-number/request`, data, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+  }).then((res) => {
     console.log(res);
   }).catch((err) => {
     if (err.response && err.response.data) {
@@ -131,6 +134,38 @@ const verifyOTP = (e) => {
   });
 }
 
+
+// const verifyChefOTP = (e) => {
+//   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
+//   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+//   const data = {
+//     email: userData.email,
+//     otp: document.querySelector('#otp').value
+//   }
+//   e.preventDefault();
+//   const button = document.querySelector('#otp-btn');
+
+//   button.innerHTML = '<div class="loader"></div>';
+//   button.setAttribute('disabled', true);
+//   axios.post(`${baseURL}/chef/verify-number/request`, data, {
+//     headers: {
+//       'Authorization': `Bearer ${token}`
+//     },
+//   }).then((res) => {
+//     button.innerHTML = 'Verify';
+//     button.removeAttribute('disabled');
+//     toastr.success('Phone number verification successful');
+//   }).catch((err) => {
+//     button.innerHTML = 'Verify';
+//     button.removeAttribute('disabled');
+//     if (err.response && err.response.data) {
+//       toastr.error(err.response.data.error.message);
+//     } else {
+//       toastr.error('Something went wrong, please try again');
+//     }
+//   });
+// }
+
 const resetOTP = (e) => {
   e.preventDefault();
   const email = document.querySelector('#email').value;
@@ -167,7 +202,6 @@ const verifypasswordOTP = (e) => {
   localStorage.removeItem('fyc-email');
   e.preventDefault();
   const button = document.querySelector('#otp-btn');
-
   button.innerHTML = '<div class="loader"></div>';
   button.setAttribute('disabled', true);
   axios.post(`${baseURL}/reset-password`, data).then((res) => {
@@ -282,59 +316,160 @@ const handleChefSignup = (e, user) => {
 
 const addListingSection = document.querySelector('#add-listing');
 if (addListingSection) {
+  // let availability = {
+  //   "monday" : [],
+  //   "tuesday" : [],
+  //   "wednesday" : [],
+  //   "thursday" : [],
+  //   "friday" : [],
+  //   "saturday" : [],
+  //   "sunday" : []
+  // };
   let availability = {
-    "monday" : [],
-    "tuesday" : [],
-    "wednesday" : [],
-    "thursday" : [],
-    "friday" : [],
-    "saturday" : [],
-    "sunday" : []
-  };
+    "monday": [
+        {
+            "startHours": 1,
+            "startMinutes": 30,
+            "endHours": 2,
+            "endMinutes": 30
+        },
+        {
+            "startHours": 12,
+            "startMinutes": 25,
+            "endHours": 16,
+            "endMinutes": 50
+        }
+    ],
+    "tuesday": [
+        {
+            "startHours": 1,
+            "startMinutes": 30,
+            "endHours": 2,
+            "endMinutes": 30
+        },
+        {
+            "startHours": 12,
+            "startMinutes": 25,
+            "endHours": 16,
+            "endMinutes": 50
+        }
+    ],
+    "wednesday": [
+        {
+            "startHours": 1,
+            "startMinutes": 30,
+            "endHours": 2,
+            "endMinutes": 30
+        },
+        {
+            "startHours": 12,
+            "startMinutes": 25,
+            "endHours": 16,
+            "endMinutes": 50
+        }
+    ],
+    "thursday": [
+        {
+            "startHours": 1,
+            "startMinutes": 30,
+            "endHours": 2,
+            "endMinutes": 30
+        },
+        {
+            "startHours": 12,
+            "startMinutes": 25,
+            "endHours": 16,
+            "endMinutes": 50
+        }
+    ],
+    "friday": [
+        {
+            "startHours": 1,
+            "startMinutes": 30,
+            "endHours": 2,
+            "endMinutes": 30
+        },
+        {
+            "startHours": 12,
+            "startMinutes": 25,
+            "endHours": 16,
+            "endMinutes": 50
+        }
+    ],
+    "saturday": [
+        {
+            "startHours": 1,
+            "startMinutes": 30,
+            "endHours": 2,
+            "endMinutes": 30
+        },
+        {
+            "startHours": 12,
+            "startMinutes": 25,
+            "endHours": 16,
+            "endMinutes": 50
+        }
+    ],
+    "sunday": [
+        {
+            "startHours": 1,
+            "startMinutes": 30,
+            "endHours": 2,
+            "endMinutes": 30
+        },
+        {
+            "startHours": 12,
+            "startMinutes": 25,
+            "endHours": 16,
+            "endMinutes": 50
+        }
+    ]
+}
   addListingSection.addEventListener('click', (e) => {
-    if (e.target.textContent === 'Add') {
-      let startInput = e.target.parentElement.parentElement.children[0].children[0].value;
-      let endInput = e.target.parentElement.parentElement.children[0].children[3].value;
-      let parent = e.target.parentElement.parentElement.parentElement.children[0].textContent.toLowerCase();
-      let startArr = startInput.split(':');
-      let arrStart = [];
-      startArr.forEach(item => {
-        let timeVal = parseInt(item);
-        arrStart.push(timeVal);
-      });
-      let endArr = endInput.split(':');
-      let arrEnd = [];
-      endArr.forEach(item => {
-        let timeVal = parseInt(item);
-        arrEnd.push(timeVal);
-      })
-      // const dayID = Math.random()*Date.now();
-      availability[parent].push({
-        "startHours": arrStart[0],
-        "startMinutes": arrStart[1],
-        "endHours": arrEnd[0],
-        "endMinutes": arrEnd[1],
-        // id: dayID
-      })
-    }else if (e.target.id === 'post-recipe') {
+    // if (e.target.textContent === 'Add') {
+    //   let startInput = e.target.parentElement.parentElement.children[0].children[0].value;
+    //   let endInput = e.target.parentElement.parentElement.children[0].children[3].value;
+    //   let parent = e.target.parentElement.parentElement.parentElement.children[0].textContent.toLowerCase();
+    //   let startArr = startInput.split(':');
+    //   let arrStart = [];
+    //   startArr.forEach(item => {
+    //     let timeVal = parseInt(item);
+    //     arrStart.push(timeVal);
+    //   });
+    //   let endArr = endInput.split(':');
+    //   let arrEnd = [];
+    //   endArr.forEach(item => {
+    //     let timeVal = parseInt(item);
+    //     arrEnd.push(timeVal);
+    //   })
+    //   // const dayID = Math.random()*Date.now();
+    //   availability[parent].push({
+    //     "startHours": arrStart[0],
+    //     "startMinutes": arrStart[1],
+    //     "endHours": arrEnd[0],
+    //     "endMinutes": arrEnd[1],
+    //     // id: dayID
+    //   })
+    // }else 
+    if (e.target.id === 'post-recipe') {
       e.preventDefault();
       e.target.innerHTML = '<div class="loader"></div>';
       e.target.setAttribute('disabled', true);
-      const name = document.querySelector('#recipe-title').value;
-      // const category = document.querySelector('#category').value;
-      const category = "Beverage"
-      const keywords = document.querySelector('#keywords').value;
-      const tags = keywords.split(',');
-      const location = document.querySelector('#location').value;
-      const radius = document.querySelector('#radius').value;
-      const dropzone = document.querySelector('#dropzone').value;
-      const overview = document.querySelector('#summary').value;
-      const phoneOptional = document.querySelector('#phone-optional').value;
-      const websiteOptional = document.querySelector('#website-optional').value;
-      const emailOptional = document.querySelector('#email-optional').value;
-      const coords = "39.7993942,-78.9658362";
-      const perimeter = ["1.02433,0.84950", "2.4923,1.490493"];
-      const price = "40";
+      let name = document.querySelector('#recipe-title').value;
+      // let category = document.querySelector('#category').value;
+      let category = "Beverage"
+      let keywords = document.querySelector('#keywords').value;
+      let tags = keywords.split(',');
+      let location = document.querySelector('#location').value;
+      let radius = document.querySelector('#radius').value;
+      let dropzone = document.querySelector('#dropzone').value;
+      let overview = document.querySelector('#summary').value;
+      let phoneOptional = document.querySelector('#phone-optional').value;
+      let websiteOptional = document.querySelector('#website-optional').value;
+      let emailOptional = document.querySelector('#email-optional').value;
+      let coords = "39.7993942,-78.9658362";
+      let perimeter = ["1.02433,0.84950", "2.4923,1.490493"];
+      let price = "40";
       const data = {
         name,
         location,
@@ -358,6 +493,15 @@ if (addListingSection) {
         const fyc_Id = res.data.payload.data._id;
         localStorage.setItem('fyc-chef-id', fycChefId);
         localStorage.setItem('fyc-id', fyc_Id);
+        name = "";
+        location = "";
+        price = "";
+        coords = "";
+        overview = "";
+        category = "";
+        perimeter = "";
+        tags = "";
+        availability
         console.log(res);
         toastr.success('Recipe added successfully!');
       }).catch((err) => {
@@ -435,7 +579,7 @@ if (location.href.endsWith('/dashboard.html')) {
   }
   verifyPhoneBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    sendChefOTP('chef');
+    sendChefOTP();
   })
   if (userData.IDVerified === false ) {
     toastr.error('Please verify your ID!');
@@ -564,11 +708,73 @@ if (adjacentElement) {
 
 /*SEARCH QUERY ON HOME PAGE TO FIND CHEF IN EXPLORE PAGE */
 const findChef = () => {
-  // e.preventDefault();
-  const searchInput = document.querySelector('.search-input').value;
-
-  sessionStorage.setItem('fyc-input', searchInput);
+  const data = {
+    searchInput : document.querySelector('.search-input').value,
+    radius : "50miles"
+  }
+  sessionStorage.setItem('fyc-search', JSON.stringify(data));
   location.href='/explore.html';
+}
+
+const loadLatestRecipes = () => {
+  axios.get(`${baseURL}/recipes?page=1`).then((res) => {
+    console.log(res.data.payload.data);
+    const recipes = res.data.payload.data;
+    popLatestRecipes(recipes);
+  }).catch((err) => {
+    if (err.response && err.response.data) {
+      toastr.error(err.response.data.error.message);
+    } else {
+      toastr.error('Something went wrong, please try again');
+    }
+  });
+}
+
+
+const popLatestRecipes = (recipes) => {
+  const recipeContainer = document.querySelector('.simple-slick-carousel');
+  recipes.forEach(recipe => {
+    const name = recipe.name;
+    const category = recipe.category;
+    const chefName = recipe.chefName;
+    const image = recipe.image;
+    const price = recipe.price;
+    const location = recipe.location;
+    const id = recipe._id;
+    const event = window.Event;
+    let listItem =  `
+
+    <!-- Listing Item -->
+    <div class="carousel-item">
+        <a href="loadRecipePage('${id}')" class="listing-item-container">
+            <div class="listing-item">
+
+                <img src="${image}" alt="">
+
+                <div class="listing-badge now-open">Available</div>
+
+                <div class="listing-item-details">
+                    <ul>
+                        <li>Starting from $${price} per meal</li>
+                    </ul>
+                </div>
+
+                <div class="listing-item-content">
+                    <span class="tag">${category}</span>
+                    <h3>${chefName} <i class="verified-icon"></i></h3>
+                    <span>${location}</span>
+                </div>
+                <span class="like-icon"></span>
+            </div>
+            <div class="star-rating" data-rating="3.5">
+                <div class="rating-counter">(12 reviews)</div>
+            </div>
+        </a>
+    </div>
+    <!-- Listing Item / End -->
+    `;
+    recipeContainer.innerHTML += listItem;
+  }) 
 }
 
 /* VIEW RECIPES */
@@ -637,6 +843,7 @@ const popAllRecipes = (recipes) => {
     const price = recipe.price;
     const location = recipe.location;
     const id = recipe._id;
+    const event = window.Event;
     let listItem =  `
     <div class="col-lg-12 col-md-12">
       <div class="listing-item-container list-layout" data-marker-id="1">
@@ -661,7 +868,7 @@ const popAllRecipes = (recipes) => {
               </div>
             </div>
 
-            <span class="like-icon"></span>
+            <span onclick="bookmarkRecipe(${event}, ${id})" class="like-icon"></span>
             <div class="listing-item-details">Starting from $${price} per meal</div>
 
           </div>
@@ -731,10 +938,9 @@ const popRecipeData = (data) => {
   const overview = data.overview;
   // const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   // const email = userData.email;
-  // const phone = userData.phoneNumber;
+  const phone = data.chefNumber;
   // const userImage = userData.image;
   const email = "rexitodo@gmail.com";
-  const phone = "+2349035858578";
   const slider = document.querySelector('.listing-slider');
   slider.innerHTML = `
                   <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 1"></a>
@@ -946,12 +1152,13 @@ const postReview = (e) => {
 }
 
 /* BOOKMARK RECIPE */
-const bookmark = document.querySelector('.like-button');
-if (bookmark) {
-  bookmark.addEventListener('click', () => {
+
+const bookmarkRecipe = (e, id) => {
+e.preventDefault();
+  const token = localStorage.getItem('fyc-token');
+  if (token) {
     const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-    const token = localStorage.getItem('fyc-token');
-    const recipeID = localStorage.getItem('fyc-recipe-id');
+    const recipeID = id;
     let bookmarkersID;
     if (userData.role === 'chef') {
       bookmarkersID = userData.chefID;
@@ -999,6 +1206,65 @@ if (bookmark) {
           toastr.error('Something went wrong, please try again');
         }
       });   
+    }
+  }
+}
+const bookmark = document.querySelector('.like-button');
+if (bookmark) {
+  bookmark.addEventListener('click', (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('fyc-token');
+    if (token) {
+      const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+      const recipeID = localStorage.getItem('fyc-recipe-id');
+      let bookmarkersID;
+      if (userData.role === 'chef') {
+        bookmarkersID = userData.chefID;
+      } else {
+        bookmarkersID = userData.userID;
+      }
+      const data = {
+        bookmarkersID,
+        recipeID
+      }
+      console.log(localStorage.getItem('fyc-bookmark-id'));
+      if (localStorage.getItem('fyc-bookmark-id') === null) {
+        axios.post(`${baseURL}/bookmark`, data, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+        }).then((res) => {
+          console.log(res);
+          toastr.success(res.data.payload.data.message);
+          localStorage.setItem('fyc-bookmark-id', res.data.payload.data.recipeID);
+        }).catch((err) => {
+          if (err.response && err.response.data) {
+            toastr.error(err.response.data.error.message);
+          } else {
+            toastr.error('Something went wrong, please try again');
+          }
+        });
+      } else {
+        const bookmarkID = localStorage.getItem('fyc-bookmark-id');
+        const data = {
+          bookmarkID
+        }
+        axios.delete(`${baseURL}/bookmark`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        }, data).then((res) => {
+          console.log(res);
+          toastr.success(res.data.payload.data.message);
+          localStorage.removeItem('fyc-bookmark-id');
+        }).catch((err) => {
+          if (err.response && err.response.data) {
+            toastr.error(err.response.data.error.message);
+          } else {
+            toastr.error('Something went wrong, please try again');
+          }
+        });   
+      }
     }
   })
 }
@@ -1137,3 +1403,29 @@ $(window).on('resize', function() {
 // 	});
 
 // } starRating('.star-rating');
+
+const loadAllBookmarks = () => {
+  const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  let userID;
+  if (userData.role === 'chef') {
+    userID = userData.chefID;
+  } else {
+    userID = userData.userID;
+  }
+  axios.get(`${baseURL}/${userID}?page=1`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+  }).then((res) => {
+    console.log(res.data.payload.data);
+    // const recipes = res.data.payload.data;
+    // popAllRecipes(recipes);
+  }).catch((err) => {
+    if (err.response && err.response.data) {
+      toastr.error(err.response.data.error.message);
+    } else {
+      toastr.error('Something went wrong, please try again');
+    }
+  });
+}
