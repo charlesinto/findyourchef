@@ -489,10 +489,6 @@ if (addListingSection) {
       }).then((res) => {
         e.target.removeAttribute('disabled');
         e.target.innerHTML = 'Post Recipe <i class="fa fa-arrow-circle-right"></i>';
-        const fycChefId = res.data.payload.data.chefID;
-        const fyc_Id = res.data.payload.data._id;
-        localStorage.setItem('fyc-chef-id', fycChefId);
-        localStorage.setItem('fyc-id', fyc_Id);
         name = "";
         location = "";
         price = "";
@@ -604,12 +600,13 @@ if (headername) {
 
 /* GET RECIPE */
 const loadActiveRecipe = () => {
-  const chefID = localStorage.getItem('fyc-id');
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  const chefID = userData._id;
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   const data = {
     chefID,
   };
-  axios.post(`${baseURL}/chef/recipe/list?status=active&page=3`, data, {
+  axios.post(`${baseURL}/chef/recipe/list?status=active&page=1`, data, {
     headers: {
       'Authorization': `Bearer ${token}`
     },
@@ -665,8 +662,8 @@ const popRecipe = (recipes) => {
     event.preventDefault();
     const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
     const data = {
-      chefID,
-      recipeID
+      recipeID,
+      chefID
     };
     const actionBtn = event.target.parentElement;
     actionBtn.parentElement.parentElement.remove();
@@ -746,7 +743,7 @@ const popLatestRecipes = (recipes) => {
 
     <!-- Listing Item -->
     <div class="carousel-item">
-        <a href="loadRecipePage('${id}')" class="listing-item-container">
+        <a onclick="loadRecipePage('${id}')" class="listing-item-container">
             <div class="listing-item">
 
                 <img src="${image}" alt="">
@@ -766,7 +763,7 @@ const popLatestRecipes = (recipes) => {
                 </div>
                 <span class="like-icon"></span>
             </div>
-            <div class="star-rating" data-rating="3.5">
+            <div class="star-rating" data-rating="3.75">
                 <div class="rating-counter">(12 reviews)</div>
             </div>
         </a>
@@ -863,7 +860,7 @@ const popAllRecipes = (recipes) => {
               <h3>${name}</h3>
               <p>${chefName}<i class="verified-icon"></i></p>
               <p>${location}</p>
-              <div class="star-rating" data-rating="3.5">
+              <div class="star-rating" data-rating="3.75">
                 <div class="rating-counter">(12 reviews)</div>
               </div>
             </div>
@@ -1083,9 +1080,14 @@ const popReviews = (reviews) => {
 
 const addReviewToDOM = () => {
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-  const name = userData.username;
+  const name = userData.fullname;
   const image = userData.image;
   const date = new Date();
+  const year = date.getFullYear();
+  const num = date.getMonth();
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"];
+  const month = months[num];
+  const formattedDate = `${month} ${year}`;
   const review = document.querySelector('.review-area').value;
   const stars = 5;
   const recipeImage = document.querySelector('.uploadButton-input').value;
@@ -1094,7 +1096,7 @@ const addReviewToDOM = () => {
   <li>
     <div class="avatar"><img src="${image}" alt="" /></div>
     <div class="comment-content"><div class="arrow-comment"></div>
-      <div class="comment-by">${name}<i class="tip" data-tip-content="Person who left this review actually was a customer"></i> <span class="date">${date}</span>
+      <div class="comment-by">${name}<i class="tip" data-tip-content="Person who left this review actually was a customer"></i> <span class="date">${formattedDate}</span>
         <div class="star-rating" data-rating="${stars}"></div>
       </div>
       <p>${review}</p>
@@ -1115,14 +1117,8 @@ const postReview = (e) => {
   if (!token) {
     toastr.error("You need to be signed in to be able to drop a review");
   } else {
-    // addReviewToDOM(e);
     const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-    let reviewersID;
-    if (userData.role === 'chef') {
-      reviewersID = userData.chefID;
-    } else {
-      reviewersID = userData.userID;
-    }
+    let reviewersID = userData._id;
     const review = document.querySelector('.review-area').value;
     const stars = 5;
    
@@ -1159,17 +1155,12 @@ e.preventDefault();
   if (token) {
     const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
     const recipeID = id;
-    let bookmarkersID;
-    if (userData.role === 'chef') {
-      bookmarkersID = userData.chefID;
-    } else {
-      bookmarkersID = userData.userID;
-    }
+    let bookmarkersID = userData._id;
     const data = {
       bookmarkersID,
       recipeID
     }
-    console.log(localStorage.getItem('fyc-bookmark-id'));
+    console.log(data);
     if (localStorage.getItem('fyc-bookmark-id') === null) {
       axios.post(`${baseURL}/bookmark`, data, {
         headers: {
@@ -1216,18 +1207,12 @@ if (bookmark) {
     const token = localStorage.getItem('fyc-token');
     if (token) {
       const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+      const bookmarkersID = userData._id;
       const recipeID = localStorage.getItem('fyc-recipe-id');
-      let bookmarkersID;
-      if (userData.role === 'chef') {
-        bookmarkersID = userData.chefID;
-      } else {
-        bookmarkersID = userData.userID;
-      }
       const data = {
         bookmarkersID,
         recipeID
       }
-      console.log(localStorage.getItem('fyc-bookmark-id'));
       if (localStorage.getItem('fyc-bookmark-id') === null) {
         axios.post(`${baseURL}/bookmark`, data, {
           headers: {
@@ -1235,8 +1220,8 @@ if (bookmark) {
           },
         }).then((res) => {
           console.log(res);
-          toastr.success(res.data.payload.data.message);
-          localStorage.setItem('fyc-bookmark-id', res.data.payload.data.recipeID);
+          toastr.success("Recipe bookmarked");
+          localStorage.setItem('fyc-bookmark-id', res.data.payload.data._id);
         }).catch((err) => {
           if (err.response && err.response.data) {
             toastr.error(err.response.data.error.message);
@@ -1301,7 +1286,6 @@ function ratingOverview(ratingElem) {
 
   $(ratingElem).each(function() {
     var dataRating = $(this).attr('data-rating');
-
     // Rules
       if (dataRating >= 4.0) {
           $(this).addClass('high');
@@ -1322,105 +1306,102 @@ $(window).on('resize', function() {
 });
 
 
-// /*----------------------------------------------------*/
-// /*  Ratings Script
-// /*----------------------------------------------------*/
+/*----------------------------------------------------*/
+/*  Ratings Script
+/*----------------------------------------------------*/
 
-// /*  Numerical Script
-// /*--------------------------*/
-// function numericalRating(ratingElem) {
+/*  Numerical Script
+/*--------------------------*/
+function numericalRating(ratingElem) {
 
-// 	$(ratingElem).each(function() {
-// 		var dataRating = $(this).attr('data-rating');
+	$(ratingElem).each(function() {
+		var dataRating = $(this).attr('data-rating');
 
-// 		// Rules
-// 	    if (dataRating >= 4.0) {
-// 	        $(this).addClass('high');
-// 	    } else if (dataRating >= 3.0) {
-// 	        $(this).addClass('mid');
-// 	    } else if (dataRating < 3.0) {
-// 	        $(this).addClass('low');
-// 	    }
+		// Rules
+	    if (dataRating >= 4.0) {
+	        $(this).addClass('high');
+	    } else if (dataRating >= 3.0) {
+	        $(this).addClass('mid');
+	    } else if (dataRating < 3.0) {
+	        $(this).addClass('low');
+	    }
 
-// 	});
+	});
 
-// } numericalRating('.numerical-rating');
+} numericalRating('.numerical-rating');
 
 
-// /*  Star Rating
-// /*--------------------------*/
-// function starRating(ratingElem) {
+/*  Star Rating
+/*--------------------------*/
+function starRating(ratingElem) {
 
-// 	$(ratingElem).each(function() {
+	$(ratingElem).each(function() {
 
-// 		var dataRating = $(this).attr('data-rating');
+		var dataRating = $(this).attr('data-rating');
+		// Rating Stars Output
+		function starsOutput(firstStar, secondStar, thirdStar, fourthStar, fifthStar) {
+			return(''+
+				'<span class="'+firstStar+'"></span>'+
+				'<span class="'+secondStar+'"></span>'+
+				'<span class="'+thirdStar+'"></span>'+
+				'<span class="'+fourthStar+'"></span>'+
+				'<span class="'+fifthStar+'"></span>');
+		}
 
-// 		// Rating Stars Output
-// 		function starsOutput(firstStar, secondStar, thirdStar, fourthStar, fifthStar) {
-// 			return(''+
-// 				'<span class="'+firstStar+'"></span>'+
-// 				'<span class="'+secondStar+'"></span>'+
-// 				'<span class="'+thirdStar+'"></span>'+
-// 				'<span class="'+fourthStar+'"></span>'+
-// 				'<span class="'+fifthStar+'"></span>');
-// 		}
+		var fiveStars = starsOutput('star','star','star','star','star');
 
-// 		var fiveStars = starsOutput('star','star','star','star','star');
+		var fourHalfStars = starsOutput('star','star','star','star','star half');
+		var fourStars = starsOutput('star','star','star','star','star empty');
 
-// 		var fourHalfStars = starsOutput('star','star','star','star','star half');
-// 		var fourStars = starsOutput('star','star','star','star','star empty');
+		var threeHalfStars = starsOutput('star','star','star','star half','star empty');
+		var threeStars = starsOutput('star','star','star','star empty','star empty');
 
-// 		var threeHalfStars = starsOutput('star','star','star','star half','star empty');
-// 		var threeStars = starsOutput('star','star','star','star empty','star empty');
+		var twoHalfStars = starsOutput('star','star','star half','star empty','star empty');
+		var twoStars = starsOutput('star','star','star empty','star empty','star empty');
 
-// 		var twoHalfStars = starsOutput('star','star','star half','star empty','star empty');
-// 		var twoStars = starsOutput('star','star','star empty','star empty','star empty');
+		var oneHalfStar = starsOutput('star','star half','star empty','star empty','star empty');
+		var oneStar = starsOutput('star','star empty','star empty','star empty','star empty');
 
-// 		var oneHalfStar = starsOutput('star','star half','star empty','star empty','star empty');
-// 		var oneStar = starsOutput('star','star empty','star empty','star empty','star empty');
+    // Rules
+    console.log('dataRating');
+        if (dataRating >= 4.75) {
+            $(this).append(fiveStars);
+        } else if (dataRating >= 4.25) {
+            $(this).append(fourHalfStars);
+        } else if (dataRating >= 3.75) {
+            // $(this).append(fourStars);
+            document.querySelector('.star-rating').innerHTML += fourStars;
+        } else if (dataRating >= 3.25) {
+            // $(this).append(threeHalfStars);
+            document.querySelector('.star-rating').innerHTML += 'threeHalfStars';
+        } else if (dataRating >= 2.75) {
+            $(this).append(threeStars);
+        } else if (dataRating >= 2.25) {
+            $(this).append(twoHalfStars);
+        } else if (dataRating >= 1.75) {
+            $(this).append(twoStars);
+        } else if (dataRating >= 1.25) {
+            $(this).append(oneHalfStar);
+        } else if (dataRating < 1.25) {
+            $(this).append(oneStar);
+        }
 
-// 		// Rules
-//         if (dataRating >= 4.75) {
-//             $(this).append(fiveStars);
-//         } else if (dataRating >= 4.25) {
-//             $(this).append(fourHalfStars);
-//         } else if (dataRating >= 3.75) {
-//             $(this).append(fourStars);
-//         } else if (dataRating >= 3.25) {
-//             $(this).append(threeHalfStars);
-//         } else if (dataRating >= 2.75) {
-//             $(this).append(threeStars);
-//         } else if (dataRating >= 2.25) {
-//             $(this).append(twoHalfStars);
-//         } else if (dataRating >= 1.75) {
-//             $(this).append(twoStars);
-//         } else if (dataRating >= 1.25) {
-//             $(this).append(oneHalfStar);
-//         } else if (dataRating < 1.25) {
-//             $(this).append(oneStar);
-//         }
+	});
 
-// 	});
-
-// } starRating('.star-rating');
+} starRating('.star-rating');
 
 const loadAllBookmarks = () => {
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-  let userID;
-  if (userData.role === 'chef') {
-    userID = userData.chefID;
-  } else {
-    userID = userData.userID;
-  }
-  axios.get(`${baseURL}/${userID}?page=1`, {
+  let chefID = userData._id;
+  axios.get(`${baseURL}/bookmark/${chefID}?page=1`, {
     headers: {
       'Authorization': `Bearer ${token}`
     },
   }).then((res) => {
     console.log(res.data.payload.data);
-    // const recipes = res.data.payload.data;
-    // popAllRecipes(recipes);
+    const bookmarks = res.data.payload.data;
+    popAllBookmarks(bookmarks);
   }).catch((err) => {
     if (err.response && err.response.data) {
       toastr.error(err.response.data.error.message);
@@ -1428,4 +1409,58 @@ const loadAllBookmarks = () => {
       toastr.error('Something went wrong, please try again');
     }
   });
+}
+
+const popAllBookmarks = (bookmarks) => {
+  const bookmarkContainer = document.querySelector('.listing-container');
+  bookmarks.forEach(bookmark => {
+    const image = bookmark.recipesImage[0];
+    const name = bookmark.recipeName;
+    const location = bookmark.location;
+    const reviews = bookmark.reviewCount;
+    const bookmarkID = bookmark._id;
+    const event = window.Event;
+    bookmarkContainer.innerHTML += `
+    <li>
+      <div class="list-box-listing">
+        <div class="list-box-listing-img"><a href="#"><img src="${image}" alt=""></a></div>
+        <div class="list-box-listing-content">
+          <div class="inner">
+            <h3>${name}</h3>
+            <span>${location}</span>
+            <div class="star-rating" data-rating="5.0">
+              <div class="rating-counter">(${reviews} reviews)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="buttons-to-right">
+        <a href="#" onclick="deleteBookmark(event, '${bookmarkID}')" class="button gray"><i class="sl sl-icon-close"></i> Delete</a>
+      </div>
+    </li>
+  `
+  })
+}
+
+const deleteBookmark = (e, bookmarkID) => {
+  e.preventDefault();
+  const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
+  const data = {
+    bookmarkID
+  }
+  axios.delete(`${baseURL}/bookmark`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+  }, data).then((res) => {
+    console.log(res);
+    toastr.success(res.data.payload.data.message);
+    e.target.parentElement.parentElement.remove();
+  }).catch((err) => {
+    if (err.response && err.response.data) {
+      toastr.error(err.response.data.error.message);
+    } else {
+      toastr.error('Something went wrong, please try again');
+    }
+  }); 
 }

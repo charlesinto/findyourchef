@@ -319,29 +319,7 @@
 <script type="text/javascript" src="scripts/custom.js"></script>
 <script>
 	window.addEventListener('load', function() {
-    console.log('get recipes');
-		
-    const chefID = localStorage.getItem('fyc-id');
-		const token = localStorage.getItem('fyc-token');
-    const userData = JSON.parse(localStorage.getItem('fyc-user'));
-		const baseURL = 'https://thepotters-api.herokuapp.com/api/v1';
-    const data = {
-      chefID,
-		};
-			axios.post(`${baseURL}/chef/recipe/list?status=pending&page=1`, data, {
-				headers: {
-					'Authorization': `Bearer ${token}`
-				},
-			}).then((res) => {
-				console.log(res);
-				// const recipes = res.payload.data;
-			}).catch((err) => {
-				if (err.response && err.response.data) {
-					toastr.error(err.response.data.error.message);
-				} else {
-					toastr.error('Something went wrong, please try again');
-				}
-			});
+		loadDeletedRecipe();
 	});
 </script>
 
