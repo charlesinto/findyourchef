@@ -57,6 +57,12 @@ const handleLogin = (e) => {
   });
 }
 
+const handleLogout = () => {
+  localStorage.clear();
+  sessionStorage.clear();
+  location.href = "/index.html";
+}
+
 const sendOTP = (email) => {
   localStorage.setItem('fyc-email', email);
   const data = {
@@ -781,7 +787,10 @@ const loadAllRecipes = () => {
   /* VIEW ALL RECIPES */
 
   if (searchData === null) {
-    axios.get(`${baseURL}/recipes?page=1`).then((res) => {
+    const pagination = document.querySelector('.recipe-pagination');
+    let page = 1;
+    console.log(page);
+    axios.get(`${baseURL}/recipes?page=${page}`).then((res) => {
       console.log(res.data.payload.data);
       const recipes = res.data.payload.data;
       popAllRecipes(recipes);
@@ -792,6 +801,26 @@ const loadAllRecipes = () => {
         toastr.error('Something went wrong, please try again');
       }
     });
+    pagination.addEventListener('click', (e) => {
+      console.log(e.target.innerText);
+      if (e.target.id === "next") {
+        console.log('arrow-next');
+        page += 1;
+      } else {
+        page = e.target.innerText;
+      }
+      axios.get(`${baseURL}/recipes?page=${page}`).then((res) => {
+        console.log(res.data.payload.data);
+        const recipes = res.data.payload.data;
+        popAllRecipes(recipes);
+      }).catch((err) => {
+        if (err.response && err.response.data) {
+          toastr.error(err.response.data.error.message);
+        } else {
+          toastr.error('Something went wrong, please try again');
+        }
+      });
+    })
   } else {
     /* VIEW SEARCHED RECIPES */
     const searchInput = searchData.searchInput;
@@ -933,6 +962,8 @@ const popRecipeData = (data) => {
   const location = data.location;
   const tags = data.tags;
   const overview = data.overview;
+  const availability = data.availability;
+  console.log(availability);
   // const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   // const email = userData.email;
   const phone = data.chefNumber;
@@ -1463,4 +1494,32 @@ const deleteBookmark = (e, bookmarkID) => {
       toastr.error('Something went wrong, please try again');
     }
   }); 
+}
+
+const fetchChefOverview = () => {
+  const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  const userID = userData._id;
+  console.log(userID);
+  axios.get(`${baseURL}/chef/overview/${userID}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+  }).then((res) => {
+    console.log(res.data.payload.data);
+    // const recipes = res.data.payload.data;
+    // popLatestRecipes(recipes);
+  }).catch((err) => {
+    if (err.response && err.response.data) {
+      toastr.error(err.response.data.error.message);
+    } else {
+      toastr.error('Something went wrong, please try again');
+    }
+  });
+}
+
+const bookRecipe = (e) => {
+  e.preventDefault();
+  const picker = document.querySelector('#date-picker');
+  console.log(picker);
 }

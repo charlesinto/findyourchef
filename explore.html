@@ -227,36 +227,6 @@
 			<!-- Listings -->
 			<div class="row recipe-container fs-listings">
 				<li><div class="loader"></div></li>
-				<div class="col-lg-12 col-md-12">
-					<div class="listing-item-container list-layout" data-marker-id="1">
-						<a onclick="loadRecipePage('${id}')" class="listing-item">
-							
-							<!-- Image -->
-							<div class="listing-item-image">
-								<img src="${image}" alt="">
-								<span class="tag">${category}</span>
-							</div>
-							
-							<!-- Content -->
-							<div class="listing-item-content">
-								<div class="listing-badge now-open">Available</div>
-		
-								<div class="listing-item-inner">
-									<h3>${name}</h3>
-									<p>${chefName}<i class="verified-icon"></i></p>
-									<p>${location}</p>
-									<div class="star-rating" data-rating="3.5">
-										<div class="rating-counter">(12 reviews)</div>
-									</div>
-								</div>
-		
-								<span onclick="bookmarkRecipe(${event}, ${id})" class="like-icon"></span>
-								<div class="listing-item-details">Starting from $${price} per meal</div>
-		
-							</div>
-						</a>
-					</div>
-				</div>
 			</div>
 			<!-- Listings Container / End -->
 
@@ -272,11 +242,11 @@
 							<!-- Pagination -->
 							<div class="pagination-container margin-top-15 margin-bottom-40">
 								<nav class="pagination">
-									<ul>
+									<ul class="recipe-pagination">
 										<li><a href="#" class="current-page">1</a></li>
 										<li><a href="#">2</a></li>
 										<li><a href="#">3</a></li>
-										<li><a href="#"><i class="sl sl-icon-arrow-right"></i></a></li>
+										<li><a href="#"><i id="next" class="sl sl-icon-arrow-right"></i></a></li>
 									</ul>
 								</nav>
 							</div>
