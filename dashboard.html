@@ -10,6 +10,7 @@
 <!-- CSS
 ================================================== -->
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/main-color.css" id="colors">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <!-- PAGE RESTRICTION TO LOGGED IN USERS -->
@@ -17,7 +18,6 @@
 	const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
 	if (!token) {
 		window.location.href = '/index.html';
-		console.log('token detected');
 	} else {
 		false;
 	}
@@ -163,7 +163,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					<button id="verify-phone" type="submit" class="button border fw margin-top-10 display-none">
+					<button id="verify-phone" onclick="sendChefOTP()" type="submit" class="button border fw margin-top-10 display-none">
 						Verify Phone number
 					</button>
 				</div>

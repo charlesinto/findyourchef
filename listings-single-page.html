@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/main-color.css" id="colors">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://js.stripe.com/v3/"></script>
 
 </head>
 
@@ -282,79 +283,23 @@
 
 					<!-- Date Range Picker - docs: http://www.daterangepicker.com/ -->
 					<div class="col-lg-12">
-						<input type="text" id="date-picker" placeholder="Date" readonly="readonly">
+						<input type="text" id="date-picker" onchange="popAvailability()" placeholder="Date" readonly="readonly">
 					</div>
 
 					<!-- Panel Dropdown -->
 					<div class="col-lg-12">
 						<div class="panel-dropdown time-slots-dropdown">
-							<a href="#">Time Slots</a>
-							<div class="panel-dropdown-content padding-reset">
+							<a class="final-display" href="#">Time Slots</a>
+							<div class="panel-dropdown-content padding-reset display-none">
 								<div class="panel-dropdown-scrollable">
-									
-									<!-- Time Slot -->
+								  <!-- Time Slot
 									<div class="time-slot">
 										<input type="radio" name="time-slot" id="time-slot-1">
 										<label for="time-slot-1">
-											<strong>8:30 am - 9:00 am</strong>
-											<span>1 slot available</span>
+											<strong>5:30 am - 4:00 pm</strong>
+											<span id="monday-2">1 slot available</span>
 										</label>
-									</div>
-
-									<!-- Time Slot -->
-									<div class="time-slot">
-										<input type="radio" name="time-slot" id="time-slot-2">
-										<label for="time-slot-2">
-											<strong>9:00 am - 9:30 am</strong>
-											<span>2 slots available</span>
-										</label>
-									</div>
-
-									<!-- Time Slot -->
-									<div class="time-slot">
-										<input type="radio" name="time-slot" id="time-slot-3">
-										<label for="time-slot-3">
-											<strong>9:30 am - 10:00 am</strong>
-											<span>1 slots available</span>
-										</label>
-									</div>
-
-									<!-- Time Slot -->
-									<div class="time-slot">
-										<input type="radio" name="time-slot" id="time-slot-4">
-										<label for="time-slot-4">
-											<strong>10:00 am - 10:30 am</strong>
-											<span>3 slots available</span>
-										</label>
-									</div>
-
-									<!-- Time Slot -->
-									<div class="time-slot">
-										<input type="radio" name="time-slot" id="time-slot-5">
-										<label for="time-slot-5">
-											<strong>13:00 pm - 13:30 pm</strong>
-											<span>2 slots available</span>
-										</label>
-									</div>
-
-									<!-- Time Slot -->
-									<div class="time-slot">
-										<input type="radio" name="time-slot" id="time-slot-6">
-										<label for="time-slot-6">
-											<strong>13:30 pm - 14:00 pm</strong>
-											<span>1 slots available</span>
-										</label>
-									</div>
-
-									<!-- Time Slot -->
-									<div class="time-slot">
-										<input type="radio" name="time-slot" id="time-slot-7">
-										<label for="time-slot-7">
-											<strong>14:00 pm - 14:30 pm</strong>
-											<span>1 slots available</span>
-										</label>
-									</div>
-
+									</div> -->
 								</div>
 							</div>
 						</div>
@@ -631,6 +576,7 @@
 <!-- Date Range Picker - docs: http://www.daterangepicker.com/ -->
 <script src="scripts/moment.min.js"></script>
 <script src="scripts/daterangepicker.js"></script>
+<script src="scripts/custom/listing-single-page.js"></script>
 <script>
 	/* LOAD ALL RECIPES */
 	window.addEventListener('load', function() {

@@ -60,7 +60,7 @@ const handleLogin = (e) => {
 const handleLogout = () => {
   localStorage.clear();
   sessionStorage.clear();
-  location.href = "/index.html";
+  location.href = "/login.html";
 }
 
 const sendOTP = (email) => {
@@ -88,6 +88,7 @@ const sendOTP = (email) => {
 
 const sendChefOTP = () => {
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   const data = {
     email: userData.email,
   };
@@ -141,36 +142,37 @@ const verifyOTP = (e) => {
 }
 
 
-// const verifyChefOTP = (e) => {
-//   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
-//   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-//   const data = {
-//     email: userData.email,
-//     otp: document.querySelector('#otp').value
-//   }
-//   e.preventDefault();
-//   const button = document.querySelector('#otp-btn');
+const verifyChefOTP = (e) => {
+  const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  const data = {
+    email: userData.email,
+    otp: document.querySelector('#otp').value
+  }
+  e.preventDefault();
+  const button = document.querySelector('#otp-btn');
 
-//   button.innerHTML = '<div class="loader"></div>';
-//   button.setAttribute('disabled', true);
-//   axios.post(`${baseURL}/chef/verify-number/request`, data, {
-//     headers: {
-//       'Authorization': `Bearer ${token}`
-//     },
-//   }).then((res) => {
-//     button.innerHTML = 'Verify';
-//     button.removeAttribute('disabled');
-//     toastr.success('Phone number verification successful');
-//   }).catch((err) => {
-//     button.innerHTML = 'Verify';
-//     button.removeAttribute('disabled');
-//     if (err.response && err.response.data) {
-//       toastr.error(err.response.data.error.message);
-//     } else {
-//       toastr.error('Something went wrong, please try again');
-//     }
-//   });
-// }
+  button.innerHTML = '<div class="loader"></div>';
+  button.setAttribute('disabled', true);
+  axios.post(`${baseURL}/chef/verify-number/request`, data, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+  }).then((res) => {
+    button.innerHTML = 'Verify';
+    button.removeAttribute('disabled');
+    toastr.success('Phone number verification successful');
+    handleLogout();
+  }).catch((err) => {
+    button.innerHTML = 'Verify';
+    button.removeAttribute('disabled');
+    if (err.response && err.response.data) {
+      toastr.error(err.response.data.error.message);
+    } else {
+      toastr.error('Something went wrong, please try again');
+    }
+  });
+}
 
 const resetOTP = (e) => {
   e.preventDefault();
@@ -322,19 +324,19 @@ const handleChefSignup = (e, user) => {
 
 const addListingSection = document.querySelector('#add-listing');
 if (addListingSection) {
-  // let availability = {
-  //   "monday" : [],
-  //   "tuesday" : [],
-  //   "wednesday" : [],
-  //   "thursday" : [],
-  //   "friday" : [],
-  //   "saturday" : [],
-  //   "sunday" : []
-  // };
   let availability = {
+    "monday" : [],
+    "tuesday" : [],
+    "wednesday" : [],
+    "thursday" : [],
+    "friday" : [],
+    "saturday" : [],
+    "sunday" : []
+  };
+  /*let availability = {
     "monday": [
         {
-            "startHours": 1,
+            "startHours": 0,
             "startMinutes": 30,
             "endHours": 2,
             "endMinutes": 30
@@ -430,40 +432,36 @@ if (addListingSection) {
             "endMinutes": 50
         }
     ]
-}
+}*/
   addListingSection.addEventListener('click', (e) => {
-    // if (e.target.textContent === 'Add') {
-    //   let startInput = e.target.parentElement.parentElement.children[0].children[0].value;
-    //   let endInput = e.target.parentElement.parentElement.children[0].children[3].value;
-    //   let parent = e.target.parentElement.parentElement.parentElement.children[0].textContent.toLowerCase();
-    //   let startArr = startInput.split(':');
-    //   let arrStart = [];
-    //   startArr.forEach(item => {
-    //     let timeVal = parseInt(item);
-    //     arrStart.push(timeVal);
-    //   });
-    //   let endArr = endInput.split(':');
-    //   let arrEnd = [];
-    //   endArr.forEach(item => {
-    //     let timeVal = parseInt(item);
-    //     arrEnd.push(timeVal);
-    //   })
-    //   // const dayID = Math.random()*Date.now();
-    //   availability[parent].push({
-    //     "startHours": arrStart[0],
-    //     "startMinutes": arrStart[1],
-    //     "endHours": arrEnd[0],
-    //     "endMinutes": arrEnd[1],
-    //     // id: dayID
-    //   })
-    // }else 
-    if (e.target.id === 'post-recipe') {
+    if (e.target.textContent === 'Add') {
+      let startInput = e.target.parentElement.parentElement.children[0].children[0].value;
+      let endInput = e.target.parentElement.parentElement.children[0].children[3].value;
+      let parent = e.target.parentElement.parentElement.parentElement.children[0].textContent.toLowerCase();
+      let startArr = startInput.split(':');
+      let arrStart = [];
+      startArr.forEach(item => {
+        let timeVal = parseInt(item);
+        arrStart.push(timeVal);
+      });
+      let endArr = endInput.split(':');
+      let arrEnd = [];
+      endArr.forEach(item => {
+        let timeVal = parseInt(item);
+        arrEnd.push(timeVal);
+      })
+      availability[parent].push({
+        "startHours": arrStart[0],
+        "startMinutes": arrStart[1],
+        "endHours": arrEnd[0],
+        "endMinutes": arrEnd[1],
+      })
+    }else if (e.target.id === 'post-recipe') {
       e.preventDefault();
       e.target.innerHTML = '<div class="loader"></div>';
       e.target.setAttribute('disabled', true);
       let name = document.querySelector('#recipe-title').value;
-      // let category = document.querySelector('#category').value;
-      let category = "Beverage"
+      let category = document.querySelector('#category').value;
       let keywords = document.querySelector('#keywords').value;
       let tags = keywords.split(',');
       let location = document.querySelector('#location').value;
@@ -963,7 +961,7 @@ const popRecipeData = (data) => {
   const tags = data.tags;
   const overview = data.overview;
   const availability = data.availability;
-  console.log(availability);
+  sessionStorage.setItem('fyc-availability', JSON.stringify(availability))
   // const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   // const email = userData.email;
   const phone = data.chefNumber;
@@ -1061,7 +1059,6 @@ const fetchRecipeReview = (id) => {
   }
   axios.get(`${baseURL}/reviews/${id}?page=1`, data).then( res => {
     const reviews = res.data.payload.data;
-    console.log(reviews);
     popReviews(reviews);
   }).catch((err) => {
     console.log(err)
@@ -1518,8 +1515,47 @@ const fetchChefOverview = () => {
   });
 }
 
-const bookRecipe = (e) => {
-  e.preventDefault();
-  const picker = document.querySelector('#date-picker');
-  console.log(picker);
-}
+// const bookRecipe = (e) => {
+//   e.preventDefault();
+// }
+
+// const popAvailability = () => {
+//   const availability = JSON.parse(sessionStorage.getItem('fyc-availability'));
+//   const weekDay = ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"];
+//   const picker = document.querySelector('#date-picker').value;
+//   const date = new Date(picker).getDay();
+//   const day = weekDay[date];
+//   const daySlots = availability[day];
+//   const panel = document.querySelector('.panel-dropdown-scrollable');
+//   panel.innerHTML = '';
+//   // const display = document.querySelector('.final-display');
+//   let output;
+//   console.log(day, daySlots);
+//   daySlots.forEach( time => {
+//     const id = time.id;
+//     if(time.startHours > 12) {
+//       time.startHours = time.startHours%12;
+//       output = `${time.startHours}:${time.startMinutes} pm - `;
+//     } else {
+//       output = `${time.startHours}:${time.startMinutes} am - `;
+//     }
+//     if(time.endHours > 12) {
+//       time.endHours = time.endHours%12;
+//       output += `${time.endHours}:${time.endMinutes} pm`;
+//     } else {
+//       output += `${time.endHours}:${time.endMinutes} am`;
+//     }
+//     panel.innerHTML += `									
+//     <!-- Time Slot -->
+//     <div class="time-slot">
+//       <input type="radio" name="time-slot" id="time-slot-1">
+//       <label for="time-slot-1">
+//         <strong>${output}</strong>
+//         <span id="${id}">1 slot available</span>
+//       </label>
+//     </div>
+//     `;
+//     // display.innerText = output;
+//   });
+//   console.log(output);
+// }
