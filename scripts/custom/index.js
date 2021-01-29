@@ -567,25 +567,6 @@ if(element) {
 
 /* DASHBOARD ACCOUNT VERIFICATION */
 
-if (location.href.endsWith('/dashboard.html')) {
-  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-  const verifyPhoneBtn = document.querySelector('#verify-phone');
-  if (userData.emailVerified === false ) {
-    toastr.error('Please verify your Email Address!');
-  }
-  if (userData.numberVerified === false ) {
-    toastr.error('Please verify your Phone Number!');
-    verifyPhoneBtn.classList.remove('display-none');
-  }
-  verifyPhoneBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    sendChefOTP();
-  })
-  if (userData.IDVerified === false ) {
-    toastr.error('Please verify your ID!');
-  }
-};
-
 /* SHOW USER'S NAME WHEN THEY LOGIN */
 
 const username = document.querySelector('.logged-username');
@@ -1493,69 +1474,48 @@ const deleteBookmark = (e, bookmarkID) => {
   }); 
 }
 
-const fetchChefOverview = () => {
+const fetchOverview = () => {
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-  const userID = userData._id;
-  console.log(userID);
-  axios.get(`${baseURL}/chef/overview/${userID}`, {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    },
-  }).then((res) => {
-    console.log(res.data.payload.data);
-    // const recipes = res.data.payload.data;
-    // popLatestRecipes(recipes);
-  }).catch((err) => {
-    if (err.response && err.response.data) {
-      toastr.error(err.response.data.error.message);
-    } else {
-      toastr.error('Something went wrong, please try again');
+  if (userData.role === 'chef' || userData.numberVerified === false) {
+    toastr.error('Please verify your Phone Number!');
+    const titleBar = document.querySelector('#titlebar');
+    titleBar.innerHTML += `
+    <div class="row verify-phone-row">
+      <div class="col-md-12">
+        <button id="verify-phone" type="submit" class="button border fw margin-top-10 display-none">
+          Verify Phone number
+        </button>
+      </div>
+    </div>`;
+    const verifyPhoneBtn = document.querySelector('#verify-phone');
+    if (userData.emailVerified === false ) {
+      toastr.error('Please verify your Email Address!');
     }
-  });
+    verifyPhoneBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      sendChefOTP();
+    })
+    if (userData.IDVerified === false ) {
+      toastr.error('Please verify your ID!');
+    }
+  }
+  if (userData.role === 'chef') {
+    const userID = userData._id;
+    axios.get(`${baseURL}/chef/overview/${userID}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    }).then((res) => {
+      console.log(res.data.payload.data);
+      // const recipes = res.data.payload.data;
+      // popLatestRecipes(recipes);
+    }).catch((err) => {
+      if (err.response && err.response.data) {
+        toastr.error(err.response.data.error.message);
+      } else {
+        toastr.error('Something went wrong, please try again');
+      }
+    });
+  }
 }
-
-// const bookRecipe = (e) => {
-//   e.preventDefault();
-// }
-
-// const popAvailability = () => {
-//   const availability = JSON.parse(sessionStorage.getItem('fyc-availability'));
-//   const weekDay = ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"];
-//   const picker = document.querySelector('#date-picker').value;
-//   const date = new Date(picker).getDay();
-//   const day = weekDay[date];
-//   const daySlots = availability[day];
-//   const panel = document.querySelector('.panel-dropdown-scrollable');
-//   panel.innerHTML = '';
-//   // const display = document.querySelector('.final-display');
-//   let output;
-//   console.log(day, daySlots);
-//   daySlots.forEach( time => {
-//     const id = time.id;
-//     if(time.startHours > 12) {
-//       time.startHours = time.startHours%12;
-//       output = `${time.startHours}:${time.startMinutes} pm - `;
-//     } else {
-//       output = `${time.startHours}:${time.startMinutes} am - `;
-//     }
-//     if(time.endHours > 12) {
-//       time.endHours = time.endHours%12;
-//       output += `${time.endHours}:${time.endMinutes} pm`;
-//     } else {
-//       output += `${time.endHours}:${time.endMinutes} am`;
-//     }
-//     panel.innerHTML += `									
-//     <!-- Time Slot -->
-//     <div class="time-slot">
-//       <input type="radio" name="time-slot" id="time-slot-1">
-//       <label for="time-slot-1">
-//         <strong>${output}</strong>
-//         <span id="${id}">1 slot available</span>
-//       </label>
-//     </div>
-//     `;
-//     // display.innerText = output;
-//   });
-//   console.log(output);
-// }

@@ -80,8 +80,8 @@ function close_panel_dropdown() {
     const amount = document.querySelector('.qtyTotal').innerText;
     const slotID = sessionStorage.getItem('fyc-book-id');
     const recipeID = localStorage.getItem('fyc-recipe-id');
-    const success_url = "http://127.0.0.1:5500/payment_success.html";
-    const cancel_url = "http://127.0.0.1:5500/payment_failure.html";
+    const success_url = "http://www.thepottersmind.com/fyc/payment_success.html";
+    const cancel_url = "http://www.thepottersmind.com/fyc/payment_failure.html";
     const data = {
       bookersID,
       recipeID,
@@ -90,6 +90,7 @@ function close_panel_dropdown() {
       success_url,
       cancel_url
     }
+    console.log(data);
     axios.post(`${baseURL}/recipe/book`, data, {
       headers: {
         'Authorization': `Bearer ${token}`

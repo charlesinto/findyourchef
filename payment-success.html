@@ -12,43 +12,11 @@
 </head>
 <body>
   <div class="container">
-    <div class="sign-in-form sign-in-container">
-      <h2>Signin to your account</h2>
-      <form class="login" onsubmit="handleLogin(event)">
-  
-        <p class="form-row form-row-wide">
-          <label for="email">Email:
-            <i class="im im-icon-Email"></i>
-            <input type="email" class="input-text" name="email" id="email" value="" />
-          </label>
-        </p>
-  
-        <p class="form-row form-row-wide">
-          <label for="password">Password:
-            <i class="im im-icon-Lock-2"></i>
-            <input class="input-text" type="password" name="password" id="password"/>
-          </label>
-          <span class="lost_password">
-            <a href="resetpassword.html" >Lost Your Password?</a>
-          </span>
-          <div class="lost_password">
-            Don't have an account?
-            <a href="signup.html">Sign up</a>
-          </div>
-        </p>
-  
-        <div class="form-row">
-          <!-- <input id="login-btn" type="submit" class="" name="login" value="Login" /> -->
-          <div class="checkboxes margin-top-10">
-            <input id="remember-me" type="checkbox" name="check">
-            <label for="remember-me">Remember Me</label>
-          </div>
-          <button id="login-btn" type="submit" class="button border margin-top-5">
-            Login
-          </button>
-        </div>
-        
-      </form>
+    <div class="success-message">
+      <h2>Payment Successful</h2>
+      <button id="home-btn" type="submit" class="button border margin-top-5">
+        Back to Home Page
+      </button>
     </div>
   </div>
   <script type="text/javascript" src="scripts/jquery-3.5.1.min.js"></script>
