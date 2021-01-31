@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/main-color.css" id="colors">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjbSwlaIqraERZQGoSOPEnPspCgPsE8y8" defer ></script>
     <!-- PAGE RESTRICTION TO LOGGED IN USERS -->
     <script>
         const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
@@ -248,7 +250,13 @@
                                         <!-- Address -->
                                         <div class="col-md-6">
                                             <h5>Primary Location</h5>
-                                            <input id="location" type="text" placeholder="Laurel, MD 20708">
+                                            <!-- <input id="location" type="text" placeholder="Laurel, MD 20708"> -->
+                                            <div class="main-search-input-item location">
+                                                <div id="autocomplete-container">
+                                                    <input id="autocomplete-input" type="text" placeholder="Laurel, MD 20708">
+                                                </div>
+                                                <a href="#"><i class="fa fa-map-marker"></i></a>
+                                            </div>
                                         </div>
 
                                         <!-- City -->
@@ -1093,44 +1101,62 @@
         <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
         <script type="text/javascript" src="scripts/tooltips.min.js"></script>
         <script type="text/javascript" src="scripts/custom/index.js"></script>
+        <script type="text/javascript" src="scripts/maps.js"></script>
         <script type="text/javascript" src="scripts/custom.js"></script>
 
 
-        <!-- Opening hours added via JS (this is only for demo purpose) -->
-        <script>
-            $(".opening-day.js-demo-hours .chosen-select").each(function() {
-                $(this).append('' +
-                    '<option></option>' +
-                    '<option>Closed</option>' +
-                    '<option>1 AM</option>' +
-                    '<option>2 AM</option>' +
-                    '<option>3 AM</option>' +
-                    '<option>4 AM</option>' +
-                    '<option>5 AM</option>' +
-                    '<option>6 AM</option>' +
-                    '<option>7 AM</option>' +
-                    '<option>8 AM</option>' +
-                    '<option>9 AM</option>' +
-                    '<option>10 AM</option>' +
-                    '<option>11 AM</option>' +
-                    '<option>12 AM</option>' +
-                    '<option>1 PM</option>' +
-                    '<option>2 PM</option>' +
-                    '<option>3 PM</option>' +
-                    '<option>4 PM</option>' +
-                    '<option>5 PM</option>' +
-                    '<option>6 PM</option>' +
-                    '<option>7 PM</option>' +
-                    '<option>8 PM</option>' +
-                    '<option>9 PM</option>' +
-                    '<option>10 PM</option>' +
-                    '<option>11 PM</option>' +
-                    '<option>12 PM</option>');
-            });
-        </script>
+    <!-- Leaflet // Docs: https://leafletjs.com/ -->
+    <script src="scripts/leaflet.min.js"></script>
 
-        <!-- DropZone | Documentation: http://dropzonejs.com -->
-        <script type="text/javascript" src="scripts/dropzone.js"></script>
+    <!-- Leaflet Maps Scripts -->
+    <script src="scripts/leaflet-markercluster.min.js"></script>
+    <script src="scripts/leaflet-gesture-handling.min.js"></script>
+    <script src="scripts/leaflet-listeo.js"></script>
+
+    <!-- Leaflet Geocoder + Search Autocomplete // Docs: https://github.com/perliedman/leaflet-control-geocoder -->
+    <script src="scripts/leaflet-autocomplete.js"></script>
+    <script src="scripts/leaflet-control-geocoder.js"></script>
+    <script>
+        /* GET CURRENT POSITION */
+        window.addEventListener('load', function() {
+            showLocation();
+        });
+    </script>
+    <!-- Opening hours added via JS (this is only for demo purpose) -->
+    <script>
+        $(".opening-day.js-demo-hours .chosen-select").each(function() {
+            $(this).append('' +
+                '<option></option>' +
+                '<option>Closed</option>' +
+                '<option>1 AM</option>' +
+                '<option>2 AM</option>' +
+                '<option>3 AM</option>' +
+                '<option>4 AM</option>' +
+                '<option>5 AM</option>' +
+                '<option>6 AM</option>' +
+                '<option>7 AM</option>' +
+                '<option>8 AM</option>' +
+                '<option>9 AM</option>' +
+                '<option>10 AM</option>' +
+                '<option>11 AM</option>' +
+                '<option>12 AM</option>' +
+                '<option>1 PM</option>' +
+                '<option>2 PM</option>' +
+                '<option>3 PM</option>' +
+                '<option>4 PM</option>' +
+                '<option>5 PM</option>' +
+                '<option>6 PM</option>' +
+                '<option>7 PM</option>' +
+                '<option>8 PM</option>' +
+                '<option>9 PM</option>' +
+                '<option>10 PM</option>' +
+                '<option>11 PM</option>' +
+                '<option>12 PM</option>');
+        });
+    </script>
+
+    <!-- DropZone | Documentation: http://dropzonejs.com -->
+    <script type="text/javascript" src="scripts/dropzone.js"></script>
 
 </body>
 

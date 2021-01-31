@@ -75,7 +75,7 @@ var infoBox_ratingType = 'star-rating';
         var scrollEnabled = false;
       }
 
-      const addressMap = JSON.parse(sessionStorage.getItem('fyc-address'));
+      const addressMap = JSON.parse(sessionStorage.getItem('fyc-coords'));
       // Main Map
       var map = new google.maps.Map(document.getElementById('map'), {
         zoom: zoomLevel,

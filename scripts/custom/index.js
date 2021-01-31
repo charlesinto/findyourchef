@@ -333,106 +333,6 @@ if (addListingSection) {
     "saturday" : [],
     "sunday" : []
   };
-  /*let availability = {
-    "monday": [
-        {
-            "startHours": 0,
-            "startMinutes": 30,
-            "endHours": 2,
-            "endMinutes": 30
-        },
-        {
-            "startHours": 12,
-            "startMinutes": 25,
-            "endHours": 16,
-            "endMinutes": 50
-        }
-    ],
-    "tuesday": [
-        {
-            "startHours": 1,
-            "startMinutes": 30,
-            "endHours": 2,
-            "endMinutes": 30
-        },
-        {
-            "startHours": 12,
-            "startMinutes": 25,
-            "endHours": 16,
-            "endMinutes": 50
-        }
-    ],
-    "wednesday": [
-        {
-            "startHours": 1,
-            "startMinutes": 30,
-            "endHours": 2,
-            "endMinutes": 30
-        },
-        {
-            "startHours": 12,
-            "startMinutes": 25,
-            "endHours": 16,
-            "endMinutes": 50
-        }
-    ],
-    "thursday": [
-        {
-            "startHours": 1,
-            "startMinutes": 30,
-            "endHours": 2,
-            "endMinutes": 30
-        },
-        {
-            "startHours": 12,
-            "startMinutes": 25,
-            "endHours": 16,
-            "endMinutes": 50
-        }
-    ],
-    "friday": [
-        {
-            "startHours": 1,
-            "startMinutes": 30,
-            "endHours": 2,
-            "endMinutes": 30
-        },
-        {
-            "startHours": 12,
-            "startMinutes": 25,
-            "endHours": 16,
-            "endMinutes": 50
-        }
-    ],
-    "saturday": [
-        {
-            "startHours": 1,
-            "startMinutes": 30,
-            "endHours": 2,
-            "endMinutes": 30
-        },
-        {
-            "startHours": 12,
-            "startMinutes": 25,
-            "endHours": 16,
-            "endMinutes": 50
-        }
-    ],
-    "sunday": [
-        {
-            "startHours": 1,
-            "startMinutes": 30,
-            "endHours": 2,
-            "endMinutes": 30
-        },
-        {
-            "startHours": 12,
-            "startMinutes": 25,
-            "endHours": 16,
-            "endMinutes": 50
-        }
-    ]
-}*/
   addListingSection.addEventListener('click', (e) => {
     if (e.target.textContent === 'Add') {
       let startInput = e.target.parentElement.parentElement.children[0].children[0].value;
@@ -464,21 +364,23 @@ if (addListingSection) {
       let category = document.querySelector('#category').value;
       let keywords = document.querySelector('#keywords').value;
       let tags = keywords.split(',');
-      let location = document.querySelector('#location').value;
+      let location = document.querySelector('#autocomplete-input').value;
       let radius = document.querySelector('#radius').value;
       let dropzone = document.querySelector('#dropzone').value;
       let overview = document.querySelector('#summary').value;
       let phoneOptional = document.querySelector('#phone-optional').value;
       let websiteOptional = document.querySelector('#website-optional').value;
       let emailOptional = document.querySelector('#email-optional').value;
-      let coords = "39.7993942,-78.9658362";
+      const inputAddress = JSON.parse(sessionStorage.getItem('fyc-coords'));
+      const lat = inputAddress.lat;
+      const lng = inputAddress.lng;
       let perimeter = ["1.02433,0.84950", "2.4923,1.490493"];
       let price = "40";
       const data = {
         name,
         location,
         price,
-        coords,
+        coords: `${lat},${lng}`,
         overview,
         category,
         perimeter,
@@ -639,7 +541,6 @@ const popRecipe = (recipes) => {
     `;
     listParent.innerHTML += list;
   });
-
 }
 
 /* DELETE RECIPE */
@@ -668,6 +569,61 @@ const popRecipe = (recipes) => {
     });      
   }
 
+
+/* GET RECIPE */
+const loadExpiredRecipe = () => {
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  const chefID = userData._id;
+  const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
+  const data = {
+    chefID,
+  };
+  axios.post(`${baseURL}/chef/recipe/list?status=expired&page=1`, data, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+  }).then((res) => {
+    console.log(res);
+    const recipes = res.data.payload.data;
+    popDelRecipe(recipes);
+  }).catch((err) => {
+    if (err.response && err.response.data) {
+      toastr.error(err.response.data.error.message);
+    } else {
+      toastr.error('Something went wrong, please try again');
+    }
+  });
+};
+const popDelRecipe = (recipes) => {
+  const listParent = document.querySelector('#recipe-list');
+  listParent.innerHTML = "";
+  recipes.forEach(recipe => {
+    const name = recipe.name;
+    const location = recipe.location;
+    const image = recipe.image;
+    const recipeID = recipe._id;
+    const chefID = recipe.chefID
+    const event = window.Event;
+    let list = `
+    <li>
+      <div class="list-box-listing">
+        <div class="list-box-listing-img"><a href="#"><img src="${image}" alt=""></a></div>
+        <div class="list-box-listing-content">
+          <div class="inner">
+            <h3><a href="#">${name}</a></h3>
+            <span>${location}</span>
+            <div class="star-rating" data-rating="5">
+              <div class="rating-counter">(12 reviews)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    `;
+    listParent.innerHTML += list;
+  });
+}
+
 /* REMOVE SIGN IN BUTTON IF THE USER IS SIGNED IN */
 
 adjacentElement = document.querySelector('.with-icon');
@@ -688,10 +644,22 @@ if (adjacentElement) {
   adjacentElement.insertAdjacentElement('beforebegin', targetElement);
 }
 
+
+const tagCon = document.querySelector('.highlighted-categories');
+if (tagCon) {
+  let tag;
+  tagCon.addEventListener('click', (e) => {
+    e.preventDefault();
+    const category = e.target.dataset.category;
+    sessionStorage.setItem('fyc-data-category', category);
+  })
+}
+
 /*SEARCH QUERY ON HOME PAGE TO FIND CHEF IN EXPLORE PAGE */
 const findChef = () => {
   const data = {
     searchInput : document.querySelector('.search-input').value,
+    locationInput: document.querySelector('#autocomplete-input').value,
     radius : "50miles"
   }
   sessionStorage.setItem('fyc-search', JSON.stringify(data));
@@ -802,14 +770,27 @@ const loadAllRecipes = () => {
     })
   } else {
     /* VIEW SEARCHED RECIPES */
-    const searchInput = searchData.searchInput;
-    const searchLocation = searchData.searchLocation;
-    // const searchLocation = "39.7993942,-78.9658362";
+    const location = searchData.locationInput;
+    const radius = searchData.radius;
+    const input = searchData.searchInput;
+    const category = sessionStorage.getItem('fyc-data-category');
+    const inputAddress = JSON.parse(sessionStorage.getItem('fyc-address')) || JSON.parse(sessionStorage.getItem('fyc-coords'));
+    const lat = inputAddress.lat;
+    const lng = inputAddress.lng;
     const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
     const data = {
-      searchLocation,
-      searchInput
+      location,
+      radius,
+      coords: `${lat},${lng}`
     };
+    console.log(data);
+    if(input) {
+      data.input = input;
+      data.tag = input;
+    }
+    if(category) {
+      data.category = category;
+    }
     axios.post(`${baseURL}/recipes/search?page=1`, data, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -1270,6 +1251,25 @@ const getLocation = (showPosition) => {
     lat,
     lng
   }
+  sessionStorage.setItem('fyc-coords', JSON.stringify(latlng));
+  const geocoder = new google.maps.Geocoder();
+  geocoder.geocode({location: latlng}, (results, status) => {
+    if (status === "OK") {
+      if (results[0]) {
+        const address = results[2].formatted_address;
+        const locationInput = document.querySelector('#autocomplete-input');
+        locationInput.value = address;
+      } else {
+        window.alert("No results found");
+      }
+    } else {
+      window.alert(`Geocoder failed due to ${status}`);
+    }
+  });
+}
+
+const showLocation = () => {
+  const latlng = JSON.parse(sessionStorage.getItem('fyc-coords'));
   const geocoder = new google.maps.Geocoder();
   geocoder.geocode({location: latlng}, (results, status) => {
     if (status === "OK") {
