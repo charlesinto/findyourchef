@@ -527,9 +527,9 @@ const popRecipe = (recipes) => {
           <div class="inner">
             <h3><a href="#">${name}</a></h3>
             <span>${location}</span>
-            <div class="star-rating" data-rating="5">
+            <!--<div class="star-rating" data-rating="5">
               <div class="rating-counter">(12 reviews)</div>
-            </div>
+            </div>-->
           </div>
         </div>
       </div>
@@ -541,6 +541,118 @@ const popRecipe = (recipes) => {
     `;
     listParent.innerHTML += list;
   });
+  
+/*----------------------------------------------------*/
+/*  Rating Overview Background Colors
+/*----------------------------------------------------*/
+function ratingOverview(ratingElem) {
+
+  $(ratingElem).each(function() {
+    var dataRating = $(this).attr('data-rating');
+    // Rules
+      if (dataRating >= 4.0) {
+          $(this).addClass('high');
+          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*100 + "%", });
+      } else if (dataRating >= 3.0) {
+          $(this).addClass('mid');
+          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*80 + "%", });
+      } else if (dataRating < 3.0) {
+          $(this).addClass('low');
+          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*60 + "%", });
+      }
+
+  });
+} ratingOverview('.rating-bars-rating');
+
+$(window).on('resize', function() {
+  ratingOverview('.rating-bars-rating');
+});
+
+
+/*----------------------------------------------------*/
+/*  Ratings Script
+/*----------------------------------------------------*/
+
+/*  Numerical Script
+/*--------------------------*/
+function numericalRating(ratingElem) {
+
+	$(ratingElem).each(function() {
+		var dataRating = $(this).attr('data-rating');
+
+		// Rules
+	    if (dataRating >= 4.0) {
+	        $(this).addClass('high');
+	    } else if (dataRating >= 3.0) {
+	        $(this).addClass('mid');
+	    } else if (dataRating < 3.0) {
+	        $(this).addClass('low');
+	    }
+
+	});
+
+} numericalRating('.numerical-rating');
+
+
+/*  Star Rating
+/*--------------------------*/
+function starRating(ratingElem) {
+
+	$(ratingElem).each(function() {
+
+		var dataRating = $(this).attr('data-rating');
+		// Rating Stars Output
+		function starsOutput(firstStar, secondStar, thirdStar, fourthStar, fifthStar) {
+			return(''+
+				'<span class="'+firstStar+'"></span>'+
+				'<span class="'+secondStar+'"></span>'+
+				'<span class="'+thirdStar+'"></span>'+
+				'<span class="'+fourthStar+'"></span>'+
+				'<span class="'+fifthStar+'"></span>');
+		}
+
+		var fiveStars = starsOutput('star','star','star','star','star');
+
+		var fourHalfStars = starsOutput('star','star','star','star','star half');
+		var fourStars = starsOutput('star','star','star','star','star empty');
+
+		var threeHalfStars = starsOutput('star','star','star','star half','star empty');
+		var threeStars = starsOutput('star','star','star','star empty','star empty');
+
+		var twoHalfStars = starsOutput('star','star','star half','star empty','star empty');
+		var twoStars = starsOutput('star','star','star empty','star empty','star empty');
+
+		var oneHalfStar = starsOutput('star','star half','star empty','star empty','star empty');
+		var oneStar = starsOutput('star','star empty','star empty','star empty','star empty');
+
+    // Rules
+    console.log('dataRating');
+        if (dataRating >= 4.75) {
+            $(this).append(fiveStars);
+        } else if (dataRating >= 4.25) {
+            $(this).append(fourHalfStars);
+        } else if (dataRating >= 3.75) {
+            $(this).append(fourStars);
+            // document.querySelector('.star-rating').innerHTML += fourStars;
+        } else if (dataRating >= 3.25) {
+            $(this).append(threeHalfStars);
+            // document.querySelector('.star-rating').innerHTML += 'threeHalfStars';
+        } else if (dataRating >= 2.75) {
+            $(this).append(threeStars);
+        } else if (dataRating >= 2.25) {
+            $(this).append(twoHalfStars);
+        } else if (dataRating >= 1.75) {
+            $(this).append(twoStars);
+        } else if (dataRating >= 1.25) {
+            $(this).append(oneHalfStar);
+        } else if (dataRating < 1.25) {
+            $(this).append(oneStar);
+        }
+
+	});
+
+} starRating('.star-rating');
+
 }
 
 /* DELETE RECIPE */
@@ -612,9 +724,9 @@ const popDelRecipe = (recipes) => {
           <div class="inner">
             <h3><a href="#">${name}</a></h3>
             <span>${location}</span>
-            <div class="star-rating" data-rating="5">
+            <!--<div class="star-rating" data-rating="5">
               <div class="rating-counter">(12 reviews)</div>
-            </div>
+            </div>-->
           </div>
         </div>
       </div>
@@ -622,6 +734,115 @@ const popDelRecipe = (recipes) => {
     `;
     listParent.innerHTML += list;
   });
+  
+/*----------------------------------------------------*/
+/*  Rating Overview Background Colors
+/*----------------------------------------------------*/
+function ratingOverview(ratingElem) {
+
+  $(ratingElem).each(function() {
+    var dataRating = $(this).attr('data-rating');
+    // Rules
+      if (dataRating >= 4.0) {
+          $(this).addClass('high');
+          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*100 + "%", });
+      } else if (dataRating >= 3.0) {
+          $(this).addClass('mid');
+          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*80 + "%", });
+      } else if (dataRating < 3.0) {
+          $(this).addClass('low');
+          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*60 + "%", });
+      }
+
+  });
+} ratingOverview('.rating-bars-rating');
+
+$(window).on('resize', function() {
+  ratingOverview('.rating-bars-rating');
+});
+
+
+/*----------------------------------------------------*/
+/*  Ratings Script
+/*----------------------------------------------------*/
+
+/*  Numerical Script
+/*--------------------------*/
+function numericalRating(ratingElem) {
+
+	$(ratingElem).each(function() {
+		var dataRating = $(this).attr('data-rating');
+
+		// Rules
+	    if (dataRating >= 4.0) {
+	        $(this).addClass('high');
+	    } else if (dataRating >= 3.0) {
+	        $(this).addClass('mid');
+	    } else if (dataRating < 3.0) {
+	        $(this).addClass('low');
+	    }
+
+	});
+
+} numericalRating('.numerical-rating');
+
+
+/*  Star Rating
+/*--------------------------*/
+function starRating(ratingElem) {
+
+	$(ratingElem).each(function() {
+
+		var dataRating = $(this).attr('data-rating');
+		// Rating Stars Output
+		function starsOutput(firstStar, secondStar, thirdStar, fourthStar, fifthStar) {
+			return(''+
+				'<span class="'+firstStar+'"></span>'+
+				'<span class="'+secondStar+'"></span>'+
+				'<span class="'+thirdStar+'"></span>'+
+				'<span class="'+fourthStar+'"></span>'+
+				'<span class="'+fifthStar+'"></span>');
+		}
+
+		var fiveStars = starsOutput('star','star','star','star','star');
+
+		var fourHalfStars = starsOutput('star','star','star','star','star half');
+		var fourStars = starsOutput('star','star','star','star','star empty');
+
+		var threeHalfStars = starsOutput('star','star','star','star half','star empty');
+		var threeStars = starsOutput('star','star','star','star empty','star empty');
+
+		var twoHalfStars = starsOutput('star','star','star half','star empty','star empty');
+		var twoStars = starsOutput('star','star','star empty','star empty','star empty');
+
+		var oneHalfStar = starsOutput('star','star half','star empty','star empty','star empty');
+		var oneStar = starsOutput('star','star empty','star empty','star empty','star empty');
+
+    // Rules
+        if (dataRating >= 4.75) {
+            $(this).append(fiveStars);
+        } else if (dataRating >= 4.25) {
+            $(this).append(fourHalfStars);
+        } else if (dataRating >= 3.75) {
+            $(this).append(fourStars);
+        } else if (dataRating >= 3.25) {
+            $(this).append(threeHalfStars);
+        } else if (dataRating >= 2.75) {
+            $(this).append(threeStars);
+        } else if (dataRating >= 2.25) {
+            $(this).append(twoHalfStars);
+        } else if (dataRating >= 1.75) {
+            $(this).append(twoStars);
+        } else if (dataRating >= 1.25) {
+            $(this).append(oneHalfStar);
+        } else if (dataRating < 1.25) {
+            $(this).append(oneStar);
+        }
+
+    });
+
+  } starRating('.star-rating');
+
 }
 
 /* REMOVE SIGN IN BUTTON IF THE USER IS SIGNED IN */
@@ -724,8 +945,168 @@ const popLatestRecipes = (recipes) => {
     <!-- Listing Item / End -->
     `;
     recipeContainer.innerHTML += listItem;
-  }) 
+  })
+    
+/*----------------------------------------------------*/
+/*  Rating Overview Background Colors
+/*----------------------------------------------------*/
+function ratingOverview(ratingElem) {
+
+  $(ratingElem).each(function() {
+    var dataRating = $(this).attr('data-rating');
+    // Rules
+      if (dataRating >= 4.0) {
+          $(this).addClass('high');
+          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*100 + "%", });
+      } else if (dataRating >= 3.0) {
+          $(this).addClass('mid');
+          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*80 + "%", });
+      } else if (dataRating < 3.0) {
+          $(this).addClass('low');
+          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*60 + "%", });
+      }
+
+  });
+} ratingOverview('.rating-bars-rating');
+
+$(window).on('resize', function() {
+  ratingOverview('.rating-bars-rating');
+});
+
+
+/*----------------------------------------------------*/
+/*  Ratings Script
+/*----------------------------------------------------*/
+
+/*  Numerical Script
+/*--------------------------*/
+function numericalRating(ratingElem) {
+
+	$(ratingElem).each(function() {
+		var dataRating = $(this).attr('data-rating');
+
+		// Rules
+	    if (dataRating >= 4.0) {
+	        $(this).addClass('high');
+	    } else if (dataRating >= 3.0) {
+	        $(this).addClass('mid');
+	    } else if (dataRating < 3.0) {
+	        $(this).addClass('low');
+	    }
+
+	});
+
+} numericalRating('.numerical-rating');
+
+
+/*  Star Rating
+/*--------------------------*/
+function starRating(ratingElem) {
+
+	$(ratingElem).each(function() {
+
+		var dataRating = $(this).attr('data-rating');
+		// Rating Stars Output
+		function starsOutput(firstStar, secondStar, thirdStar, fourthStar, fifthStar) {
+			return(''+
+				'<span class="'+firstStar+'"></span>'+
+				'<span class="'+secondStar+'"></span>'+
+				'<span class="'+thirdStar+'"></span>'+
+				'<span class="'+fourthStar+'"></span>'+
+				'<span class="'+fifthStar+'"></span>');
+		}
+
+		var fiveStars = starsOutput('star','star','star','star','star');
+
+		var fourHalfStars = starsOutput('star','star','star','star','star half');
+		var fourStars = starsOutput('star','star','star','star','star empty');
+
+		var threeHalfStars = starsOutput('star','star','star','star half','star empty');
+		var threeStars = starsOutput('star','star','star','star empty','star empty');
+
+		var twoHalfStars = starsOutput('star','star','star half','star empty','star empty');
+		var twoStars = starsOutput('star','star','star empty','star empty','star empty');
+
+		var oneHalfStar = starsOutput('star','star half','star empty','star empty','star empty');
+		var oneStar = starsOutput('star','star empty','star empty','star empty','star empty');
+
+    // Rules
+        if (dataRating >= 4.75) {
+            $(this).append(fiveStars);
+        } else if (dataRating >= 4.25) {
+            $(this).append(fourHalfStars);
+        } else if (dataRating >= 3.75) {
+            $(this).append(fourStars);
+        } else if (dataRating >= 3.25) {
+            $(this).append(threeHalfStars);
+        } else if (dataRating >= 2.75) {
+            $(this).append(threeStars);
+        } else if (dataRating >= 2.25) {
+            $(this).append(twoHalfStars);
+        } else if (dataRating >= 1.75) {
+            $(this).append(twoStars);
+        } else if (dataRating >= 1.25) {
+            $(this).append(oneHalfStar);
+        } else if (dataRating < 1.25) {
+            $(this).append(oneStar);
+        }
+
+    });
+
+  } starRating('.star-rating');
+
+
+  setTimeout(() => {
+   return $('.simple-slick-carousel').slick({
+    infinite: true,
+		slidesToShow: 3,
+		slidesToScroll: 3,
+		dots: true,
+		arrows: true,
+		responsive: [
+		    {
+		      breakpoint: 992,
+		      settings: {
+		        slidesToShow: 2,
+		        slidesToScroll: 2
+		      }
+		    },
+		    {
+		      breakpoint: 769,
+		      settings: {
+		        slidesToShow: 1,
+		        slidesToScroll: 1
+		      }
+		    }
+	  ]
+  });
+  })
 }
+// function makeSlider (){
+//   $('.simple-slick-carousel').slick({
+//     infinite: true,
+// 		slidesToShow: 3,
+// 		slidesToScroll: 3,
+// 		dots: true,
+// 		arrows: true,
+// 		responsive: [
+// 		    {
+// 		      breakpoint: 992,
+// 		      settings: {
+// 		        slidesToShow: 2,
+// 		        slidesToScroll: 2
+// 		      }
+// 		    },
+// 		    {
+// 		      breakpoint: 769,
+// 		      settings: {
+// 		        slidesToShow: 1,
+// 		        slidesToScroll: 1
+// 		      }
+// 		    }
+// 	  ]
+//   });
+// } makeSlider();
 
 /* VIEW RECIPES */
 const loadAllRecipes = () => {
@@ -736,7 +1117,6 @@ const loadAllRecipes = () => {
   if (searchData === null) {
     const pagination = document.querySelector('.recipe-pagination');
     let page = 1;
-    console.log(page);
     axios.get(`${baseURL}/recipes?page=${page}`).then((res) => {
       console.log(res.data.payload.data);
       const recipes = res.data.payload.data;
@@ -864,277 +1244,120 @@ const popAllRecipes = (recipes) => {
     `;
     recipeContainer.innerHTML += listItem;
   }) 
+  
+/*----------------------------------------------------*/
+/*  Rating Overview Background Colors
+/*----------------------------------------------------*/
+function ratingOverview(ratingElem) {
+
+  $(ratingElem).each(function() {
+    var dataRating = $(this).attr('data-rating');
+    // Rules
+      if (dataRating >= 4.0) {
+          $(this).addClass('high');
+          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*100 + "%", });
+      } else if (dataRating >= 3.0) {
+          $(this).addClass('mid');
+          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*80 + "%", });
+      } else if (dataRating < 3.0) {
+          $(this).addClass('low');
+          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*60 + "%", });
+      }
+
+  });
+} ratingOverview('.rating-bars-rating');
+
+$(window).on('resize', function() {
+  ratingOverview('.rating-bars-rating');
+});
+
+
+/*----------------------------------------------------*/
+/*  Ratings Script
+/*----------------------------------------------------*/
+
+/*  Numerical Script
+/*--------------------------*/
+function numericalRating(ratingElem) {
+
+	$(ratingElem).each(function() {
+		var dataRating = $(this).attr('data-rating');
+
+		// Rules
+	    if (dataRating >= 4.0) {
+	        $(this).addClass('high');
+	    } else if (dataRating >= 3.0) {
+	        $(this).addClass('mid');
+	    } else if (dataRating < 3.0) {
+	        $(this).addClass('low');
+	    }
+
+	});
+
+} numericalRating('.numerical-rating');
+
+
+/*  Star Rating
+/*--------------------------*/
+function starRating(ratingElem) {
+
+	$(ratingElem).each(function() {
+
+		var dataRating = $(this).attr('data-rating');
+		// Rating Stars Output
+		function starsOutput(firstStar, secondStar, thirdStar, fourthStar, fifthStar) {
+			return(''+
+				'<span class="'+firstStar+'"></span>'+
+				'<span class="'+secondStar+'"></span>'+
+				'<span class="'+thirdStar+'"></span>'+
+				'<span class="'+fourthStar+'"></span>'+
+				'<span class="'+fifthStar+'"></span>');
+		}
+
+		var fiveStars = starsOutput('star','star','star','star','star');
+
+		var fourHalfStars = starsOutput('star','star','star','star','star half');
+		var fourStars = starsOutput('star','star','star','star','star empty');
+
+		var threeHalfStars = starsOutput('star','star','star','star half','star empty');
+		var threeStars = starsOutput('star','star','star','star empty','star empty');
+
+		var twoHalfStars = starsOutput('star','star','star half','star empty','star empty');
+		var twoStars = starsOutput('star','star','star empty','star empty','star empty');
+
+		var oneHalfStar = starsOutput('star','star half','star empty','star empty','star empty');
+		var oneStar = starsOutput('star','star empty','star empty','star empty','star empty');
+
+    // Rules
+        if (dataRating >= 4.75) {
+            $(this).append(fiveStars);
+        } else if (dataRating >= 4.25) {
+            $(this).append(fourHalfStars);
+        } else if (dataRating >= 3.75) {
+            $(this).append(fourStars);
+        } else if (dataRating >= 3.25) {
+            $(this).append(threeHalfStars);
+        } else if (dataRating >= 2.75) {
+            $(this).append(threeStars);
+        } else if (dataRating >= 2.25) {
+            $(this).append(twoHalfStars);
+        } else if (dataRating >= 1.75) {
+            $(this).append(twoStars);
+        } else if (dataRating >= 1.25) {
+            $(this).append(oneHalfStar);
+        } else if (dataRating < 1.25) {
+            $(this).append(oneStar);
+        }
+
+	});
+
+} starRating('.star-rating');
+
 }
 /* SET RECIPE ID TO LOCALSTORAGE */
 const loadRecipePage = (id) => {
   localStorage.setItem('fyc-recipe-id', id);
   location.href = '/listings-single-page.html';
-}
-
-/* FETCH RECIPE DATA */
-const fetchRecipeData = () => {
-  const id = localStorage.getItem('fyc-recipe-id');
-  axios.get(`${baseURL}/recipes/${id}`).then((res) => {
-    const recipe = res.data.payload.data;
-    console.log(recipe);
-    popRecipeData(recipe);
-    fetchRecipeReview(id);
-  }).catch((err) => {
-    console.log(err);
-    if (err.response && err.response.data) {
-      toastr.error(err.response.data.error.message);
-    } else {
-      toastr.error('Something went wrong, please try again');
-    }
-  });
-}
-
-
-	/*----------------------------------------------------*/
-	/*  Inline CSS replacement for backgrounds etc.
-	/*----------------------------------------------------*/
-	function inlineCSS() {
-
-		// Common Inline CSS
-		$(".main-search-container, section.fullwidth, .listing-slider .item, .listing-slider-small .item, .address-container, .img-box-background, .image-edge, .edge-bg").each(function() {
-			var attrImageBG = $(this).attr('data-background-image');
-			var attrColorBG = $(this).attr('data-background-color');
-
-	        if(attrImageBG !== undefined) {
-	            $(this).css('background-image', 'url('+attrImageBG+')');
-	        }
-
-	        if(attrColorBG !== undefined) {
-	            $(this).css('background', ''+attrColorBG+'');
-	        }
-		});
-
-	}
-
-
-/* POPULATE DOM WITH RECIPE DATA */
-const popRecipeData = (data) => {
-  const name = data.name;
-  const chefName = data.chefName;
-  const image = data.image;
-  const price = data.price;
-  const category = data.category;
-  const location = data.location;
-  const tags = data.tags;
-  const overview = data.overview;
-  const availability = data.availability;
-  sessionStorage.setItem('fyc-availability', JSON.stringify(availability))
-  // const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-  // const email = userData.email;
-  const phone = data.chefNumber;
-  // const userImage = userData.image;
-  const email = "rexitodo@gmail.com";
-  const slider = document.querySelector('.listing-slider');
-  slider.innerHTML = `
-                  <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 1"></a>
-                  <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 3"></a>
-                  <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 2"></a>
-                  <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 4"></a>
-                  `;
-  
-
-                  $('.listing-slider').slick({
-                    centerMode: true,
-                    centerPadding: '20%',
-                    slidesToShow: 2,
-                    responsive: [
-                      {
-                        breakpoint: 1367,
-                        settings: {
-                          centerPadding: '15%'
-                        }
-                      },
-                      {
-                        breakpoint: 1025,
-                        settings: {
-                          centerPadding: '0'
-                        }
-                      },
-                      {
-                        breakpoint: 767,
-                        settings: {
-                          centerPadding: '0',
-                          slidesToShow: 1
-                        }
-                      }
-                    ]
-                  });
-                  inlineCSS();
-  const titlebarTitle = document.querySelector('.listing-titlebar-title');
-  titlebarTitle.innerHTML = `
-                          <div class="listing-titlebar-title">
-                            <h2>${name}<span class="listing-tag">${category}</span></h2>
-                            <span>
-                              <a href="#listing-location" class="listing-address">
-                                <i class="fa fa-map-marker"></i>
-                                ${location}
-                              </a>
-                            </span>
-                            <div class="star-rating" data-rating="5">
-                              <div class="rating-counter"><a href="#listing-reviews">(31 reviews)</a></div>
-                            </div>
-                          </div>
-  `;
-  const listingOverview = document.querySelector('#listing-overview');
-  listingOverview.innerHTML = `
-  
-                            <p>
-                            ${overview}
-                          </p>
-                          <div class="clearfix"></div>
-
-                          <h3 class="listing-desc-headline">Tags</h3>
-                          <ul class="listing-features checkboxes margin-top-0">
-                          </ul>
-  `;
-  const listingFeatures = document.querySelector('.listing-features');
-  tags.forEach(tag => {
-    listingFeatures.innerHTML += `<li>${tag}</li>`;
-  })
-  const hostedTitle = document.querySelector('.hosted-by-title');
-  hostedTitle.innerHTML = `
-                        <h4><span>Recipe by</span> <a href="pages-user-profile.html">${chefName}</a></h4>
-                        <a href="pages-user-profile.html" class="hosted-by-avatar"><img src="" alt=""></a>
-  `;
-  const listingDetails = document.querySelector('.listing-details-sidebar');
-  listingDetails.innerHTML = `
-                          <li><i class="sl sl-icon-phone"></i>${phone}</li>
-                          <li><i class="fa fa-envelope-o"></i> <a href="#">${email}</a></li>
-  `;
-  const dollarSign = document.querySelector('.bsf-left');
-  dollarSign.innerHTML = `
-                      <h4>Starting from $${price}</h4>
-                      <div class="star-rating" data-rating="5">
-                        <div class="rating-counter"></div>
-                      </div>
-  `;
-}
-
-const fetchRecipeReview = (id) => {
-  const data = {
-    recipeID : id
-  }
-  axios.get(`${baseURL}/reviews/${id}?page=1`, data).then( res => {
-    const reviews = res.data.payload.data;
-    popReviews(reviews);
-  }).catch((err) => {
-    console.log(err)
-    if (err.response && err.response.data) {
-      toastr.error(err.response.data.error.message);
-    } else {
-      toastr.error('Something went wrong, please try again');
-    }
-  });
-}
-
-const popReviews = (reviews) => {
-  const length = reviews.length;
-  const review_count = document.querySelector('.pop-review-count');
-  review_count.innerText = `(${length})`;
-  const reviewBody = document.querySelector('.listing-reviews-body');
-  reviews.forEach(review => {
-    const image = review.reviewersImage;
-    const name = review.reviewersName;
-    const recipeImage = review.recipesImage[0];
-    const comment = review.review;
-    const stars = review.stars;
-    const date = new Date(review.created);
-    const year = date.getFullYear();
-    const num = date.getMonth();
-    const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"];
-    const month = months[num];
-    const formattedDate = `${month} ${year}`;
-    reviewBody.innerHTML += `
-            <li>
-							<div class="avatar"><img src="${image}" alt="" /></div>
-							<div class="comment-content"><div class="arrow-comment"></div>
-								<div class="comment-by">${name}<i class="tip" data-tip-content="Person who left this review actually was a customer"></i> <span class="date">${formattedDate}</span>
-									<div class="star-rating" data-rating="${stars}"></div>
-								</div>
-								<p>${comment}</p>
-								
-								<div class="review-images mfp-gallery-container">
-									<a href="${recipeImage}" class="mfp-gallery"><img src="${recipeImage}" alt=""></a>
-								</div>
-								<a href="#" class="rate-review"><i class="sl sl-icon-like"></i> Helpful Review <span>12</span></a>
-							</div>
-						</li>
-    `;
-  })
-}
-
-const addReviewToDOM = () => {
-  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-  const name = userData.fullname;
-  const image = userData.image;
-  const date = new Date();
-  const year = date.getFullYear();
-  const num = date.getMonth();
-  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"];
-  const month = months[num];
-  const formattedDate = `${month} ${year}`;
-  const review = document.querySelector('.review-area').value;
-  const stars = 5;
-  const recipeImage = document.querySelector('.uploadButton-input').value;
-  const reviewBody = document.querySelector('.listing-reviews-body');
-  reviewBody.innerHTML += `
-  <li>
-    <div class="avatar"><img src="${image}" alt="" /></div>
-    <div class="comment-content"><div class="arrow-comment"></div>
-      <div class="comment-by">${name}<i class="tip" data-tip-content="Person who left this review actually was a customer"></i> <span class="date">${formattedDate}</span>
-        <div class="star-rating" data-rating="${stars}"></div>
-      </div>
-      <p>${review}</p>
-      
-      <div class="review-images mfp-gallery-container">
-        <a href="${recipeImage}" class="mfp-gallery"><img src="${recipeImage}" alt=""></a>
-      </div>
-      <a href="#" class="rate-review"><i class="sl sl-icon-like"></i> Helpful Review <span>12</span></a>
-    </div>
-  </li>
-  `;
-}
-
-const postReview = (e) => {
-  e.preventDefault();
-  const recipeID = localStorage.getItem('fyc-recipe-id');
-  const token = localStorage.getItem('fyc-token');
-  if (!token) {
-    toastr.error("You need to be signed in to be able to drop a review");
-  } else {
-    const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-    let reviewersID = userData._id;
-    const review = document.querySelector('.review-area').value;
-    const stars = 5;
-   
-    const data = {
-      reviewersID,
-      recipeID,
-      review,
-      stars
-    };
-    console.log(data);
-    axios.post(`${baseURL}/reviews`, data, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-    }).then((res) => {
-      console.log(res);
-      addReviewToDOM();
-      toastr.success(res.data.payload.data.message);
-    }).catch((err) => {
-      if (err.response && err.response.data) {
-        toastr.error(err.response.data.error.message);
-      } else {
-        toastr.error('Something went wrong, please try again');
-      }
-    });
-  }
 }
 
 /* BOOKMARK RECIPE */
@@ -1190,60 +1413,6 @@ e.preventDefault();
     }
   }
 }
-const bookmark = document.querySelector('.like-button');
-if (bookmark) {
-  bookmark.addEventListener('click', (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem('fyc-token');
-    if (token) {
-      const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-      const bookmarkersID = userData._id;
-      const recipeID = localStorage.getItem('fyc-recipe-id');
-      const data = {
-        bookmarkersID,
-        recipeID
-      }
-      if (localStorage.getItem('fyc-bookmark-id') === null) {
-        axios.post(`${baseURL}/bookmark`, data, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
-        }).then((res) => {
-          console.log(res);
-          toastr.success("Recipe bookmarked");
-          localStorage.setItem('fyc-bookmark-id', res.data.payload.data._id);
-        }).catch((err) => {
-          if (err.response && err.response.data) {
-            toastr.error(err.response.data.error.message);
-          } else {
-            toastr.error('Something went wrong, please try again');
-          }
-        });
-      } else {
-        const bookmarkID = localStorage.getItem('fyc-bookmark-id');
-        const data = {
-          bookmarkID
-        }
-        axios.delete(`${baseURL}/bookmark`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
-        }, data).then((res) => {
-          console.log(res);
-          toastr.success(res.data.payload.data.message);
-          localStorage.removeItem('fyc-bookmark-id');
-        }).catch((err) => {
-          if (err.response && err.response.data) {
-            toastr.error(err.response.data.error.message);
-          } else {
-            toastr.error('Something went wrong, please try again');
-          }
-        });   
-      }
-    }
-  })
-}
-
 const getLocation = (showPosition) => {
   const lat = showPosition.coords.latitude;
   const lng = showPosition.coords.longitude;
@@ -1378,11 +1547,11 @@ function starRating(ratingElem) {
         } else if (dataRating >= 4.25) {
             $(this).append(fourHalfStars);
         } else if (dataRating >= 3.75) {
-            // $(this).append(fourStars);
-            document.querySelector('.star-rating').innerHTML += fourStars;
+            $(this).append(fourStars);
+            // document.querySelector('.star-rating').innerHTML += fourStars;
         } else if (dataRating >= 3.25) {
-            // $(this).append(threeHalfStars);
-            document.querySelector('.star-rating').innerHTML += 'threeHalfStars';
+            $(this).append(threeHalfStars);
+            // document.querySelector('.star-rating').innerHTML += 'threeHalfStars';
         } else if (dataRating >= 2.75) {
             $(this).append(threeStars);
         } else if (dataRating >= 2.25) {
@@ -1394,7 +1563,6 @@ function starRating(ratingElem) {
         } else if (dataRating < 1.25) {
             $(this).append(oneStar);
         }
-
 	});
 
 } starRating('.star-rating');
