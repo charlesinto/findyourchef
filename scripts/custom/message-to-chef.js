@@ -56,20 +56,20 @@
 // }
 // // export default socketChef;
 
-const jwt = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
-let socketUser = io.connect(`https://thepotters-api.herokuapp.com/user`, {
-  query: `token=${jwt}`,
-});
+// const jwt = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
+// let socketUser = io.connect(`https://thepotters-api.herokuapp.com/user`, {
+//   query: `token=${jwt}`,
+// });
 const chefID = sessionStorage.getItem('fyc-recipe-chefID');
 
 // Reply message from a chat received
-const replyMessage = () => {
-  let message = document.querySelector("#message").value;
+const sendChefMessage = () => {
+  let message = document.querySelector("#message");
   socketUser.emit('user/message', {
-    message,
+    message: message.value,
     chefID
   });
   console.log("Sending a message.....");
   toastr.success('Sending message');
-  message = "";
+  message.value = "";
 }
