@@ -6,11 +6,12 @@
 <title>Find Your Chef</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
 <!-- CSS
 ================================================== -->
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/main-color.css" id="colors">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js" integrity="sha512-v8ng/uGxkge3d1IJuEo6dJP8JViyvms0cly9pnbfRxT6/31c3dRWxIiwGnMSWwZjHKOuY3EVmijs7k1jz/9bLA==" crossorigin="anonymous"></script>
 <!-- PAGE RESTRICTION TO LOGGED IN USERS -->
 <script>
 	const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
@@ -328,8 +329,8 @@
 
 						<!-- Message Content -->
 						<div class="message-content">
-
-							<div class="message-bubble">
+						<div class="message-container"></div>
+						<!--	<div class="message-bubble">
 								<div class="message-avatar"><img src="http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&amp;s=70" alt="" /></div>
 								<div class="message-text"><p>Hello, I want to talk about your great listing! Morbi velit eros, sagittis in facilisis non, rhoncus et erat. Nam posuere tristique sem, eu ultricies tortor lacinia neque imperdiet vitae.</p></div>
 							</div>
@@ -367,13 +368,14 @@
 							<div class="message-bubble">
 								<div class="message-avatar"><img src="http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&amp;s=70" alt="" /></div>
 								<div class="message-text"><p>Nulla eget erat consequat quam feugiat dapibus eget sed mauris.</p></div>
-							</div>
+							</div>-->
 							
 							<!-- Reply Area -->
 							<div class="clearfix"></div>
 							<div class="message-reply">
-								<textarea cols="40" rows="3" placeholder="Your Message"></textarea>
-								<button class="button">Send Message</button>
+								<!-- <input type="text" id="message" placeholder="Your Message"> -->
+								<textarea id="message" cols="40" rows="3" placeholder="Your Message"></textarea>
+								<button onclick="checkSocket()" class="button">Send Message</button>
 							</div>
 							
 						</div>
@@ -416,8 +418,11 @@
 <script type="text/javascript" src="scripts/counterup.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
 <script type="text/javascript" src="scripts/tooltips.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script type="text/javascript" src="scripts/custom.js"></script>
 <script type="text/javascript" src="scripts/custom/index.js"></script>
+<script type="text/javascript" src="scripts/custom/socket.js"></script>
+
 <script>
 	/* LOAD ALL RECIPES */
 	window.addEventListener('load', function() {

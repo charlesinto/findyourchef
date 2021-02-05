@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="css/main-color.css" id="colors">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <script src="https://js.stripe.com/v3/"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 </head>
 
 <body>
@@ -265,8 +265,8 @@
 							<h3>Message Chef</h3>
 						</div>
 						<div class="message-reply margin-top-0">
-							<textarea cols="40" rows="3" placeholder="Your message to Chef"></textarea>
-							<button class="button">Message Chef</button>
+							<textarea id="message" cols="40" rows="6" placeholder="Your message to Chef"></textarea>
+							<button onclick="replyMessage()" class="button">Message Chef</button>
 						</div>
 					</div>
 	
@@ -563,7 +563,6 @@
 <script type="text/javascript" src="scripts/tooltips.min.js"></script>
 <script type="text/javascript" src="scripts/custom.js"></script>
 <script type="text/javascript" src="scripts/custom/index.js"></script>
-
 <!-- Maps -->
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&amp;language=en"></script>
 <script type="text/javascript" src="scripts/infobox.min.js"></script>
@@ -576,7 +575,9 @@
 <!-- Date Range Picker - docs: http://www.daterangepicker.com/ -->
 <script src="scripts/moment.min.js"></script>
 <script src="scripts/daterangepicker.js"></script>
-<script src="scripts/custom/listing-single-page.js"></script>
+<script type="text/javascript" src="scripts/custom/listing-single-page.js"></script>
+<script type="text/javascript" src="scripts/custom/socket.js"></script>
+<script type="text/javascript" src="scripts/custom/message-to-chef.js"></script>
 <script>
 	/* LOAD ALL RECIPES */
 	window.addEventListener('load', function() {

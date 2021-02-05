@@ -1118,7 +1118,7 @@ const loadAllRecipes = () => {
     const pagination = document.querySelector('.recipe-pagination');
     let page = 1;
     axios.get(`${baseURL}/recipes?page=${page}`).then((res) => {
-      console.log(res.data.payload.data);
+      console.log(res);
       const recipes = res.data.payload.data;
       popAllRecipes(recipes);
     }).catch((err) => {
@@ -1212,20 +1212,20 @@ const popAllRecipes = (recipes) => {
     const event = window.Event;
     let listItem =  `
     <div class="col-lg-12 col-md-12">
-      <div class="listing-item-container list-layout" data-marker-id="1">
-        <a onclick="loadRecipePage('${id}')" class="listing-item">
+      <div data-id="${id}" class="listing-item-container list-layout" data-marker-id="1">
+        <a data-id="${id}" onclick="loadRecipePage('${id}')" class="listing-item">
           
           <!-- Image -->
           <div class="listing-item-image">
-            <img src="${image}" alt="">
+            <img data-id="${id}" src="${image}" alt="">
             <span class="tag">${category}</span>
           </div>
           
           <!-- Content -->
-          <div class="listing-item-content">
-            <div class="listing-badge now-open">Available</div>
+          <div data-id="${id}" class="listing-item-content">
+            <div data-id="${id}" class="listing-badge now-open">Available</div>
 
-            <div class="listing-item-inner">
+            <div data-id="${id}" class="listing-item-inner">
               <h3>${name}</h3>
               <p>${chefName}<i class="verified-icon"></i></p>
               <p>${location}</p>
@@ -1355,6 +1355,16 @@ function starRating(ratingElem) {
 
 }
 /* SET RECIPE ID TO LOCALSTORAGE */
+// const listingContainer = document.querySelector('.listing-item-container');
+// if (listingContainer) {
+//   listingContainer.addEventListener('click', (e) => {
+//     if (e.target.classList.contains('listing-item')) {
+//       const id = e.target.dataset.id;
+//       console.log(id);
+//     }
+//     console.log('clicked!');
+//   })
+// }
 const loadRecipePage = (id) => {
   localStorage.setItem('fyc-recipe-id', id);
   location.href = '/listings-single-page.html';
@@ -1364,6 +1374,7 @@ const loadRecipePage = (id) => {
 
 const bookmarkRecipe = (e, id) => {
 e.preventDefault();
+e.stopPropagation();
   const token = localStorage.getItem('fyc-token');
   if (token) {
     const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
@@ -1391,26 +1402,10 @@ e.preventDefault();
         }
       });
     } else {
-      const bookmarkID = localStorage.getItem('fyc-bookmark-id');
-      const data = {
-        bookmarkID
-      }
-      axios.delete(`${baseURL}/bookmark`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-      }, data).then((res) => {
-        console.log(res);
-        toastr.success(res.data.payload.data.message);
-        localStorage.removeItem('fyc-bookmark-id');
-      }).catch((err) => {
-        if (err.response && err.response.data) {
-          toastr.error(err.response.data.error.message);
-        } else {
-          toastr.error('Something went wrong, please try again');
-        }
-      });   
+      toastr.error('This recipe has already been bookmarked'); 
     }
+  } else {
+    toastr.error('You need to login before bookmarking a recipe');
   }
 }
 const getLocation = (showPosition) => {
@@ -1744,4 +1739,4 @@ const loadSidebar = () => {
   </div>
     `;
   }
-}
+} 

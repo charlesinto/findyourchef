@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/main-color.css" id="colors">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 <!-- PAGE RESTRICTION TO LOGGED IN USERS -->
 <script>
 	const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
@@ -354,11 +355,13 @@
 <script type="text/javascript" src="scripts/tooltips.min.js"></script>
 <script type="text/javascript" src="scripts/custom.js"></script>
 <script type="text/javascript" src="scripts/custom/index.js"></script>
+<script type="text/javascript" src="scripts/custom/socket.js"></script>
 <script>
 	/* LOAD ALL RECIPES */
 	window.addEventListener('load', function() {
 		loadSidebar();
 		fetchOverview();
+		initSocket();
 	});
 </script>
 

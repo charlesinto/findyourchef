@@ -7,6 +7,7 @@ const fetchRecipeData = () => {
   const id = localStorage.getItem('fyc-recipe-id');
   axios.get(`${baseURL}/recipes/${id}`).then((res) => {
     const recipe = res.data.payload.data;
+    sessionStorage.setItem('fyc-recipe-chefID', recipe.chefID);
     console.log(recipe);
     popRecipeData(recipe);
     fetchRecipeReview(id);
@@ -231,7 +232,7 @@ const addReviewToDOM = () => {
 const postReview = (e) => {
   e.preventDefault();
   const recipeID = localStorage.getItem('fyc-recipe-id');
-  const token = localStorage.getItem('fyc-token');
+  const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   if (!token) {
     toastr.error("You need to be signed in to be able to drop a review");
   } else {
