@@ -1,6 +1,6 @@
 // const baseURL = 'https://thepotters-api.herokuapp.com/api/v1';
 const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
-
+let star, length;
 
 /* FETCH RECIPE DATA */
 const fetchRecipeData = () => {
@@ -150,6 +150,7 @@ const fetchRecipeReview = (id) => {
   }
   axios.get(`${baseURL}/reviews/${id}?page=1`, data).then( res => {
     const reviews = res.data.payload.data;
+    console.log(reviews);
     popReviews(reviews);
   }).catch((err) => {
     console.log(err)
@@ -162,10 +163,11 @@ const fetchRecipeReview = (id) => {
 }
 
 const popReviews = (reviews) => {
-  const length = reviews.length;
+  length = reviews.length;
   const review_count = document.querySelector('.pop-review-count');
   review_count.innerText = `(${length})`;
   const reviewBody = document.querySelector('.listing-reviews-body');
+  let starCount = 0
   reviews.forEach(review => {
     const image = review.reviewersImage;
     const name = review.reviewersName;
@@ -178,6 +180,7 @@ const popReviews = (reviews) => {
     const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"];
     const month = months[num];
     const formattedDate = `${month} ${year}`;
+    starCount += stars;
     reviewBody.innerHTML += `
             <li>
 							<div class="avatar"><img src="${image}" alt="" /></div>
@@ -195,10 +198,134 @@ const popReviews = (reviews) => {
 						</li>
     `;
   })
+  const starFinal = starCount / length;
+  star = Math.round(( starFinal + Number.EPSILON) * 10) / 10;
+  const overviewBox = document.querySelector('.rating-overview-box');
+  overviewBox.innerHTML = 
+  `<span class="rating-overview-box-total">${star}</span>
+  <span class="rating-overview-box-percent">out of 5.0</span>
+  <div class="star-rating" data-rating="${star}"></div>`;
+  
+/*----------------------------------------------------*/
+/*  Rating Overview Background Colors
+/*----------------------------------------------------*/
+function ratingOverview(ratingElem) {
+
+  $(ratingElem).each(function() {
+    var dataRating = $(this).attr('data-rating');
+    // Rules
+      if (dataRating >= 4.0) {
+          $(this).addClass('high');
+          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*100 + "%", });
+      } else if (dataRating >= 3.0) {
+          $(this).addClass('mid');
+          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*80 + "%", });
+      } else if (dataRating < 3.0) {
+          $(this).addClass('low');
+          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*60 + "%", });
+      }
+
+  });
+} ratingOverview('.rating-bars-rating');
+
+$(window).on('resize', function() {
+  ratingOverview('.rating-bars-rating');
+});
+
+
+/*----------------------------------------------------*/
+/*  Ratings Script
+/*----------------------------------------------------*/
+
+/*  Numerical Script
+/*--------------------------*/
+function numericalRating(ratingElem) {
+
+	$(ratingElem).each(function() {
+		var dataRating = $(this).attr('data-rating');
+
+		// Rules
+	    if (dataRating >= 4.0) {
+	        $(this).addClass('high');
+	    } else if (dataRating >= 3.0) {
+	        $(this).addClass('mid');
+	    } else if (dataRating < 3.0) {
+	        $(this).addClass('low');
+	    }
+
+	});
+
+} numericalRating('.numerical-rating');
+
+
+/*  Star Rating
+/*--------------------------*/
+function starRating(ratingElem) {
+
+	$(ratingElem).each(function() {
+
+		var dataRating = $(this).attr('data-rating');
+		// Rating Stars Output
+		function starsOutput(firstStar, secondStar, thirdStar, fourthStar, fifthStar) {
+			return(''+
+				'<span class="'+firstStar+'"></span>'+
+				'<span class="'+secondStar+'"></span>'+
+				'<span class="'+thirdStar+'"></span>'+
+				'<span class="'+fourthStar+'"></span>'+
+				'<span class="'+fifthStar+'"></span>');
+		}
+
+		var fiveStars = starsOutput('star','star','star','star','star');
+
+		var fourHalfStars = starsOutput('star','star','star','star','star half');
+		var fourStars = starsOutput('star','star','star','star','star empty');
+
+		var threeHalfStars = starsOutput('star','star','star','star half','star empty');
+		var threeStars = starsOutput('star','star','star','star empty','star empty');
+
+		var twoHalfStars = starsOutput('star','star','star half','star empty','star empty');
+		var twoStars = starsOutput('star','star','star empty','star empty','star empty');
+
+		var oneHalfStar = starsOutput('star','star half','star empty','star empty','star empty');
+		var oneStar = starsOutput('star','star empty','star empty','star empty','star empty');
+
+    // Rules
+        if (dataRating >= 4.75) {
+            $(this).append(fiveStars);
+        } else if (dataRating >= 4.25) {
+            $(this).append(fourHalfStars);
+        } else if (dataRating >= 3.75) {
+            $(this).append(fourStars);
+        } else if (dataRating >= 3.25) {
+            $(this).append(threeHalfStars);
+        } else if (dataRating >= 2.75) {
+            $(this).append(threeStars);
+        } else if (dataRating >= 2.25) {
+            $(this).append(twoHalfStars);
+        } else if (dataRating >= 1.75) {
+            $(this).append(twoStars);
+        } else if (dataRating >= 1.25) {
+            $(this).append(oneHalfStar);
+        } else if (dataRating < 1.25) {
+            $(this).append(oneStar);
+        }
+
+	});
+
+} starRating('.star-rating');
 }
 
 const addReviewToDOM = () => {
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  length += 1;
+  const parentNode = document.querySelectorAll('.star-rating');
+  parentNode.forEach( parent => {
+    while (parent.firstChild) {
+      parent.removeChild(parent.firstChild);
+    }
+  })
+  const review_count = document.querySelector('.pop-review-count');
+  review_count.innerText = `(${length})`;
   const name = userData.fullname;
   const image = userData.image;
   const date = new Date();
@@ -208,7 +335,7 @@ const addReviewToDOM = () => {
   const month = months[num];
   const formattedDate = `${month} ${year}`;
   const review = document.querySelector('.review-area').value;
-  const stars = 5;
+  const stars = (serviceRate + moneyRate + cleanRate) / 3;
   const recipeImage = document.querySelector('.uploadButton-input').value;
   const reviewBody = document.querySelector('.listing-reviews-body');
   reviewBody.innerHTML += `
@@ -227,10 +354,171 @@ const addReviewToDOM = () => {
     </div>
   </li>
   `;
+  
+/*----------------------------------------------------*/
+/*  Rating Overview Background Colors
+/*----------------------------------------------------*/
+function ratingOverview(ratingElem) {
+
+  $(ratingElem).each(function() {
+    var dataRating = $(this).attr('data-rating');
+    // Rules
+      if (dataRating >= 4.0) {
+          $(this).addClass('high');
+          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*100 + "%", });
+      } else if (dataRating >= 3.0) {
+          $(this).addClass('mid');
+          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*80 + "%", });
+      } else if (dataRating < 3.0) {
+          $(this).addClass('low');
+          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*60 + "%", });
+      }
+
+  });
+} ratingOverview('.rating-bars-rating');
+
+$(window).on('resize', function() {
+  ratingOverview('.rating-bars-rating');
+});
+
+
+/*----------------------------------------------------*/
+/*  Ratings Script
+/*----------------------------------------------------*/
+
+/*  Numerical Script
+/*--------------------------*/
+function numericalRating(ratingElem) {
+
+	$(ratingElem).each(function() {
+		var dataRating = $(this).attr('data-rating');
+
+		// Rules
+	    if (dataRating >= 4.0) {
+	        $(this).addClass('high');
+	    } else if (dataRating >= 3.0) {
+	        $(this).addClass('mid');
+	    } else if (dataRating < 3.0) {
+	        $(this).addClass('low');
+	    }
+
+	});
+
+} numericalRating('.numerical-rating');
+
+
+/*  Star Rating
+/*--------------------------*/
+function starRating(ratingElem) {
+
+	$(ratingElem).each(function() {
+
+		var dataRating = $(this).attr('data-rating');
+		// Rating Stars Output
+		function starsOutput(firstStar, secondStar, thirdStar, fourthStar, fifthStar) {
+			return(''+
+				'<span class="'+firstStar+'"></span>'+
+				'<span class="'+secondStar+'"></span>'+
+				'<span class="'+thirdStar+'"></span>'+
+				'<span class="'+fourthStar+'"></span>'+
+				'<span class="'+fifthStar+'"></span>');
+		}
+
+		var fiveStars = starsOutput('star','star','star','star','star');
+
+		var fourHalfStars = starsOutput('star','star','star','star','star half');
+		var fourStars = starsOutput('star','star','star','star','star empty');
+
+		var threeHalfStars = starsOutput('star','star','star','star half','star empty');
+		var threeStars = starsOutput('star','star','star','star empty','star empty');
+
+		var twoHalfStars = starsOutput('star','star','star half','star empty','star empty');
+		var twoStars = starsOutput('star','star','star empty','star empty','star empty');
+
+		var oneHalfStar = starsOutput('star','star half','star empty','star empty','star empty');
+		var oneStar = starsOutput('star','star empty','star empty','star empty','star empty');
+
+    // Rules
+        if (dataRating >= 4.75) {
+            $(this).append(fiveStars);
+        } else if (dataRating >= 4.25) {
+            $(this).append(fourHalfStars);
+        } else if (dataRating >= 3.75) {
+            $(this).append(fourStars);
+        } else if (dataRating >= 3.25) {
+            $(this).append(threeHalfStars);
+        } else if (dataRating >= 2.75) {
+            $(this).append(threeStars);
+        } else if (dataRating >= 2.25) {
+            $(this).append(twoHalfStars);
+        } else if (dataRating >= 1.75) {
+            $(this).append(twoStars);
+        } else if (dataRating >= 1.25) {
+            $(this).append(oneHalfStar);
+        } else if (dataRating < 1.25) {
+            $(this).append(oneStar);
+        }
+
+	});
+
+} starRating('.star-rating');
 }
+
+const ratingContainer = document.querySelector('.sub-ratings-container');
+let rating;
+let serviceRate;
+let moneyRate;
+let cleanRate;
+if (ratingContainer) {
+  const ratingService = document.querySelector('.service-rating');
+  ratingService.addEventListener('click', (e) => {
+    if (e.target.type === 'radio') {
+      const rateObj = {
+        5 : 1,
+        4 : 2,
+        3 : 3,
+        2 : 4,
+        1 : 5
+      }
+      const rateVal = e.target.value;
+      serviceRate = rateObj[rateVal];
+    }
+  })
+  const ratingMoney = document.querySelector('.money-rating');
+  ratingMoney.addEventListener('click', (e) => {
+    if (e.target.type === 'radio') {
+      const rateObj = {
+        5 : 1,
+        4 : 2,
+        3 : 3,
+        2 : 4,
+        1 : 5
+      }
+      const rateVal = e.target.value;
+      moneyRate = rateObj[rateVal];
+    }
+  })
+  const ratingClean = document.querySelector('.clean-rating');
+  ratingClean.addEventListener('click', (e) => {
+    if (e.target.type === 'radio') {
+      const rateObj = {
+        5 : 1,
+        4 : 2,
+        3 : 3,
+        2 : 4,
+        1 : 5
+      }
+      const rateVal = e.target.value;
+      cleanRate = rateObj[rateVal];
+    }
+  })
+}
+
 
 const postReview = (e) => {
   e.preventDefault();
+  console.log(serviceRate, moneyRate, cleanRate);
+
   const recipeID = localStorage.getItem('fyc-recipe-id');
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   if (!token) {
@@ -239,7 +527,9 @@ const postReview = (e) => {
     const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
     let reviewersID = userData._id;
     const review = document.querySelector('.review-area').value;
-    const stars = 5;
+    const stars = (serviceRate + moneyRate + cleanRate) / 3;
+
+    
    
     const data = {
       reviewersID,

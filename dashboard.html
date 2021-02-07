@@ -14,6 +14,8 @@
 <link rel="stylesheet" href="css/main-color.css" id="colors">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjbSwlaIqraERZQGoSOPEnPspCgPsE8y8" defer ></script>
+
 <!-- PAGE RESTRICTION TO LOGGED IN USERS -->
 <script>
 	const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
@@ -359,6 +361,12 @@
 <script>
 	/* LOAD ALL RECIPES */
 	window.addEventListener('load', function() {
+		const coords = sessionStorage.getItem('fyc-coords');
+		if (coords === null) {
+			navigator.geolocation.getCurrentPosition(getPosition);
+		} else {
+			false;
+		}
 		loadSidebar();
 		fetchOverview();
 		initSocket();

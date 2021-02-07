@@ -708,32 +708,32 @@ $(document).ready(function(){
 
 
 
-    /*----------------------------------------------------*/
-    /*  Rating Overview Background Colors
-    /*----------------------------------------------------*/
-	function ratingOverview(ratingElem) {
+  //   /*----------------------------------------------------*/
+  //   /*  Rating Overview Background Colors
+  //   /*----------------------------------------------------*/
+	// function ratingOverview(ratingElem) {
 
-		$(ratingElem).each(function() {
-			var dataRating = $(this).attr('data-rating');
+	// 	$(ratingElem).each(function() {
+	// 		var dataRating = $(this).attr('data-rating');
 
-			// Rules
-		    if (dataRating >= 4.0) {
-		        $(this).addClass('high');
-		   		$(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*100 + "%", });
-		    } else if (dataRating >= 3.0) {
-		        $(this).addClass('mid');
-		   		$(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*80 + "%", });
-		    } else if (dataRating < 3.0) {
-		        $(this).addClass('low');
-		   		$(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*60 + "%", });
-		    }
+	// 		// Rules
+	// 	    if (dataRating >= 4.0) {
+	// 	        $(this).addClass('high');
+	// 	   		$(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*100 + "%", });
+	// 	    } else if (dataRating >= 3.0) {
+	// 	        $(this).addClass('mid');
+	// 	   		$(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*80 + "%", });
+	// 	    } else if (dataRating < 3.0) {
+	// 	        $(this).addClass('low');
+	// 	   		$(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*60 + "%", });
+	// 	    }
 
-		});
-	} ratingOverview('.rating-bars-rating');
+	// 	});
+	// } ratingOverview('.rating-bars-rating');
 
-	$(window).on('resize', function() {
-		ratingOverview('.rating-bars-rating');
-	});
+	// $(window).on('resize', function() {
+	// 	ratingOverview('.rating-bars-rating');
+	// });
 
 
     /*----------------------------------------------------*/
@@ -1453,84 +1453,84 @@ $.scrollTo = $.fn.scrollTo = function(x, y, options){
 };
 
 
-/*----------------------------------------------------*/
-/*  Ratings Script
-/*----------------------------------------------------*/
+// /*----------------------------------------------------*/
+// /*  Ratings Script
+// /*----------------------------------------------------*/
 
-/*  Numerical Script
-/*--------------------------*/
-function numericalRating(ratingElem) {
+// /*  Numerical Script
+// /*--------------------------*/
+// function numericalRating(ratingElem) {
 
-	$(ratingElem).each(function() {
-		var dataRating = $(this).attr('data-rating');
+// 	$(ratingElem).each(function() {
+// 		var dataRating = $(this).attr('data-rating');
 
-		// Rules
-	    if (dataRating >= 4.0) {
-	        $(this).addClass('high');
-	    } else if (dataRating >= 3.0) {
-	        $(this).addClass('mid');
-	    } else if (dataRating < 3.0) {
-	        $(this).addClass('low');
-	    }
+// 		// Rules
+// 	    if (dataRating >= 4.0) {
+// 	        $(this).addClass('high');
+// 	    } else if (dataRating >= 3.0) {
+// 	        $(this).addClass('mid');
+// 	    } else if (dataRating < 3.0) {
+// 	        $(this).addClass('low');
+// 	    }
 
-	});
+// 	});
 
-} numericalRating('.numerical-rating');
+// } numericalRating('.numerical-rating');
 
 
-/*  Star Rating
-/*--------------------------*/
-function starRating(ratingElem) {
+// /*  Star Rating
+// /*--------------------------*/
+// function starRating(ratingElem) {
 
-	$(ratingElem).each(function() {
+// 	$(ratingElem).each(function() {
 
-		var dataRating = $(this).attr('data-rating');
+// 		var dataRating = $(this).attr('data-rating');
 
-		// Rating Stars Output
-		function starsOutput(firstStar, secondStar, thirdStar, fourthStar, fifthStar) {
-			return(''+
-				'<span class="'+firstStar+'"></span>'+
-				'<span class="'+secondStar+'"></span>'+
-				'<span class="'+thirdStar+'"></span>'+
-				'<span class="'+fourthStar+'"></span>'+
-				'<span class="'+fifthStar+'"></span>');
-		}
+// 		// Rating Stars Output
+// 		function starsOutput(firstStar, secondStar, thirdStar, fourthStar, fifthStar) {
+// 			return(''+
+// 				'<span class="'+firstStar+'"></span>'+
+// 				'<span class="'+secondStar+'"></span>'+
+// 				'<span class="'+thirdStar+'"></span>'+
+// 				'<span class="'+fourthStar+'"></span>'+
+// 				'<span class="'+fifthStar+'"></span>');
+// 		}
 
-		var fiveStars = starsOutput('star','star','star','star','star');
+// 		var fiveStars = starsOutput('star','star','star','star','star');
 
-		var fourHalfStars = starsOutput('star','star','star','star','star half');
-		var fourStars = starsOutput('star','star','star','star','star empty');
+// 		var fourHalfStars = starsOutput('star','star','star','star','star half');
+// 		var fourStars = starsOutput('star','star','star','star','star empty');
 
-		var threeHalfStars = starsOutput('star','star','star','star half','star empty');
-		var threeStars = starsOutput('star','star','star','star empty','star empty');
+// 		var threeHalfStars = starsOutput('star','star','star','star half','star empty');
+// 		var threeStars = starsOutput('star','star','star','star empty','star empty');
 
-		var twoHalfStars = starsOutput('star','star','star half','star empty','star empty');
-		var twoStars = starsOutput('star','star','star empty','star empty','star empty');
+// 		var twoHalfStars = starsOutput('star','star','star half','star empty','star empty');
+// 		var twoStars = starsOutput('star','star','star empty','star empty','star empty');
 
-		var oneHalfStar = starsOutput('star','star half','star empty','star empty','star empty');
-		var oneStar = starsOutput('star','star empty','star empty','star empty','star empty');
+// 		var oneHalfStar = starsOutput('star','star half','star empty','star empty','star empty');
+// 		var oneStar = starsOutput('star','star empty','star empty','star empty','star empty');
 
-		// Rules
-        if (dataRating >= 4.75) {
-            $(this).append(fiveStars);
-        } else if (dataRating >= 4.25) {
-            $(this).append(fourHalfStars);
-        } else if (dataRating >= 3.75) {
-            $(this).append(fourStars);
-        } else if (dataRating >= 3.25) {
-            $(this).append(threeHalfStars);
-        } else if (dataRating >= 2.75) {
-            $(this).append(threeStars);
-        } else if (dataRating >= 2.25) {
-            $(this).append(twoHalfStars);
-        } else if (dataRating >= 1.75) {
-            $(this).append(twoStars);
-        } else if (dataRating >= 1.25) {
-            $(this).append(oneHalfStar);
-        } else if (dataRating < 1.25) {
-            $(this).append(oneStar);
-        }
+// 		// Rules
+//         if (dataRating >= 4.75) {
+//             $(this).append(fiveStars);
+//         } else if (dataRating >= 4.25) {
+//             $(this).append(fourHalfStars);
+//         } else if (dataRating >= 3.75) {
+//             $(this).append(fourStars);
+//         } else if (dataRating >= 3.25) {
+//             $(this).append(threeHalfStars);
+//         } else if (dataRating >= 2.75) {
+//             $(this).append(threeStars);
+//         } else if (dataRating >= 2.25) {
+//             $(this).append(twoHalfStars);
+//         } else if (dataRating >= 1.75) {
+//             $(this).append(twoStars);
+//         } else if (dataRating >= 1.25) {
+//             $(this).append(oneHalfStar);
+//         } else if (dataRating < 1.25) {
+//             $(this).append(oneStar);
+//         }
 
-	});
+// 	});
 
-} starRating('.star-rating');
+// } starRating('.star-rating');
