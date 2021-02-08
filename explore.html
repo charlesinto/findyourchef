@@ -300,12 +300,15 @@
 <script type="text/javascript" src="scripts/custom.js"></script>
 <script type="text/javascript" src="scripts/custom/index.js"></script>
 <script type="text/javascript" src="scripts/custom/socket.js"></script>
+<script type="text/javascript" src="scripts/custom/explore.js"></script>
+
 
 
 <script>
 	/* LOAD ALL RECIPES */
 	window.addEventListener('load', function() {
 		loadAllRecipes();
+		loadUserBookmarks();
 	});
 /* Google Autocomplete */
   function initAutocomplete() {

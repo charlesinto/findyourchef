@@ -18331,9 +18331,7 @@ body .category-box-btn:hover {
 	#style-switcher { display: none; }
 
 /* SUCCESS MESSAGE ON CHEF SIGNUP PAGE */
-	.display-none {
-		display: none;
-	}
+
 	.success-message {
 		position: absolute;
 		top: 50%;
@@ -18351,6 +18349,9 @@ body .category-box-btn:hover {
 	}
 	@media only screen and (max-width: 768px) {.success-message {width: 90%;}}
 
+	.display-none {
+		display: none;
+	}
 
 /* PASSBASE BUTTON STYLE */
 	.passbase-container {
