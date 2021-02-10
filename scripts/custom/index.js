@@ -916,26 +916,22 @@ const popLatestRecipes = (recipes) => {
     let listItem =  `
 
     <!-- Listing Item -->
-    <div class="carousel-item">
-        <a onclick="loadRecipePage('${id}')" class="listing-item-container">
-            <div class="listing-item">
-
-                <img src="${image}" alt="">
-
+    <div data-id="${id}" class="carousel-item">
+        <a data-id="${id}" class="listing-item-container">
+            <div data-id="${id}" class="listing-item">
+                <img data-id="${id}" src="${image}" alt="">
                 <div class="listing-badge now-open">Available</div>
-
-                <div class="listing-item-details">
+                <div data-id="${id}" class="listing-item-details">
                     <ul>
                         <li>Starting from $${price} per meal</li>
                     </ul>
                 </div>
-
-                <div class="listing-item-content">
+                <div data-id="${id}" class="listing-item-content">
                     <span class="tag">${category}</span>
-                    <h3>${chefName} <i class="verified-icon"></i></h3>
-                    <span>${location}</span>
+                    <h3 data-id="${id}">${chefName} <i class="verified-icon"></i></h3>
+                    <span data-id="${id}">${location}</span>
                 </div>
-                <span class="like-icon"></span>
+                <span data-id="${id}" class="like-icon"></span>
             </div>
             <div class="star-rating" data-rating="3.75">
                 <div class="rating-counter">(12 reviews)</div>

@@ -1,18 +1,17 @@
-
 /* VIEW RECIPES */
 const loadAllRecipes = () => {
   const searchData = JSON.parse(sessionStorage.getItem('fyc-search'));
-
+  const pagination = document.querySelector('.recipe-pagination');
+  let page = 1;
   /* VIEW ALL RECIPES */
 
   if (searchData === null) {
-    const pagination = document.querySelector('.recipe-pagination');
-    let page = 1;
     axios.get(`${baseURL}/recipes?page=${page}`).then((res) => {
       console.log(res);
-      const recipes = res.data.payload.data;
+      const recipes = res.data.payload.data.data;
+      const recipeCount = res.data.payload.data.dataCount;
       popAllRecipes(recipes);
-      console.log(recipes);
+      paginate(recipeCount);
     }).catch((err) => {
       if (err.response && err.response.data) {
         toastr.error(err.response.data.error.message);
@@ -21,24 +20,59 @@ const loadAllRecipes = () => {
       }
     });
     pagination.addEventListener('click', (e) => {
-      console.log(e.target.innerText);
-      if (e.target.id === "next") {
-        console.log('arrow-next');
-        page += 1;
-      } else {
-        page = e.target.innerText;
-      }
-      axios.get(`${baseURL}/recipes?page=${page}`).then((res) => {
-        console.log(res.data.payload.data);
-        const recipes = res.data.payload.data;
-        popAllRecipes(recipes);
-      }).catch((err) => {
-        if (err.response && err.response.data) {
-          toastr.error(err.response.data.error.message);
-        } else {
-          toastr.error('Something went wrong, please try again');
+      const listingParent = document.querySelector('.fs-content');
+      listingParent.scrollIntoView({ behavior: 'smooth', block: 'start'});
+      const pageParent = e.target.parentElement.parentElement.children;
+      e.preventDefault();
+      if (e.target.classList.contains("next")) {
+        page;
+        let curPage,nxtPage;
+        for (let i = 0; i < pageParent.length; i++) {
+          const pageNode = pageParent[i].children[0];
+          if (pageNode.classList.contains('current-page')) {
+            curPage = i;
+            const prevPage = parseFloat(pageNode.innerText);
+            page = prevPage + 1;
+          } else {
+            false;
+          }
         }
-      });
+        nxtPage = curPage + 1;
+        pageParent[curPage].children[0].classList.remove('current-page');
+        pageParent[nxtPage].children[0].classList.add('current-page');
+        axios.get(`${baseURL}/recipes?page=${page}`).then((res) => {
+          console.log(res.data.payload.data);
+          const recipes = res.data.payload.data.data;
+          popAllRecipes(recipes);
+        }).catch((err) => {
+          if (err.response && err.response.data) {
+            toastr.error(err.response.data.error.message);
+          } else {
+            toastr.error('Something went wrong, please try again');
+          }
+        });
+      } else {
+        for (let i = 0; i < pageParent.length; i++) {
+          const pageNode = pageParent[i].children[0];
+          if (pageNode.classList.contains('current-page')) {
+            pageNode.classList.remove('current-page');
+          } else {
+            false;
+          }
+        }
+        page = e.target.innerText;
+        e.target.classList.add('current-page');
+        axios.get(`${baseURL}/recipes?page=${page}`).then((res) => {
+          const recipes = res.data.payload.data.data;
+          popAllRecipes(recipes);
+        }).catch((err) => {
+          if (err.response && err.response.data) {
+            toastr.error(err.response.data.error.message);
+          } else {
+            toastr.error('Something went wrong, please try again');
+          }
+        });
+      }
     })
   } else {
     /* VIEW SEARCHED RECIPES */
@@ -63,14 +97,16 @@ const loadAllRecipes = () => {
     if(category) {
       data.category = category;
     }
-    axios.post(`${baseURL}/recipes/search?page=1`, data, {
+    axios.post(`${baseURL}/recipes/search?page=${page}`, data, {
       headers: {
         'Authorization': `Bearer ${token}`
       },
     }).then((res) => {
       console.log(res);
-      const recipes = res.data.payload.data;
+      const recipes = res.data.payload.data.data;
+      const recipeCount = res.data.payload.data.dataCount;
       popAllRecipes(recipes);
+      paginate(recipeCount);
     }).catch((err) => {
       if (err.response && err.response.data) {
         toastr.error(err.response.data.error.message);
@@ -78,8 +114,74 @@ const loadAllRecipes = () => {
         toastr.error('Something went wrong, please try again');
       }
     });
+    pagination.addEventListener('click', (e) => {
+      const listingParent = document.querySelector('.fs-content');
+      listingParent.scrollIntoView({ behavior: 'smooth', block: 'start'});
+      const pageParent = e.target.parentElement.parentElement.children;
+      e.preventDefault();
+      if (e.target.classList.contains("next")) {
+        page;
+        let curPage,nxtPage;
+        for (let i = 0; i < pageParent.length; i++) {
+          const pageNode = pageParent[i].children[0];
+          if (pageNode.classList.contains('current-page')) {
+            curPage = i;
+            const prevPage = parseFloat(pageNode.innerText);
+            page = prevPage + 1;
+          } else {
+            false;
+          }
+        }
+        nxtPage = curPage + 1;
+        pageParent[curPage].children[0].classList.remove('current-page');
+        pageParent[nxtPage].children[0].classList.add('current-page');
+        axios.get(`${baseURL}/recipes/search?page=${page}`).then((res) => {
+          console.log(res.data.payload.data);
+          const recipes = res.data.payload.data.data;
+          popAllRecipes(recipes);
+        }).catch((err) => {
+          if (err.response && err.response.data) {
+            toastr.error(err.response.data.error.message);
+          } else {
+            toastr.error('Something went wrong, please try again');
+          }
+        });
+      } else {
+        for (let i = 0; i < pageParent.length; i++) {
+          const pageNode = pageParent[i].children[0];
+          if (pageNode.classList.contains('current-page')) {
+            pageNode.classList.remove('current-page');
+          } else {
+            false;
+          }
+        }
+        page = e.target.innerText;
+        e.target.classList.add('current-page');
+        axios.get(`${baseURL}/recipes/search?page=${page}`).then((res) => {
+          console.log(res.data.payload.data);
+          const recipes = res.data.payload.data.data;
+          popAllRecipes(recipes);
+        }).catch((err) => {
+          if (err.response && err.response.data) {
+            toastr.error(err.response.data.error.message);
+          } else {
+            toastr.error('Something went wrong, please try again');
+          }
+        });
+      }
+    })
   }
 };
+
+const paginate = (count) => {
+  const pageContainer = document.querySelector('.recipe-pagination');
+  pageContainer.innerHTML = `<li><a href="#" class="current-page">1</a></li>`;
+  const pages = Math.round(count / 10);
+  for (let i = 2; i <= pages; i++) {
+    pageContainer.innerHTML += `<li><a href="#">${i}</a></li>`;
+  }
+  pageContainer.innerHTML += `<li><a class="next" href="#"><i id="next" class="next sl sl-icon-arrow-right"></i></a></li>`;
+}
 
 const loadUserBookmarks = () => {
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
