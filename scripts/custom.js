@@ -806,12 +806,12 @@ $(document).ready(function(){
     /*----------------------------------------------------*/
     /*  Counters
     /*----------------------------------------------------*/
-    $(window).on('load', function() {
-		$('.dashboard-stat-content h4').counterUp({
-	        delay: 100,
-	        time: 800
-	    });
-    });
+    // $(window).on('load', function() {
+		// $('.dashboard-stat-content h4').counterUp({
+	  //       delay: 100,
+	  //       time: 800
+	  //   });
+    // });
 
 
     /*----------------------------------------------------*/

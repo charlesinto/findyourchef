@@ -11809,6 +11809,9 @@ a.dashboard-responsive-nav-trigger { display: none; }
 	overflow: hidden;
 	transition: 0.3s;
 	cursor: default;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .dashboard-stat:hover { transform: translateY(-4px); }

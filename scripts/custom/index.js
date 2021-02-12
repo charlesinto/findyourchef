@@ -890,7 +890,7 @@ const findChef = () => {
 const loadLatestRecipes = () => {
   axios.get(`${baseURL}/recipes?page=1`).then((res) => {
     console.log(res.data.payload.data);
-    const recipes = res.data.payload.data;
+    const recipes = res.data.payload.data.data;
     popLatestRecipes(recipes);
   }).catch((err) => {
     if (err.response && err.response.data) {
@@ -1409,14 +1409,14 @@ const fetchOverview = () => {
   }
   if (userData.role === 'chef') {
     const userID = userData._id;
-    axios.get(`${baseURL}/chef/overview/${userID}`, {
+    axios.get(`${baseURL}/chefs/overview/${userID}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       },
     }).then((res) => {
       console.log(res.data.payload.data);
-      // const recipes = res.data.payload.data;
-      // popLatestRecipes(recipes);
+      const dashData = res.data.payload.data;
+      popDash(dashData);
     }).catch((err) => {
       if (err.response && err.response.data) {
         toastr.error(err.response.data.error.message);
@@ -1425,6 +1425,26 @@ const fetchOverview = () => {
       }
     });
   }
+}
+
+const popDash = (data) => {
+  const views = parseFloat(data.views);
+  const activeRecipe = data.activeRecipes;
+  const totalReviews = data.totalReviews;
+
+  document.querySelector('.color-1').innerHTML = `<div class="dashboard-stat-content"><h4>${activeRecipe}</h4> <span>Active Recipe</span></div>
+  <div class="dashboard-stat-icon"><i class="im im-icon-Map2"></i></div>`;
+
+  document.querySelector('.color-2').innerHTML = `<div class="dashboard-stat-content"><h4>${views}</h4> <span>Total Views</span></div>
+  <div class="dashboard-stat-icon"><i class="im im-icon-Line-Chart"></i></div>`;
+
+  document.querySelector('.color-3').innerHTML = `<div class="dashboard-stat-content"><h4>${totalReviews}</h4> <span>Total Reviews</span></div>
+  <div class="dashboard-stat-icon"><i class="im im-icon-Add-UserStar"></i></div>`;
+
+  $(".dashboard-stat-content h4").counterUp({
+    delay: 100,
+    time: 1000
+  });
 }
 
 const loadSidebar = () => {

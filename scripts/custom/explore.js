@@ -176,7 +176,7 @@ const loadAllRecipes = () => {
 const paginate = (count) => {
   const pageContainer = document.querySelector('.recipe-pagination');
   pageContainer.innerHTML = `<li><a href="#" class="current-page">1</a></li>`;
-  const pages = Math.round(count / 10);
+  const pages = Math.ceil(count / 10);
   for (let i = 2; i <= pages; i++) {
     pageContainer.innerHTML += `<li><a href="#">${i}</a></li>`;
   }
@@ -240,7 +240,8 @@ const bookmarkRecipe = (e, id) => {
         });
       } else {
         const data = {
-          bookmarkID : bookmarkId
+          bookmarkersID,
+          recipeID
         }
         axios.delete(`${baseURL}/bookmark`, {
           headers: {
@@ -292,8 +293,10 @@ const bookmarkRecipe = (e, id) => {
             }
           });
         } else {
+          console.log(bookmarkID);
           const data = {
-            bookmarkID
+            bookmarkersID,
+            recipeID
           }
           axios.delete(`${baseURL}/bookmark`, {
             headers: {
@@ -311,11 +314,11 @@ const bookmarkRecipe = (e, id) => {
             }
           });
         }
-        console.log(bookmarkID);
       } else {
-        const bookmarkId = e.target.dataset.bookmarkId;
+        // const bookmarkId = e.target.dataset.bookmarkId;
         const data = {
-          bookmarkID : bookmarkId
+          bookmarkersID,
+          recipeID
         }
         axios.delete(`${baseURL}/bookmark`, {
           headers: {
