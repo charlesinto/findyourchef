@@ -269,6 +269,7 @@
 <script type="text/javascript" src="scripts/slick.min.js"></script>
 <script type="text/javascript" src="scripts/rangeslider.min.js"></script>
 <script type="text/javascript" src="scripts/magnific-popup.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script type="text/javascript" src="scripts/waypoints.min.js"></script>
 <script type="text/javascript" src="scripts/counterup.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
@@ -276,12 +277,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script type="text/javascript" src="scripts/custom.js"></script>
 <script type="text/javascript" src="scripts/custom/index.js"></script>
+<script type="text/javascript" src="scripts/custom/messages.js"></script>
 <script type="text/javascript" src="scripts/custom/socket.js"></script>
 
 <script>
 	/* LOAD ALL RECIPES */
 	window.addEventListener('load', function() {
 		loadSidebar();
+		fetchAllMessages();
 	});
 </script>
 

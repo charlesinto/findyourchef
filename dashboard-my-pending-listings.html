@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="css/main-color.css" id="colors">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 <!-- PAGE RESTRICTION TO LOGGED IN USERS -->
 <script>
 	const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
@@ -174,6 +175,15 @@
 				</div>
 			</div>
 
+			<!-- Pagination -->
+			<div class="clearfix"></div>
+			<div class="pagination-container margin-top-30 margin-bottom-0">
+				<nav class="pagination">
+					<ul class="recipe-pagination">
+					</ul>
+				</nav>
+			</div>
+			<!-- Pagination / End -->
 
 			<!-- Copyrights -->
 			<div class="col-md-12">

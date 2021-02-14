@@ -489,18 +489,22 @@ if (headername) {
 const loadActiveRecipe = () => {
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   const chefID = userData._id;
+  const pagination = document.querySelector('.recipe-pagination');
+  let page = 1;
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   const data = {
     chefID,
   };
-  axios.post(`${baseURL}/chef/recipe/list?status=active&page=1`, data, {
+  axios.post(`${baseURL}/chef/recipe/list?status=active&page=${page}`, data, {
     headers: {
       'Authorization': `Bearer ${token}`
     },
   }).then((res) => {
     console.log(res);
-    const recipes = res.data.payload.data;
+    const recipes = res.data.payload.data.data;
+    const recipeCount = res.data.payload.data.total;
     popRecipe(recipes);
+    paginate(recipeCount);
   }).catch((err) => {
     if (err.response && err.response.data) {
       toastr.error(err.response.data.error.message);
@@ -508,7 +512,81 @@ const loadActiveRecipe = () => {
       toastr.error('Something went wrong, please try again');
     }
   });
+  pagination.addEventListener('click', (e) => {
+    const listingParent = document.querySelector('.dashboard-content');
+    listingParent.scrollIntoView({ behavior: 'smooth', block: 'start'});
+    const pageParent = e.target.parentElement.parentElement.children;
+    e.preventDefault();
+    if (e.target.classList.contains("next")) {
+      page;
+      let curPage,nxtPage;
+      for (let i = 0; i < pageParent.length; i++) {
+        const pageNode = pageParent[i].children[0];
+        if (pageNode.classList.contains('current-page')) {
+          curPage = i;
+          const prevPage = parseFloat(pageNode.innerText);
+          page = prevPage + 1;
+        } else {
+          false;
+        }
+      }
+      nxtPage = curPage + 1;
+      pageParent[curPage].children[0].classList.remove('current-page');
+      pageParent[nxtPage].children[0].classList.add('current-page');
+      axios.post(`${baseURL}/chef/recipe/list?status=active&page=${page}`, data, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      }).then((res) => {
+        console.log(res.data.payload.data);
+        const recipes = res.data.payload.data.data;
+        popRecipe(recipes);
+      }).catch((err) => {
+        if (err.response && err.response.data) {
+          toastr.error(err.response.data.error.message);
+        } else {
+          toastr.error('Something went wrong, please try again');
+        }
+      });
+    } else {
+      for (let i = 0; i < pageParent.length; i++) {
+        const pageNode = pageParent[i].children[0];
+        if (pageNode.classList.contains('current-page')) {
+          pageNode.classList.remove('current-page');
+        } else {
+          false;
+        }
+      }
+      page = e.target.innerText;
+      e.target.classList.add('current-page');
+      axios.post(`${baseURL}/chef/recipe/list?status=active&page=${page}`, data, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      }).then((res) => {
+        const recipes = res.data.payload.data.data;
+        popRecipe(recipes);
+      }).catch((err) => {
+        if (err.response && err.response.data) {
+          toastr.error(err.response.data.error.message);
+        } else {
+          toastr.error('Something went wrong, please try again');
+        }
+      });
+    }
+  })
 };
+
+const paginate = (count) => {
+  const pageContainer = document.querySelector('.recipe-pagination');
+  pageContainer.innerHTML = `<li><a href="#" class="current-page">1</a></li>`;
+  const pages = Math.ceil(count / 10);
+  for (let i = 2; i <= pages; i++) {
+    pageContainer.innerHTML += `<li><a href="#">${i}</a></li>`;
+  }
+  pageContainer.innerHTML += `<li><a class="next" href="#"><i id="next" class="next sl sl-icon-arrow-right"></i></a></li>`;
+}
+
 const popRecipe = (recipes) => {
   const listParent = document.querySelector('#recipe-list');
   listParent.innerHTML = "";
@@ -541,118 +619,6 @@ const popRecipe = (recipes) => {
     `;
     listParent.innerHTML += list;
   });
-  
-/*----------------------------------------------------*/
-/*  Rating Overview Background Colors
-/*----------------------------------------------------*/
-function ratingOverview(ratingElem) {
-
-  $(ratingElem).each(function() {
-    var dataRating = $(this).attr('data-rating');
-    // Rules
-      if (dataRating >= 4.0) {
-          $(this).addClass('high');
-          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*100 + "%", });
-      } else if (dataRating >= 3.0) {
-          $(this).addClass('mid');
-          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*80 + "%", });
-      } else if (dataRating < 3.0) {
-          $(this).addClass('low');
-          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*60 + "%", });
-      }
-
-  });
-} ratingOverview('.rating-bars-rating');
-
-$(window).on('resize', function() {
-  ratingOverview('.rating-bars-rating');
-});
-
-
-/*----------------------------------------------------*/
-/*  Ratings Script
-/*----------------------------------------------------*/
-
-/*  Numerical Script
-/*--------------------------*/
-function numericalRating(ratingElem) {
-
-	$(ratingElem).each(function() {
-		var dataRating = $(this).attr('data-rating');
-
-		// Rules
-	    if (dataRating >= 4.0) {
-	        $(this).addClass('high');
-	    } else if (dataRating >= 3.0) {
-	        $(this).addClass('mid');
-	    } else if (dataRating < 3.0) {
-	        $(this).addClass('low');
-	    }
-
-	});
-
-} numericalRating('.numerical-rating');
-
-
-/*  Star Rating
-/*--------------------------*/
-function starRating(ratingElem) {
-
-	$(ratingElem).each(function() {
-
-		var dataRating = $(this).attr('data-rating');
-		// Rating Stars Output
-		function starsOutput(firstStar, secondStar, thirdStar, fourthStar, fifthStar) {
-			return(''+
-				'<span class="'+firstStar+'"></span>'+
-				'<span class="'+secondStar+'"></span>'+
-				'<span class="'+thirdStar+'"></span>'+
-				'<span class="'+fourthStar+'"></span>'+
-				'<span class="'+fifthStar+'"></span>');
-		}
-
-		var fiveStars = starsOutput('star','star','star','star','star');
-
-		var fourHalfStars = starsOutput('star','star','star','star','star half');
-		var fourStars = starsOutput('star','star','star','star','star empty');
-
-		var threeHalfStars = starsOutput('star','star','star','star half','star empty');
-		var threeStars = starsOutput('star','star','star','star empty','star empty');
-
-		var twoHalfStars = starsOutput('star','star','star half','star empty','star empty');
-		var twoStars = starsOutput('star','star','star empty','star empty','star empty');
-
-		var oneHalfStar = starsOutput('star','star half','star empty','star empty','star empty');
-		var oneStar = starsOutput('star','star empty','star empty','star empty','star empty');
-
-    // Rules
-    console.log('dataRating');
-        if (dataRating >= 4.75) {
-            $(this).append(fiveStars);
-        } else if (dataRating >= 4.25) {
-            $(this).append(fourHalfStars);
-        } else if (dataRating >= 3.75) {
-            $(this).append(fourStars);
-            // document.querySelector('.star-rating').innerHTML += fourStars;
-        } else if (dataRating >= 3.25) {
-            $(this).append(threeHalfStars);
-            // document.querySelector('.star-rating').innerHTML += 'threeHalfStars';
-        } else if (dataRating >= 2.75) {
-            $(this).append(threeStars);
-        } else if (dataRating >= 2.25) {
-            $(this).append(twoHalfStars);
-        } else if (dataRating >= 1.75) {
-            $(this).append(twoStars);
-        } else if (dataRating >= 1.25) {
-            $(this).append(oneHalfStar);
-        } else if (dataRating < 1.25) {
-            $(this).append(oneStar);
-        }
-
-	});
-
-} starRating('.star-rating');
-
 }
 
 /* DELETE RECIPE */
@@ -686,18 +652,22 @@ function starRating(ratingElem) {
 const loadExpiredRecipe = () => {
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   const chefID = userData._id;
+  const pagination = document.querySelector('.recipe-pagination');
+  let page = 1;
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   const data = {
     chefID,
   };
-  axios.post(`${baseURL}/chef/recipe/list?status=expired&page=1`, data, {
+  axios.post(`${baseURL}/chef/recipe/list?status=expired&page=${page}`, data, {
     headers: {
       'Authorization': `Bearer ${token}`
     },
   }).then((res) => {
     console.log(res);
-    const recipes = res.data.payload.data;
+    const recipes = res.data.payload.data.data;
+    const recipeCount = res.data.payload.data.total;
     popDelRecipe(recipes);
+    paginate(recipeCount);
   }).catch((err) => {
     if (err.response && err.response.data) {
       toastr.error(err.response.data.error.message);
@@ -705,6 +675,69 @@ const loadExpiredRecipe = () => {
       toastr.error('Something went wrong, please try again');
     }
   });
+  pagination.addEventListener('click', (e) => {
+    const listingParent = document.querySelector('.dashboard-content');
+    listingParent.scrollIntoView({ behavior: 'smooth', block: 'start'});
+    const pageParent = e.target.parentElement.parentElement.children;
+    e.preventDefault();
+    if (e.target.classList.contains("next")) {
+      page;
+      let curPage,nxtPage;
+      for (let i = 0; i < pageParent.length; i++) {
+        const pageNode = pageParent[i].children[0];
+        if (pageNode.classList.contains('current-page')) {
+          curPage = i;
+          const prevPage = parseFloat(pageNode.innerText);
+          page = prevPage + 1;
+        } else {
+          false;
+        }
+      }
+      nxtPage = curPage + 1;
+      pageParent[curPage].children[0].classList.remove('current-page');
+      pageParent[nxtPage].children[0].classList.add('current-page');
+      axios.post(`${baseURL}/chef/recipe/list?status=expired&page=${page}`, data, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      }).then((res) => {
+        console.log(res.data.payload.data);
+        const recipes = res.data.payload.data.data;
+        popDelRecipe(recipes);
+      }).catch((err) => {
+        if (err.response && err.response.data) {
+          toastr.error(err.response.data.error.message);
+        } else {
+          toastr.error('Something went wrong, please try again');
+        }
+      });
+    } else {
+      for (let i = 0; i < pageParent.length; i++) {
+        const pageNode = pageParent[i].children[0];
+        if (pageNode.classList.contains('current-page')) {
+          pageNode.classList.remove('current-page');
+        } else {
+          false;
+        }
+      }
+      page = e.target.innerText;
+      e.target.classList.add('current-page');
+      axios.post(`${baseURL}/chef/recipe/list?status=expired&page=${page}`, data, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      }).then((res) => {
+        const recipes = res.data.payload.data.data;
+        popDelRecipe(recipes);
+      }).catch((err) => {
+        if (err.response && err.response.data) {
+          toastr.error(err.response.data.error.message);
+        } else {
+          toastr.error('Something went wrong, please try again');
+        }
+      });
+    }
+  })
 };
 const popDelRecipe = (recipes) => {
   const listParent = document.querySelector('#recipe-list');
@@ -1424,6 +1457,23 @@ const fetchOverview = () => {
         toastr.error('Something went wrong, please try again');
       }
     });
+  } else {
+    const userID = userData._id;
+    axios.get(`${baseURL}/users/overview/${userID}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    }).then((res) => {
+      console.log(res.data.payload.data);
+      const dashData = res.data.payload.data;
+      popDash(dashData);
+    }).catch((err) => {
+      if (err.response && err.response.data) {
+        toastr.error(err.response.data.error.message);
+      } else {
+        toastr.error('Something went wrong, please try again');
+      }
+    });
   }
 }
 
@@ -1461,7 +1511,7 @@ const loadSidebar = () => {
 			</ul>
 			
 			<ul data-submenu-title="Recipe">
-				<li><a><i class="sl sl-icon-layers"></i> My Recipes</a>
+				<li class="recipeState" onclick="toggleState()"><a><i class="sl sl-icon-layers"></i> My Recipes</a>
 					<ul>
 						<li><a id="activerecipe" href="dashboard-my-active-listings.html">Active <span class="nav-tag green">6</span></a></li>
 						<li><a href="dashboard-my-pending-listings.html">Pending <span class="nav-tag yellow">1</span></a></li>
@@ -1504,3 +1554,7 @@ const loadSidebar = () => {
     `;
   }
 } 
+
+const toggleState = () => {
+  document.querySelector('.recipeState').classList.toggle('active');
+}
