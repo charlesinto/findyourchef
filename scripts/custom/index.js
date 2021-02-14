@@ -914,7 +914,7 @@ const findChef = () => {
   const data = {
     searchInput : document.querySelector('.search-input').value,
     locationInput: document.querySelector('#autocomplete-input').value,
-    radius : "50miles"
+    radius : "50"
   }
   sessionStorage.setItem('fyc-search', JSON.stringify(data));
   location.href='/explore.html';
