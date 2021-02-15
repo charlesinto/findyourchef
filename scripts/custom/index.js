@@ -119,7 +119,7 @@ const verifyOTP = (e) => {
     email: localStorage.getItem('fyc-email'),
     otp: document.querySelector('#otp').value
   }
-  localStorage.removeItem('fyc-email');
+  console.log(data);
   e.preventDefault();
   const button = document.querySelector('#otp-btn');
 
@@ -128,6 +128,7 @@ const verifyOTP = (e) => {
   axios.post(`${baseURL}/user/verify-number`, data).then((res) => {
     button.innerHTML = 'Verify';
     button.removeAttribute('disabled');
+    console.log(res);
     toastr.success('OTP verification successful');
     location.href = '/login.html';
   }).catch((err) => {
@@ -252,7 +253,6 @@ const handleUserSignup = (e) => {
   axios.post(`${baseURL}/signup/user`, data).then((res) => {
     console.log(res);
     sendOTP(email);
-    verifyOTP(e);
     button.innerHTML = 'Register';
     button.removeAttribute('disabled');
     // location.href = '/login.html';
@@ -262,10 +262,10 @@ const handleUserSignup = (e) => {
     button.removeAttribute('disabled');
     if (err.response && err.response.data) {
       toastr.error(err.response.data.error.message);
+      console.log(err.response);
     } else {
       toastr.error('Something went wrong, please try again');
     }
-    console.log(err.response);
     button.innerHTML = 'Register';
   });
 }
@@ -375,16 +375,19 @@ if (addListingSection) {
       const lat = inputAddress.lat;
       const lng = inputAddress.lng;
       let perimeter = ["1.02433,0.84950", "2.4923,1.490493"];
+      const coords = "10.4818192,7.427933500000001";
       let price = "40";
       const data = {
         name,
         location,
         price,
-        coords: `${lat},${lng}`,
+        // coords: `${lat},${lng}`,
+        coords,
         overview,
         category,
         perimeter,
         tags,
+        radius,
         availability
       }
       const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
