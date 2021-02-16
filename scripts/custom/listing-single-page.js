@@ -279,17 +279,6 @@ const fetchRecipeReview = (id) => {
   })
 }
 
-const paginate = (count) => {
-  const pageContainer = document.querySelector('.review-pagination');
-  pageContainer.innerHTML = `<li><a href="#" class="current-page">1</a></li>`;
-  const pages = Math.ceil(count / 10);
-  for (let i = 2; i <= pages; i++) {
-    pageContainer.innerHTML += `<li><a href="#">${i}</a></li>`;
-  }
-  pageContainer.innerHTML += `<li><a class="next" href="#"><i id="next" class="next sl sl-icon-arrow-right"></i></a></li>`;
-}
-
-
 const popReviews = (reviews) => {
   length = reviews.length;
   const review_count = document.querySelector('.pop-review-count');
