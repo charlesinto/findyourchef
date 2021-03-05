@@ -2526,7 +2526,7 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 	color: #666;
 }
 .range-output:after {
-	content: "km";
+	content: "miles";
 }
 
 .data-radius-title {
@@ -18365,6 +18365,7 @@ body .category-box-btn:hover {
 		position: absolute;
 		top: 8px;
 		right: 0;
+		visibility: hidden;
 	}
 
 	/* EDIT & DELETE RECIPE BTN */
@@ -18385,4 +18386,34 @@ body .category-box-btn:hover {
 
 	.dynamic-dashboard:hover {
 		color: #F3761A;
+	}
+
+	.bold {
+		font-weight: bold;
+	}
+
+	.category {
+		margin-top: 30px;
+	}
+
+	.category-edit {
+		display: flex;
+	}
+
+	.check-div {
+		display: flex;
+		align-items: center;
+		margin-right: 10px;
+	}
+
+	.check-div input[type="checkbox"] {
+		width: 30px;
+		height: 30px;
+		margin-left: 10px;
+		margin-bottom: 0;
+	}
+
+	.radius {
+		width: 300px;
+		margin: 15px 0;
 	}

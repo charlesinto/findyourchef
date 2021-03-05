@@ -50,7 +50,7 @@
 
       // Listen to all other errors on this socketUser, see documentation for error and success formats
       socketUser.on("err", (err) => {
-        console.log("The err is ", err);
+        console.log("The err is ", err)
       })
 
       // When a chat message comes in

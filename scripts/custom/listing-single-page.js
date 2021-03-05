@@ -8,9 +8,9 @@ const fetchRecipeData = () => {
   axios.get(`${baseURL}/recipes/${id}`).then((res) => {
     const recipe = res.data.payload.data.data;
     const stars = res.data.payload.data.stars;
-    console.log(res.data.payload.data);
+    const count = res.data.payload.data.reviewCount;
     sessionStorage.setItem('fyc-recipe-chefID', recipe.chefID);
-    popRecipeData(recipe, stars);
+    popRecipeData(recipe, stars, count);
     fetchRecipeReview(id);
   }).catch((err) => {
     console.log(err);
@@ -46,7 +46,7 @@ const fetchRecipeData = () => {
 
 
 /* POPULATE DOM WITH RECIPE DATA */
-const popRecipeData = (data, stars) => {
+const popRecipeData = (data, stars, count) => {
   const name = data.name;
   const chefName = data.chefName;
   const image = data.image;
@@ -106,7 +106,7 @@ const popRecipeData = (data, stars) => {
                               </a>
                             </span>
                             <div class="star-rating" data-rating="${stars.averageStars}">
-                              <div class="rating-counter"><a href="#listing-reviews">(31 reviews)</a></div>
+                              <div class="rating-counter"><a href="#listing-reviews">(${count} reviews)</a></div>
                             </div>
                           </div>
   `;
@@ -196,16 +196,17 @@ const popRecipeData = (data, stars) => {
 }
 
 const fetchRecipeReview = (id) => {
-  const pagination = document.querySelector('.review-pagination');
+  const pagination = document.querySelector('.recipe-pagination');
   let page = 1;
   const data = {
     recipeID : id
   }
   axios.get(`${baseURL}/reviews/${id}?page=${page}`, data).then( res => {
+    console.log(res.data.payload.data);
     const reviews = res.data.payload.data.data;
     const reviewCount = res.data.payload.data.dataCount;
-    popReviews(reviews);
-    paginate(reviewCount);
+    popReviews(reviews, reviewCount);
+    if (reviewCount > 0) {paginate(reviewCount);}
   }).catch((err) => {
     console.log(err)
     if (err.response && err.response.data) {

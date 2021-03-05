@@ -86,7 +86,8 @@ const sendOTP = (email) => {
   })
 }
 
-const sendChefOTP = () => {
+const sendChefOTP = (e) => {
+  e.preventDefault();
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   const data = {
@@ -155,7 +156,7 @@ const verifyChefOTP = (e) => {
 
   button.innerHTML = '<div class="loader"></div>';
   button.setAttribute('disabled', true);
-  axios.post(`${baseURL}/chef/verify-number/request`, data, {
+  axios.post(`${baseURL}/chef/verify-number`, data, {
     headers: {
       'Authorization': `Bearer ${token}`
     },
@@ -457,7 +458,7 @@ if(element) {
       console.log("Verification Starting...");
       console.log(axios);
 
-      button.setAttribute('disabled', true);
+      // button.setAttribute('disabled', true);
     }
   }) 
 }
@@ -470,7 +471,7 @@ const username = document.querySelector('.logged-username');
 if (username) {
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   const user = userData.username;
-  const image = userData.image;
+  const image = userData.profilePic;
   username.innerHTML = `<span><img src="${image}" alt=""></span>Hi, ${user}!`;
 }
 const headername = document.querySelector('.header-name');
@@ -1192,7 +1193,9 @@ const getLocation = (showPosition) => {
   geocoder.geocode({location: latlng}, (results, status) => {
     if (status === "OK") {
       if (results[0]) {
-        const address = results[4].formatted_address;
+        console.log(results);
+        const address = results[0].formatted_address;
+        console.log(address);
         const locationInput = document.querySelector('#autocomplete-input');
         locationInput.value = address;
       } else {
@@ -1210,7 +1213,7 @@ const showLocation = () => {
   geocoder.geocode({location: latlng}, (results, status) => {
     if (status === "OK") {
       if (results[0]) {
-        const address = results[4].formatted_address;
+        const address = results[0].formatted_address;
         const locationInput = document.querySelector('#autocomplete-input');
         locationInput.value = address;
       } else {
@@ -1594,27 +1597,33 @@ const deleteBookmark = (e, bookmarkID) => {
 const fetchOverview = () => {
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-  if (userData.role === 'chef' || userData.numberVerified === false) {
-    toastr.error('Please verify your Phone Number!');
-    const titleBar = document.querySelector('#titlebar');
-    titleBar.innerHTML += `
-    <div class="row verify-phone-row">
-      <div class="col-md-12">
-        <button id="verify-phone" type="submit" class="button border fw margin-top-10 display-none">
-          Verify Phone number
-        </button>
-      </div>
-    </div>`;
-    const verifyPhoneBtn = document.querySelector('#verify-phone');
-    if (userData.emailVerified === false ) {
-      toastr.error('Please verify your Email Address!');
+  console.log(userData);
+  if (userData.role === 'chef') {
+    if (userData.numberVerified === false) {
+      const titleBar = document.querySelector('#titlebar');
+      titleBar.innerHTML += `
+      <div class="row verify-phone-row">
+        <div class="col-md-12">
+          <button id="verify-phone" onclick="sendChefOTP(event)" type="submit" class="button border fw margin-top-10 display-none">
+            Verify Phone number
+          </button>
+        </div>
+      </div>`;
     }
-    verifyPhoneBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      sendChefOTP();
-    })
-    if (userData.IDVerified === false ) {
-      toastr.error('Please verify your ID!');
+    if (!userData.emailVerified ||
+        !userData.IDVerified ||
+        userData.availability.length == 0 ||
+        userData.categories.length == 0 ||
+        userData.coords == "" ||
+        !userData.numberVerified ||
+        userData.facebook == "" ||
+        userData.google == "" ||
+        userData.location == "" ||
+        userData.notes == "" || 
+        userData.perimeter == "" ||
+        userData.profilePic == "" ||
+        userData.twittwe == "" ) {
+      toastr.error('Please update your profile!!');
     }
   }
   if (userData.role === 'chef') {
@@ -1654,10 +1663,12 @@ const fetchOverview = () => {
   }
 }
 
+
 const popDash = (data) => {
   const views = parseFloat(data.views);
   const activeRecipe = data.activeRecipes;
   const totalReviews = data.totalReviews;
+  const bookmarkCount = data.bookmarkCount;
 
   document.querySelector('.color-1').innerHTML = `<div class="dashboard-stat-content"><h4>${activeRecipe}</h4> <span>Active Recipe</span></div>
   <div class="dashboard-stat-icon"><i class="im im-icon-Map2"></i></div>`;
@@ -1667,6 +1678,10 @@ const popDash = (data) => {
 
   document.querySelector('.color-3').innerHTML = `<div class="dashboard-stat-content"><h4>${totalReviews}</h4> <span>Total Reviews</span></div>
   <div class="dashboard-stat-icon"><i class="im im-icon-Add-UserStar"></i></div>`;
+
+  document.querySelector('.color-4').innerHTML = `<div class="dashboard-stat-content"><h4>${bookmarkCount}</h4> <span>Times Bookmarked</span></div>
+  <div class="dashboard-stat-icon"><i class="im im-icon-Heart"></i></div>`;
+
 
   $(".dashboard-stat-content h4").counterUp({
     delay: 100,
@@ -1734,4 +1749,19 @@ const loadSidebar = () => {
 
 const toggleState = () => {
   document.querySelector('.recipeState').classList.toggle('active');
+}
+
+const loadProfile = () => {
+  const passBtn = document.querySelector('.passbaseBtn');
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+
+  if (userData.role === "chef") {
+    if (!userData.IDVerified) {
+      passBtn.style.visibility = 'visible';
+    } else {
+      passBtn.style.visibility = 'hidden';
+    }
+  }else {
+    passBtn.style.visibility = 'hidden';
+  }
 }
