@@ -9,11 +9,13 @@
 
 <!-- CSS
 ================================================== -->
+<link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/main-color.css" id="colors">
-<script type="text/javascript" src="https://unpkg.com/@passbase/button@v3/button.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script type="text/javascript" src="https://unpkg.com/@passbase/button@v3/button.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjbSwlaIqraERZQGoSOPEnPspCgPsE8y8" defer ></script>
 <!-- PAGE RESTRICTION TO LOGGED IN USERS -->
 <script>
 	const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
@@ -147,48 +149,59 @@
 			<div class="col-lg-6 col-md-12">
 				<div class="dashboard-list-box passbase-container margin-top-0">
 					<h4 class="gray">Profile Details</h4>
-        	<div id="passbase-button" class="passbaseBtn"></div>
-					<div class="dashboard-list-box-static">
-						
-						<!-- Avatar -->
-						<div class="edit-profile-photo">
-							<img src="images/user-avatar.jpg" alt="">
-							<div class="change-photo-btn">
-								<div class="photoUpload">
-								    <span><i class="fa fa-upload"></i> Upload Photo</span>
-								    <input type="file" class="upload" />
-								</div>
-							</div>
-						</div>
-	
-						<!-- Details -->
-						<div class="my-profile">
+      <div id="passbase-button" class="passbaseBtn"></div>
+      <div class="dashboard-list-box-static">
+        
+        <!-- Avatar -->
+        <div class="edit-profile-photo">
+          <img class="user-img" src="images/user-avatar.jpg" alt="">
+          <div class="change-photo-btn">
+            <div class="photoUpload">
+                <span><i class="fa fa-upload"></i> Upload Photo</span>
+                <input type="file" class="upload" />
+            </div>
+          </div>
+        </div>
 
-							<label>Your Name</label>
-							<input value="Tom Perrin" type="text">
+        <!-- Details -->
+        <div class="my-profile edit">
 
-							<label>Phone</label>
-							<input value="(123) 123-456" type="text">
+          <label>Your Name</label>
+          <input class="fullname" value="Tom Perrin" type="text">
 
-							<label>Email</label>
-							<input value="tom@example.com" type="text">
+          <label>Phone</label>
+          <input class="phoneNumber" value="(123) 123-456" type="text">
 
-							<label>Notes</label>
-							<textarea name="notes" id="notes" cols="30" rows="10">Maecenas quis consequat libero, a feugiat eros. Nunc ut lacinia tortor morbi ultricies laoreet ullamcorper phasellus semper</textarea>
+          <label>Email</label>
+          <input class="email" value="tom@example.com" type="text">
 
-							<label><i class="fa fa-twitter"></i> Twitter</label>
-							<input placeholder="https://www.twitter.com/" type="text">
+          <label>Notes</label>
+          <textarea name="notes" id="notes" cols="30" rows="10">Maecenas quis consequat libero, a feugiat eros. Nunc ut lacinia tortor morbi ultricies laoreet ullamcorper phasellus semper</textarea>
 
-							<label><i class="fa fa-facebook-square"></i> Facebook</label>
-							<input placeholder="https://www.facebook.com/" type="text">
+          <label><i class="fa fa-twitter"></i> Twitter</label>
+          <input class="twitter" placeholder="https://www.twitter.com/" type="text">
 
-							<label><i class="fa fa-google-plus"></i> Google+</label>
-							<input placeholder="https://www.google.com/" type="text">
-						</div>
-	
-						<button class="button margin-top-15">Save Changes</button>
+          <label><i class="fa fa-facebook-square"></i> Facebook</label>
+          <input class="facebook" placeholder="https://www.facebook.com/" type="text">
 
+          <label><i class="fa fa-google-plus"></i> Google+</label>
+          <input class="google" placeholder="https://www.google.com/" type="text">
+
+					<div class="category">
+						<h5 class="bold">Select Category</h5>
+						<div class="category-edit"></div>
 					</div>
+					<div class="radius">
+						<h5 class="bold">Distance Radius</h5>
+						<div class="panel-dropdown-content">
+							<input class="distance-radius" type="range" min="1" max="100" step="1" value="50" data-title="Radius around selected destination">
+						</div>
+					</div>
+        </div>
+
+        <button onclick="updateProfile()" class="button margin-top-15">Update Profile</button>
+
+      </div>
 				</div>
 			</div>
 
@@ -197,7 +210,6 @@
 				<div class="dashboard-list-box margin-top-0">
 					<h4 class="gray">Change Password</h4>
 					<div class="dashboard-list-box-static">
-
 						<!-- Change Password -->
 						<div class="my-profile">
 							<label class="margin-top-0">Current Password</label>
@@ -208,7 +220,6 @@
 
 							<label>Confirm New Password</label>
 							<input type="password">
-
 							<button class="button margin-top-15">Change Password</button>
 						</div>
 
@@ -254,12 +265,15 @@
 <script type="text/javascript" src="scripts/custom.js"></script>
 <script type="text/javascript" src="scripts/custom/index.js"></script>
 <script type="text/javascript" src="scripts/custom/socket.js"></script>
+<script type="text/javascript" src="scripts/custom/profile.js"></script>
 <script>
 	window.addEventListener('load', function() {
 		loadSidebar();
+		loadProfile();
+		loadCategories();
+		setDetails();
 	});
 </script>
-
 
 </body>
 </html>
