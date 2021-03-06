@@ -1194,8 +1194,8 @@ const getLocation = (showPosition) => {
     if (status === "OK") {
       if (results[0]) {
         console.log(results);
-       const city = results[0].address_components[4].long_name
-       const state = results[0].address_components[5].short_name
+       const city = results[0].address_components[3].long_name
+       const state = results[0].address_components[6].short_name
        const address = `${city}, ${state}`
         const locationInput = document.querySelector('#autocomplete-input');
         locationInput.value = address;
@@ -1214,8 +1214,8 @@ const showLocation = () => {
   geocoder.geocode({location: latlng}, (results, status) => {
     if (status === "OK") {
       if (results[0]) {
-        const city = results[0].address_components[4].long_name;
-        const state = results[0].address_components[5].short_name;
+        const city = results[0].address_components[3].long_name;
+        const state = results[0].address_components[6].short_name;
         const address = `${city}, ${state}`;
         const locationInput = document.querySelector('#autocomplete-input');
         locationInput.value = address;
