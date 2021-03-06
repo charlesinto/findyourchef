@@ -131,7 +131,7 @@ const verifyOTP = (e) => {
     button.removeAttribute('disabled');
     console.log(res);
     toastr.success('OTP verification successful');
-    location.href = '/login.html';
+    fetchChefData();
   }).catch((err) => {
     button.innerHTML = 'Verify';
     button.removeAttribute('disabled');
@@ -168,6 +168,28 @@ const verifyChefOTP = (e) => {
   }).catch((err) => {
     button.innerHTML = 'Verify';
     button.removeAttribute('disabled');
+    if (err.response && err.response.data) {
+      toastr.error(err.response.data.error.message);
+    } else {
+      toastr.error('Something went wrong, please try again');
+    }
+  });
+}
+
+const fetchChefData = () => {
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  const id = userData._id;
+  axios.get(`${baseURL}/chefs/${id}`).then((res) => {
+    // if (sessionStorage.getItem('fyc-user')) {
+    //   sessionStorage.removeItem('fyc-user');
+    // } else {
+    //   localStorage.removeItem('fyc-user');
+    // }
+    const newData = res.data.payload.data;
+    sessionStorage.setItem('fyc-user', newData);
+    location.reload();
+  }).catch((err) => {
+    console.log(err);
     if (err.response && err.response.data) {
       toastr.error(err.response.data.error.message);
     } else {
@@ -325,39 +347,8 @@ const handleChefSignup = (e, user) => {
 
 const addListingSection = document.querySelector('#add-listing');
 if (addListingSection) {
-  let availability = {
-    "monday" : [],
-    "tuesday" : [],
-    "wednesday" : [],
-    "thursday" : [],
-    "friday" : [],
-    "saturday" : [],
-    "sunday" : []
-  };
   addListingSection.addEventListener('click', (e) => {
-    if (e.target.textContent === 'Add') {
-      let startInput = e.target.parentElement.parentElement.children[0].children[0].value;
-      let endInput = e.target.parentElement.parentElement.children[0].children[3].value;
-      let parent = e.target.parentElement.parentElement.parentElement.children[0].textContent.toLowerCase();
-      let startArr = startInput.split(':');
-      let arrStart = [];
-      startArr.forEach(item => {
-        let timeVal = parseInt(item);
-        arrStart.push(timeVal);
-      });
-      let endArr = endInput.split(':');
-      let arrEnd = [];
-      endArr.forEach(item => {
-        let timeVal = parseInt(item);
-        arrEnd.push(timeVal);
-      })
-      availability[parent].push({
-        "startHours": arrStart[0],
-        "startMinutes": arrStart[1],
-        "endHours": arrEnd[0],
-        "endMinutes": arrEnd[1],
-      })
-    }else if (e.target.id === 'post-recipe') {
+    if (e.target.id === 'post-recipe') {
       e.preventDefault();
       e.target.innerHTML = '<div class="loader"></div>';
       e.target.setAttribute('disabled', true);
@@ -367,11 +358,8 @@ if (addListingSection) {
       let tags = keywords.split(',');
       let location = document.querySelector('#autocomplete-input').value;
       let radius = document.querySelector('#radius').value;
-      let dropzone = document.querySelector('#dropzone').value;
+      // let dropzone = document.querySelector('#dropzone').value;
       let overview = document.querySelector('#summary').value;
-      let phoneOptional = document.querySelector('#phone-optional').value;
-      let websiteOptional = document.querySelector('#website-optional').value;
-      let emailOptional = document.querySelector('#email-optional').value;
       const inputAddress = JSON.parse(sessionStorage.getItem('fyc-coords'));
       const lat = inputAddress.lat;
       const lng = inputAddress.lng;
@@ -388,8 +376,7 @@ if (addListingSection) {
         category,
         perimeter,
         tags,
-        radius,
-        availability
+        radius
       }
       console.log(data);
       const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
@@ -412,6 +399,15 @@ if (addListingSection) {
         }
       });
     }
+  })
+}
+
+const setCategory = () => {
+  const categoryParent = document.querySelector('#category');
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  const selectedCat = userData.categories;
+  selectedCat.forEach( cat => {
+    categoryParent.innerHTML += `<option value="${cat}">${cat}</option>`;
   })
 }
 
@@ -471,7 +467,12 @@ const username = document.querySelector('.logged-username');
 if (username) {
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   const user = userData.username;
-  const image = userData.profilePic;
+  let image;
+  if (userData.role == "chef") {
+    image = userData.profilePic;
+  } else {
+    image = userData.image;
+  }
   username.innerHTML = `<span><img src="${image}" alt=""></span>Hi, ${user}!`;
 }
 const headername = document.querySelector('.header-name');

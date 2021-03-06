@@ -1,5 +1,4 @@
-
-  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  const userData = sessionStorage.getItem('fyc-user') || localStorage.getItem('fyc-user');
   const jwt = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   let socketChef, socketUser;
   if (jwt) {
