@@ -1192,31 +1192,15 @@ const getLocation = (showPosition) => {
   sessionStorage.setItem('fyc-coords', JSON.stringify(latlng));
   const geocoder = new google.maps.Geocoder();
   geocoder.geocode({location: latlng}, (results, status) => {
-    let city, state;
     if (status === "OK") {
         if (results[0]) {
-          console.log(results)
-          for (let i = 0; i < results[0].address_components.length; i++) {
-            for (
-              let b = 0;
-              b < results[0].address_components[i].types.length;
-              b++
-            ) {
-              switch (results[0].address_components[i].types[b]) {
-                case 'administrative_area_level_2':
-                  city = results[0].address_components[i].long_name
-                  break
-                case 'administrative_area_level_1':
-                  state = results[0].address_components[i].short_name
-                  break
-              }
-            }
-          }
+          const city = results[0].address_components[3].long_name;
+          const state = results[0].address_components[6].short_name;
           const address = `${city}, ${state}`
-          const locationInput = document.querySelector('#autocomplete-input')
-          locationInput.value = address
+          const locationInput = document.querySelector('#autocomplete-input');
+          locationInput.value = address;
         } else {
-          windows.alert('No results found')
+          window.alert('No results found');
         }
     } else {
       window.alert(`Geocoder failed due to ${status}`);
@@ -1228,41 +1212,16 @@ const showLocation = () => {
   const latlng = JSON.parse(sessionStorage.getItem('fyc-coords'));
   const geocoder = new google.maps.Geocoder();
   geocoder.geocode({location: latlng}, (results, status) => {
-    let state, city;
     if (status === "OK") {
-       if (results[0]) {
-         console.log(results)
-         for (let i = 0; i < results[0].address_components.length; i++) {
-           for (
-             let b = 0;
-             b < results[0].address_components[i].types.length;
-             b++
-           ) {
-             switch (results[0].address_components[i].types[b]) {
-               case 'administrative_area_level_2':
-                 city = results[0].address_components[i].long_name
-                 break
-               case 'administrative_area_level_1':
-                 state = results[0].address_components[i].short_name
-                 break
-             }
-           }
-         }
-         const address = `${city}, ${state}`
-         const locationInput = document.querySelector('#autocomplete-input');
-         locationInput.value = address;
-       } else {
-         windows.alert('No results found')
-       }
-      // if (results[0]) {
-      //   const city = results[0].address_components[3].long_name;
-      //   const state = results[0].address_components[6].short_name;
-      //   const address = `${city}, ${state}`;
-      //   const locationInput = document.querySelector('#autocomplete-input');
-      //   locationInput.value = address;
-      // } else {
-      //   window.alert("No results found");
-      // }
+      if (results[0]) {
+        const city = results[0].address_components[3].long_name;
+        const state = results[0].address_components[6].short_name;
+        const address = `${city}, ${state}`;
+        const locationInput = document.querySelector('#autocomplete-input');
+        locationInput.value = address;
+      } else {
+        window.alert("No results found");
+      }
     } else {
       window.alert(`Geocoder failed due to ${status}`);
     }
