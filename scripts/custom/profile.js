@@ -680,7 +680,9 @@ const getCoords = (showPosition) => {
   geocoder.geocode({location: latlng}, (results, status) => {
     if (status === "OK") {
       if (results[0]) {
-        const coords = results[0].formatted_address;
+        const city = results[0].address_components[3].long_name;
+        const state = results[0].address_components[6].short_name;
+        const coords = `${city}, ${state}`;
         sessionStorage.setItem('fyc-profile-coords', coords);
       } else {
         window.alert("No results found");
