@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+
+<head>
+
+    <!-- Basic Page Needs
+================================================== -->
+    <title>Find Your Chef</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- CSS
+================================================== -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/main-color.css" id="colors">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjbSwlaIqraERZQGoSOPEnPspCgPsE8y8" defer ></script>
+    <!-- PAGE RESTRICTION TO LOGGED IN USERS -->
+    <script>
+        const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
+        if (!token) {
+            window.location.href = '/index.html';
+            console.log('token detected');
+        } else {
+            false;
+        }
+    </script>
+</head>
+
+<body>
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!-- Header Container
+================================================== -->
+        <header id="header-container" class="fixed fullwidth dashboard">
+
+            <!-- Header -->
+            <div id="header" class="not-sticky">
+                <div class="container">
+
+                    <!-- Left Side Content -->
+                    <div class="left-side">
+
+                        <!-- Logo -->
+                        <div id="logo">
+                            <a href="index.html"><img src="images/logo.png" alt=""></a>
+                            <a href="index.html" class="dashboard-logo"><img src="images/logo2.png" alt=""></a>
+                        </div>
+
+                        <!-- Mobile Navigation -->
+                        <div class="mmenu-trigger">
+                            <button class="hamburger hamburger--collapse" type="button">
+						<span class="hamburger-box">
+							<span class="hamburger-inner"></span>
+						</span>
+					</button>
+                        </div>
+
+                        <!-- Main Navigation -->
+                        <nav id="navigation" class="style-1">
+                            <ul id="responsive">
+
+                                <li><a class="current" href="index.html">Home</a></li>
+                                <li><a href="become-a-chef/index.html">Become a Chef</a></li>
+                                <li><a href="explore.html">Explore Recipes</a></li>
+                                <li><a href="contact.html">Contact Us</a></li>
+
+                            </ul>
+                        </nav>
+                        <div class="clearfix"></div>
+                        <!-- Main Navigation / End -->
+
+                    </div>
+                    <!-- Left Side Content / End -->
+
+                    <!-- Right Side Content / End -->
+                    <div class="right-side">
+                        <!-- Header Widget -->
+                        <div class="header-widget">
+
+                            <!-- User Menu -->
+                            <div class="user-menu">
+                                <div class="user-name logged-username"></div>
+                                <ul>
+                                    <li><a href="dashboard.html"><i class="sl sl-icon-settings"></i> Dashboard</a></li>
+                                    <li><a href="dashboard-messages.html"><i class="sl sl-icon-envelope-open"></i> Messages</a></li>
+                                    <li><a href="dashboard-bookings.html"><i class="fa fa-calendar-check-o"></i> Bookings</a></li>
+                                    <li><a href="#" onclick="handleLogout()"><i class="sl sl-icon-power"></i> Logout</a></li>
+                                </ul>
+                            </div>
+
+                        </div>
+                        <!-- Header Widget / End -->
+                    </div>
+                    <!-- Right Side Content / End -->
+
+                </div>
+            </div>
+            <!-- Header / End -->
+
+        </header>
+        <div class="clearfix"></div>
+        <!-- Header Container / End -->
+
+
+        <!-- Dashboard -->
+        <div id="dashboard">
+
+            <!-- Navigation
+	================================================== -->
+
+            <!-- Responsive Navigation Trigger -->
+            <a href="#" class="dashboard-responsive-nav-trigger"><i class="fa fa-reorder"></i> Dashboard Navigation</a>
+
+            <div class="dashboard-nav">
+                
+            </div>
+            <!-- Navigation / End -->
+
+
+
+            <!-- Content
+	================================================== -->
+            <div class="dashboard-content">
+
+                <!-- Titlebar -->
+                <div id="titlebar">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2>Edit Listing</h2>
+                            <!-- Breadcrumbs -->
+                            <nav id="breadcrumbs">
+                                <ul>
+                                    <li><a href="#">Home</a></li>
+                                    <li><a href="#">Dashboard</a></li>
+                                    <li>Edit Listing</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <div id="add-listing">
+
+                            <!-- Section -->
+                            <div class="add-listing-section">
+
+                                <!-- Headline -->
+                                <div class="add-listing-headline">
+                                    <h3><i class="sl sl-icon-doc"></i> Basic Informations</h3>
+                                </div>
+
+                                <!-- Title -->
+                                <div class="row with-forms">
+                                    <div class="col-md-12">
+                                        <h5>Title <i class="tip" data-tip-content="Name of your Recipe"></i></h5>
+                                        <input class="search-field" type="text" id="recipe-title" value="" />
+                                    </div>
+                                </div>
+
+                                <!-- Row -->
+                                <div class="row with-forms">
+
+                                    <!-- Status -->
+                                    <div class="col-md-6">
+                                        <h5>Category</h5>
+                                        <select id="category" class="chosen-select-no-single">
+									<option label="blank">Select Category</option>	
+								</select>
+                                    </div>
+
+                                    <!-- Type -->
+                                    <div class="col-md-6">
+                                        <h5>Tags/Keywords <i class="tip" data-tip-content="Maximum of 15 keywords related with your recipe"></i></h5>
+                                        <input type="text" id="keywords" placeholder="Keywords should be separated by commas">
+                                    </div>
+
+                                </div>
+                                <!-- Row / End -->
+
+                            </div>
+                            <!-- Section / End -->
+
+                            <!-- Section -->
+                            <div class="add-listing-section margin-top-45">
+
+                                <!-- Headline -->
+                                <div class="add-listing-headline">
+                                    <h3><i class="sl sl-icon-location"></i> Location</h3>
+                                </div>
+
+                                <div class="submit-section">
+
+                                    <!-- Row -->
+                                    <div class="row with-forms">
+                                        <!-- Address -->
+                                        <div class="col-md-6">
+                                            <h5>Primary Location</h5>
+                                            <!-- <input id="location" type="text" placeholder="Laurel, MD 20708"> -->
+                                            <div class="main-search-input-item location">
+                                                <div id="autocomplete-container">
+                                                    <input id="location" type="text" placeholder="Laurel, MD 20708">
+                                                </div>
+                                                <a href="#"><i class="fa fa-map-marker"></i></a>
+                                            </div>
+                                        </div>
+
+                                        <!-- City -->
+                                        <!-- <div class="col-md-6">
+                                            <h5>Radius</h5>
+                                            <input type="text" id="radius" placeholder="50miles">
+                                        </div> -->
+
+                                    </div>
+                                    <!-- Row / End -->
+
+                                </div>
+                            </div>
+                            <!-- Section / End -->
+
+
+                            <!-- Section -->
+                            <div class="add-listing-section margin-top-45">
+
+                                <!-- Headline -->
+                                <div class="add-listing-headline">
+                                    <h3><i class="sl sl-icon-picture"></i> Gallery</h3>
+                                </div>
+
+                                <!-- Dropzone -->
+                                <div class="submit-section">
+                                    <form action="/file-upload" id="dropzone" class="dropzone"></form>
+                                </div>
+
+                            </div>
+                            <!-- Section / End -->
+
+
+                            <!-- Section -->
+                            <div class="add-listing-section margin-top-45">
+
+                                <!-- Headline -->
+                                <div class="add-listing-headline">
+                                    <h3><i class="sl sl-icon-docs"></i> Details</h3>
+                                </div>
+
+                                <!-- Description -->
+                                <div class="form">
+                                    <h5>Description</h5>
+                                    <textarea class="WYSIWYG" name="summary" cols="40" rows="3" id="summary" spellcheck="true"></textarea>
+                                </div>
+
+                                <!-- Row -->
+                                <!-- <div class="row with-forms">
+
+                                    <div class="col-md-4">
+                                        <h5>Phone <span>(optional)</span></h5>
+                                        <input id="phone-optional" type="text">
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <h5>Website <span>(optional)</span></h5>
+                                        <input id="website-optional" type="text">
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <h5>E-mail <span>(optional)</span></h5>
+                                        <input id="email-optional" type="email">
+                                    </div>
+
+                                </div> -->
+                                <!-- Row / End -->
+
+
+                                <!-- Row -->
+
+                            </div>
+                            <!-- Section / End -->
+
+                            <!-- Section -->
+                            <div class="add-listing-section margin-top-45">
+
+                                <!-- Headline -->
+                                <div class="add-listing-headline">
+                                    <h3><i class="sl sl-icon-book-open"></i> Pricing</h3>
+                                    <!-- Switcher -->
+                                    <label class="switch"><input type="checkbox" checked><span class="slider round"></span></label>
+                                </div>
+
+                                <!-- Switcher ON-OFF Content -->
+                                <div class="switcher-content">
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <table id="pricing-list-container">
+                                                <tr class="pricing-list-item pattern">
+                                                    <td>
+                                                        <div class="fm-move"><i class="sl sl-icon-cursor-move"></i></div>
+                                                        <div class="fm-input pricing-name"><input type="text" placeholder="Per Person" disabled /></div>
+                                                        <div class="fm-input pricing-ingredients">
+                                                            <select>
+																<option>No Ingredients</option>
+																<option>Ingredient</option>
+																<option>Premium Ingredient</option>
+															</select>
+                                                            <div class="fm-input pricing-price"><input type="text" placeholder="Price" data-unit="USD" /></div>
+                                                            <div class="fm-close"><a class="delete" href="#"><i class="fa fa-remove"></i></a></div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <a href="#" class="button add-pricing-list-item">Add Item</a>
+                                            <a href="#" class="button add-pricing-submenu">Add Category</a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- Switcher ON-OFF Content / End -->
+
+                                </div>
+                                <!-- Section / End -->
+
+
+                                <a href="#" onclick="updateRecipe(event)" id="update-recipe" class="button preview">Update Recipe <i class="fa fa-arrow-circle-right"></i></a>
+                                <!-- <div class="loader"></div> -->
+
+                            </div>
+                        </div>
+
+                        <!-- Copyrights -->
+                        <div class="col-md-12">
+                            <div class="copyrights">© 2020 Find Your Chef. All Rights Reserved.</div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- Content / End -->
+
+
+            </div>
+            <!-- Dashboard / End -->
+
+
+        </div>
+        <!-- Wrapper / End -->
+
+
+        <!-- Scripts
+================================================== -->
+        <script type="text/javascript" src="scripts/jquery-3.5.1.min.js"></script>
+        <script type="text/javascript" src="scripts/jquery-migrate-3.3.1.min.js"></script>
+        <script type="text/javascript" src="scripts/mmenu.min.js"></script>
+        <script type="text/javascript" src="scripts/chosen.min.js"></script>
+        <script type="text/javascript" src="scripts/slick.min.js"></script>
+        <script type="text/javascript" src="scripts/rangeslider.min.js"></script>
+        <script type="text/javascript" src="scripts/magnific-popup.min.js"></script>
+        <script type="text/javascript" src="scripts/waypoints.min.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script type="text/javascript" src="scripts/counterup.min.js"></script>
+        <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="scripts/tooltips.min.js"></script>
+        <script type="text/javascript" src="scripts/custom/index.js"></script>
+        <script type="text/javascript" src="scripts/maps.js"></script>
+        <script type="text/javascript" src="scripts/custom.js"></script>
+        <script type="text/javascript" src="scripts/custom/socket.js"></script>
+
+
+    <!-- Leaflet // Docs: https://leafletjs.com/ -->
+    <script src="scripts/leaflet.min.js"></script>
+
+    <!-- Leaflet Maps Scripts -->
+    <script src="scripts/leaflet-markercluster.min.js"></script>
+    <script src="scripts/leaflet-gesture-handling.min.js"></script>
+    <script src="scripts/leaflet-listeo.js"></script>
+
+    <!-- Leaflet Geocoder + Search Autocomplete // Docs: https://github.com/perliedman/leaflet-control-geocoder -->
+    <script src="scripts/leaflet-autocomplete.js"></script>
+    <script src="scripts/leaflet-control-geocoder.js"></script>
+    <script>
+        /* GET CURRENT POSITION */
+    window.addEventListener('load', function() {
+		    loadSidebar();
+        setCategory();
+        setRecipeData();
+    });
+    </script>
+    <!-- Opening hours added via JS (this is only for demo purpose) -->
+    <script>
+        $(".opening-day.js-demo-hours .chosen-select").each(function() {
+            $(this).append('' +
+                '<option></option>' +
+                '<option>Closed</option>' +
+                '<option>1 AM</option>' +
+                '<option>2 AM</option>' +
+                '<option>3 AM</option>' +
+                '<option>4 AM</option>' +
+                '<option>5 AM</option>' +
+                '<option>6 AM</option>' +
+                '<option>7 AM</option>' +
+                '<option>8 AM</option>' +
+                '<option>9 AM</option>' +
+                '<option>10 AM</option>' +
+                '<option>11 AM</option>' +
+                '<option>12 AM</option>' +
+                '<option>1 PM</option>' +
+                '<option>2 PM</option>' +
+                '<option>3 PM</option>' +
+                '<option>4 PM</option>' +
+                '<option>5 PM</option>' +
+                '<option>6 PM</option>' +
+                '<option>7 PM</option>' +
+                '<option>8 PM</option>' +
+                '<option>9 PM</option>' +
+                '<option>10 PM</option>' +
+                '<option>11 PM</option>' +
+                '<option>12 PM</option>');
+        });
+    </script>
+
+    <!-- DropZone | Documentation: http://dropzonejs.com -->
+    <script type="text/javascript" src="scripts/dropzone.js"></script>
+
+</body>
+
+</html>
