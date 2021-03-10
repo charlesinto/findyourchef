@@ -589,6 +589,7 @@ const popRecipe = (recipes) => {
   const listParent = document.querySelector('#recipe-list');
   listParent.innerHTML = "";
   recipes.forEach(recipe => {
+    console.log(recipe);
     const name = recipe.name;
     const location = recipe.location;
     const image = recipe.image;
@@ -610,7 +611,7 @@ const popRecipe = (recipes) => {
         </div>
       </div>
       <div class="buttons-to-right">
-        <div class="edit-recipe"><a onclick="editRecipe()" href="#" class="button gray"><i class="sl sl-icon-note"></i> Edit</a></div>
+        <div onclick="saveRecipe(event, ${JSON.stringify(recipe).split('"').join("&quot;")})" class="edit-recipe"><a href="#" class="button gray"><i class="sl sl-icon-note"></i> Edit</a></div>
         <div onclick="deleteRecipe(event, '${chefID}', '${recipeID}')" class="delete-recipe"><a href="#" class="button gray"><i class="sl sl-icon-close"></i> Delete</a></div>
       </div>
     </li>
@@ -644,6 +645,76 @@ const popRecipe = (recipes) => {
       }
     });      
   }
+
+/* EDIT RECIPE */
+const saveRecipe = (e, recipe) => {
+  e.preventDefault();
+  // console.log(recipe);
+  sessionStorage.setItem('fyc-single-recipe', JSON.stringify(recipe));
+  location.href='/dashboard-edit-recipe.html';
+}
+
+const setRecipeData = () => {
+  const recipeData = JSON.parse(sessionStorage.getItem('fyc-single-recipe'));
+  document.querySelector('.search-field').value = recipeData.name;
+  // document.querySelector('#category').value = recipeData.category;
+  const keys = recipeData.tags;
+  let keywords = "";
+  keys.forEach(key => {
+    keywords += `${key},`
+  })
+  const keyword = keywords.slice(0, -1);
+  document.querySelector('#keywords').value = keyword;
+  document.querySelector('#location').value = recipeData.location;
+  document.querySelector('.WYSIWYG').value = recipeData.overview;
+}
+
+const updateRecipe = (e) => {
+  e.preventDefault();
+  const button = document.querySelector('#update-recipe');
+  const recipeData = JSON.parse(sessionStorage.getItem('fyc-single-recipe'));
+  const data = {};
+  const name = document.querySelector('.search-field').value;
+  const category = document.querySelector('#category').value;
+  const keywords = document.querySelector('#keywords').value;
+  const tags = keywords.split(',');
+  const location = document.querySelector('#location').value = recipeData.location;
+  const overview = document.querySelector('.WYSIWYG').value = recipeData.overview;
+  data.tags = tags;
+  if (category.value != "Select Category" && recipeData.category != category) {
+    data.category = category;
+  }
+  if(recipeData.name != name) {
+    data.name = name;
+  }
+  if (recipeData.location != location) {
+    data.location = location;
+  }
+  if (recipeData.overview != overview) {
+    data.overview = overview;
+  }
+  button.innerHTML = '<div class="loader"></div>';
+  button.setAttribute('disabled', true);
+
+  console.log(category);
+  axios.put(`${baseURL}/chef/recipe`, data, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+  }).then((res) => {
+    console.log(res.data.payload.data);
+    toastr.success('Recipe Updated');
+    button.innerHTML = 'Update Recipe';
+    button.removeAttribute('disabled');
+    // fetchChefData();
+  }).catch((err) => {
+    if (err.response && err.response.data) {
+      toastr.error(err.response.data.error.message);
+    } else {
+      toastr.error('Something went wrong, please try again');
+    }
+  })
+}
 
 
 /* GET RECIPE */
@@ -1228,9 +1299,11 @@ const showLocation = () => {
   geocoder.geocode({location: latlng}, (results, status) => {
     if (status === "OK") {
       if (results[0]) {
-        const city = results[0].address_components[3].long_name;
-        const state = results[0].address_components[6].short_name;
-        const address = `${city}, ${state}`;
+        console.log(results);
+        // const city = results[0].address_components[3].long_name;
+        // const state = results[0].address_components[6].short_name;
+        // const address = `${city}, ${state}`;
+        const address = results[0].formatted_address
         const locationInput = document.querySelector('#autocomplete-input');
         locationInput.value = address;
       } else {
