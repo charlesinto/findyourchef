@@ -186,6 +186,7 @@ const fetchChefData = () => {
     //   localStorage.removeItem('fyc-user');
     // }
     const newData = res.data.payload.data;
+    console.log(newData);
     sessionStorage.setItem('fyc-user', newData);
     location.reload();
   }).catch((err) => {
@@ -918,17 +919,20 @@ const findChef = () => {
 }
 
 const loadLatestRecipes = () => {
-  axios.get(`${baseURL}/recipes?page=1`).then((res) => {
-    console.log(res.data.payload.data);
-    const recipes = res.data.payload.data.data;
-    popLatestRecipes(recipes);
-  }).catch((err) => {
-    if (err.response && err.response.data) {
-      toastr.error(err.response.data.error.message);
-    } else {
-      toastr.error('Something went wrong, please try again');
-    }
-  });
+  axios
+    .get(`${baseURL}/chefs?page=1`)
+    .then((res) => {
+      console.log(res.data.payload.data)
+      const recipes = res.data.payload.data.data
+      popLatestRecipes(recipes)
+    })
+    .catch((err) => {
+      if (err.response && err.response.data) {
+        toastr.error(err.response.data.error.message)
+      } else {
+        toastr.error('Something went wrong, please try again')
+      }
+    })
 }
 
 
@@ -936,13 +940,14 @@ const popLatestRecipes = (recipes) => {
   const recipeContainer = document.querySelector('.simple-slick-carousel');
   recipes.forEach(recipe => {
     const name = recipe.name;
-    const category = recipe.category;
-    const chefName = recipe.chefName;
-    const image = recipe.image;
+    const category = recipe.categories;
+    const chefName = recipe.fullname
+    const image = recipe.images;
     const price = recipe.price;
-    const location = recipe.location;
+    const location = recipe.coords;
     const id = recipe._id;
     const event = window.Event;
+
     let listItem =  `
 
     <!-- Listing Item -->
@@ -971,8 +976,17 @@ const popLatestRecipes = (recipes) => {
     <!-- Listing Item / End -->
     `;
     recipeContainer.innerHTML += listItem;
+    localStorage.setItem('fyc-recipe-id', id);
   })
-    
+
+  const carouselItem = document.querySelector('.carousel-item');
+  if(carouselItem) {
+    carouselItem.addEventListener('click', (e) => {
+    e.preventDefault();
+    location.href = '/listings-single-page.html';
+  }) 
+  }
+  
 /*----------------------------------------------------*/
 /*  Rating Overview Background Colors
 /*----------------------------------------------------*/

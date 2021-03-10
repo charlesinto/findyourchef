@@ -5,8 +5,10 @@ let star, length;
 /* FETCH RECIPE DATA */
 const fetchRecipeData = () => {
   const id = localStorage.getItem('fyc-recipe-id');
-  axios.get(`${baseURL}/recipes/${id}`).then((res) => {
+  console.log(id)
+  axios.get(`${baseURL}/chefs/${id}`).then((res) => {
     const recipe = res.data.payload.data.data;
+    console.log(recipe)
     const stars = res.data.payload.data.stars;
     const count = res.data.payload.data.reviewCount;
     sessionStorage.setItem('fyc-recipe-chefID', recipe.chefID);
@@ -47,12 +49,12 @@ const fetchRecipeData = () => {
 
 /* POPULATE DOM WITH RECIPE DATA */
 const popRecipeData = (data, stars, count) => {
-  const name = data.name;
+  const name = data.fullname;
   const chefName = data.chefName;
-  const image = data.image;
+  const image = data.images;
   const price = data.price;
-  const category = data.category;
-  const location = data.location;
+  const category = data.categories;
+  const location = data.coords;
   const tags = data.tags;
   const overview = data.overview;
   const availability = data.availability;
