@@ -50,7 +50,7 @@ const fetchRecipeData = () => {
 /* POPULATE DOM WITH RECIPE DATA */
 const popRecipeData = (data, stars, count) => {
   const name = data.fullname;
-  const chefName = data.chefName;
+  // const chefName = data.chefName;
   const image = data.images;
   const price = data.price;
   const category = data.categories;
@@ -59,8 +59,8 @@ const popRecipeData = (data, stars, count) => {
   const overview = data.overview;
   const availability = data.availability;
   sessionStorage.setItem('fyc-availability', JSON.stringify(availability))
-  const phone = data.chefNumber;
-  const email = data.chefEmail;
+  const phone = data.phoneNumber
+  const email = data.email
   const slider = document.querySelector('.listing-slider');
   slider.innerHTML = `
                   <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 1"></a>
@@ -125,13 +125,15 @@ const popRecipeData = (data, stars, count) => {
                           </ul>
   `;
   const listingFeatures = document.querySelector('.listing-features');
-  tags.forEach(tag => {
-    listingFeatures.innerHTML += `<li>${tag}</li>`;
-  })
+  if(tags) {
+    tags.forEach(tag => {
+      listingFeatures.innerHTML += `<li>${tag}</li>`;
+    })
+  }
   const hostedTitle = document.querySelector('.hosted-by-title');
   hostedTitle.innerHTML = `
-                        <h4><span>Recipe by</span> <a href="pages-user-profile.html">${chefName}</a></h4>
-                        <a href="pages-user-profile.html" class="hosted-by-avatar"><img src="" alt=""></a>
+                        <h4><span>Recipe by</span> <a href="pages-user-profile.html">${name}</a></h4>
+                        <a href="pages-user-profile.html" class="hosted-by-avatar"><img src=${image} alt=""></a>
   `;
   const listingDetails = document.querySelector('.listing-details-sidebar');
   listingDetails.innerHTML = `
