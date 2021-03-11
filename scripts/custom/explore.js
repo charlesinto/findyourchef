@@ -6,9 +6,10 @@ const loadAllRecipes = () => {
   /* VIEW ALL RECIPES */
 
   if (searchData === null) {
-    axios.get(`${baseURL}/recipes?page=${page}`).then((res) => {
+    axios.get(`${baseURL}/chefs?page=${page}`).then((res) => {
       console.log(res);
       const recipes = res.data.payload.data.data;
+      console.log(recipes);
       const recipeCount = res.data.payload.data.dataCount;
       popAllRecipes(recipes);
       paginate(recipeCount);
@@ -156,8 +157,8 @@ const loadAllRecipes = () => {
           }
         }
         page = e.target.innerText;
-        e.target.classList.add('current-page');
-        axios.get(`${baseURL}/recipes/search?page=${page}`).then((res) => {
+        e.target.classList.add('current-pag e');
+        axios.get(`${baseURL}/chefs/search?page=${page}`).then((res) => {
           console.log(res.data.payload.data);
           const recipes = res.data.payload.data.data;
           popAllRecipes(recipes);
@@ -358,15 +359,16 @@ const popAllRecipes = (recipes) => {
   resultsFound.innerHTML = `<p class="showing-results">${length} ${result} Found </p>`
   recipeContainer.innerHTML = "";
   recipes.forEach(recipe => {
-    const name = recipe.name;
-    const category = recipe.category;
+    const name = recipe.fullname;
+    const category = recipe.categories;
     const chefName = recipe.chefName;
-    const image = recipe.image;
+    const image = recipe.images;
     const price = recipe.price;
-    const location = recipe.location;
+    const location = recipe.coords;
+    const notes = recipe.notes;
     const id = recipe._id;
     const event = window.Event;
-    let listItem =  `
+    let listItem = `
     <div class="col-lg-12 col-md-12">
       <div data-id="${id}" class="listing-item-container list-layout" data-marker-id="1">
         <a data-id="${id}" class="listing-item">
@@ -382,9 +384,9 @@ const popAllRecipes = (recipes) => {
             <div data-id="${id}" class="listing-badge now-open">Available</div>
 
             <div data-id="${id}" class="listing-item-inner">
-              <h3 data-id="${id}">${name}</h3>
-              <p data-id="${id}">${chefName}<i class="verified-icon"></i></p>
-              <p data-id="${id}">${location}</p>
+              <p data-id="${id}">${name}<i class="verified-icon"></i></p>
+              <p data-id="${id}"><i class="fa fa-map-marker"></i> ${location}</p>
+              <p data-id="${id}">${notes}</p>
               <div data-id="${id}" class="star-rating" data-rating="3.75">
                 <div class="rating-counter">(12 reviews)</div>
               </div>
@@ -397,7 +399,7 @@ const popAllRecipes = (recipes) => {
         </a>
       </div>
     </div>
-    `;
+    `
     recipeContainer.innerHTML += listItem;
   }) 
   

@@ -1047,15 +1047,24 @@ const popLatestRecipes = (recipes) => {
     <!-- Listing Item / End -->
     `;
     recipeContainer.innerHTML += listItem;
-    localStorage.setItem('fyc-recipe-id', id);
   })
 
+  const loadRecipePage = (id) => {
+    localStorage.setItem('fyc-recipe-id', id)
+    location.href = '/listings-single-page.html'
+  }
+
   const carouselItem = document.querySelector('.carousel-item');
-  if(carouselItem) {
+  if (carouselItem) {
     carouselItem.addEventListener('click', (e) => {
-    e.preventDefault();
-    location.href = '/listings-single-page.html';
-  }) 
+      const id = e.target.dataset.id
+      if (e.target.classList.contains('like-icon')) {
+        e.stopPropagation()
+        bookmarkRecipe(e, id)
+      } else {
+        loadRecipePage(id)
+      }
+    })
   }
   
 /*----------------------------------------------------*/
