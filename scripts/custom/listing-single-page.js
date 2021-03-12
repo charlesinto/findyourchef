@@ -5,10 +5,8 @@ let star, length;
 /* FETCH RECIPE DATA */
 const fetchRecipeData = () => {
   const id = localStorage.getItem('fyc-recipe-id');
-  console.log(id)
   axios.get(`${baseURL}/chefs/${id}`).then((res) => {
     const recipe = res.data.payload.data.data;
-    console.log(recipe)
     const stars = res.data.payload.data.stars;
     const count = res.data.payload.data.reviewCount;
     sessionStorage.setItem('fyc-recipe-chefID', recipe.chefID);
@@ -55,8 +53,8 @@ const popRecipeData = (data, stars, count) => {
   const price = data.price;
   const category = data.categories;
   const location = data.coords;
-  const tags = data.tags;
-  const overview = data.overview;
+  const tags = data.tags;   
+  const overview = data.notes;
   const availability = data.availability;
   sessionStorage.setItem('fyc-availability', JSON.stringify(availability))
   const phone = data.phoneNumber
@@ -206,9 +204,7 @@ const fetchRecipeReview = (id) => {
     chefID : id
   }
   axios.get(`${baseURL}/chef/reviews/${id}`, data).then( res => {
-    console.log(res.data.payload.data);
     const reviews = res.data.payload.data.data;
-    console.log(reviews)
     const reviewCount = res.data.payload.data.dataCount;
     popReviews(reviews, reviewCount);
     if (reviewCount > 0) {paginate(reviewCount);}
@@ -695,7 +691,7 @@ const bookmark = document.querySelector('.like-button');
 if (bookmark) {
   bookmark.addEventListener('click', (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('fyc-token');
+    const token = localStorage.getItem('fyc-token') || sessionStorage.getItem('fyc-token');
     if (token) {
       const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
       const bookmarkersID = userData._id;
@@ -705,13 +701,13 @@ if (bookmark) {
         chefID
       }
       if (localStorage.getItem('fyc-bookmark-id') === null) {
-        axios.post(`${baseURL}/bookmark`, data, {
+        axios.post(`${baseURL}/bookmark/chef`, data, {
           headers: {
             'Authorization': `Bearer ${token}`
           },
         }).then((res) => {
           console.log(res);
-          toastr.success("Recipe bookmarked");
+          toastr.success("chef bookmarked");
           localStorage.setItem('fyc-bookmark-id', res.data.payload.data._id);
         }).catch((err) => {
           if (err.response && err.response.data) {
