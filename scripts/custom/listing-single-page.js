@@ -203,11 +203,12 @@ const fetchRecipeReview = (id) => {
   const pagination = document.querySelector('.recipe-pagination');
   let page = 1;
   const data = {
-    recipeID : id
+    chefID : id
   }
-  axios.get(`${baseURL}/reviews/${id}?page=${page}`, data).then( res => {
+  axios.get(`${baseURL}/chef/reviews/${id}`, data).then( res => {
     console.log(res.data.payload.data);
     const reviews = res.data.payload.data.data;
+    console.log(reviews)
     const reviewCount = res.data.payload.data.dataCount;
     popReviews(reviews, reviewCount);
     if (reviewCount > 0) {paginate(reviewCount);}
@@ -433,6 +434,7 @@ function starRating(ratingElem) {
 
 const addReviewToDOM = () => {
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  console.log(userData)
   length += 1;
   const parentNode = document.querySelectorAll('.star-rating');
   parentNode.forEach( parent => {
@@ -644,13 +646,15 @@ if (ratingContainer) {
 
 const postReview = (e) => {
   e.preventDefault();
-  const recipeID = localStorage.getItem('fyc-recipe-id');
+  const chefID = localStorage.getItem('fyc-recipe-id');
+  console.log(chefID)
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   if (!token) {
     toastr.error("You need to be signed in to be able to drop a review");
   } else {
     const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
     let reviewersID = userData._id;
+    console.log(reviewersID);
     const review = document.querySelector('.review-area').value;
     // const stars = (serviceRate + moneyRate + cleanRate) / 3;
 
@@ -658,27 +662,32 @@ const postReview = (e) => {
    
     const data = {
       reviewersID,
-      recipeID,
+      chefID,
       review,
       serviceStars,
       locationStars,
       valueStars,
       cleanlinessStars
     };
-    axios.post(`${baseURL}/reviews`, data, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-    }).then((res) => {
-      addReviewToDOM();
-      toastr.success(res.data.payload.data.message);
-    }).catch((err) => {
-      if (err.response && err.response.data) {
-        toastr.error(err.response.data.error.message);
-      } else {
-        toastr.error('Something went wrong, please try again');
-      }
-    });
+
+    console.log(data)
+    axios
+      .post(`${baseURL}/chef/review`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        addReviewToDOM()
+        toastr.success(res.data.payload.data.message)
+      })
+      .catch((err) => {
+        if (err.response && err.response.data) {
+          toastr.error(err.response.data.error.message)
+        } else {
+          toastr.error('Something went wrong, please try again')
+        }
+      })
   }
 }
 
@@ -690,10 +699,10 @@ if (bookmark) {
     if (token) {
       const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
       const bookmarkersID = userData._id;
-      const recipeID = localStorage.getItem('fyc-recipe-id');
+      const chefID = localStorage.getItem('fyc-recipe-id');
       const data = {
         bookmarkersID,
-        recipeID
+        chefID
       }
       if (localStorage.getItem('fyc-bookmark-id') === null) {
         axios.post(`${baseURL}/bookmark`, data, {
@@ -819,12 +828,12 @@ const bookRecipe = (e) => {
     const bookersID = userData._id;
     const amount = document.querySelector('.qtyTotal').innerText;
     const slotID = sessionStorage.getItem('fyc-book-id');
-    const recipeID = localStorage.getItem('fyc-recipe-id');
+    const chefID = localStorage.getItem('fyc-recipe-id');
     const success_url = "http://www.thepottersmind.com/fyc/payment_success.html";
     const cancel_url = "http://www.thepottersmind.com/fyc/payment_failure.html";
     const data = {
       bookersID,
-      recipeID,
+      chefID,
       amount,
       slotID,
       success_url,
