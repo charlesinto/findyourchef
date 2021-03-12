@@ -295,7 +295,7 @@ const popReviews = (reviews) => {
   reviews.forEach(review => {
     const image = review.reviewersImage;
     const name = review.reviewersName;
-    const recipeImage = review.recipesImage[0];
+    const recipeImage = review.recipesImage;
     const comment = review.review;
     const stars = review.averageStars;
     const date = new Date(review.created);
