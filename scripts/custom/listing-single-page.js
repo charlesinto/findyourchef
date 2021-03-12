@@ -707,7 +707,7 @@ if (bookmark) {
           },
         }).then((res) => {
           console.log(res);
-          toastr.success("chef bookmarked");
+          toastr.success(res.data.payload.data.message)
           localStorage.setItem('fyc-bookmark-id', res.data.payload.data._id);
         }).catch((err) => {
           if (err.response && err.response.data) {
@@ -721,7 +721,7 @@ if (bookmark) {
         const data = {
           bookmarkID
         }
-        axios.delete(`${baseURL}/bookmark`, {
+        axios.delete(`${baseURL}/bookmark/chef`, {
           headers: {
             Authorization: `Bearer ${token}`
           },

@@ -1230,42 +1230,45 @@ function starRating(ratingElem) {
 
 /* BOOKMARK RECIPE */
 
-// const bookmarkRecipe = (e, id) => {
-// e.preventDefault();
-// e.stopPropagation();
-//   const token = localStorage.getItem('fyc-token');
-//   if (token) {
-//     const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-//     const recipeID = id;
-//     let bookmarkersID = userData._id;
-//     const data = {
-//       bookmarkersID,
-//       recipeID
-//     }
-//     console.log(data);
-//     if (localStorage.getItem('fyc-bookmark-id') === null) {
-//       axios.post(`${baseURL}/bookmark`, data, {
-//         headers: {
-//           'Authorization': `Bearer ${token}`
-//         },
-//       }).then((res) => {
-//         console.log(res);
-//         toastr.success(res.data.payload.data.message);
-//         localStorage.setItem('fyc-bookmark-id', res.data.payload.data.recipeID);
-//       }).catch((err) => {
-//         if (err.response && err.response.data) {
-//           toastr.error(err.response.data.error.message);
-//         } else {
-//           toastr.error('Something went wrong, please try again');
-//         }
-//       });
-//     } else {
-//       toastr.error('This recipe has already been bookmarked'); 
-//     }
-//   } else {
-//     toastr.error('You need to login before bookmarking a recipe');
-//   }
-// }
+const bookmarkRecipe = (e, id) => {
+e.preventDefault();
+e.stopPropagation();
+  const token =
+    localStorage.getItem('fyc-token') || sessionStorage.getItem('fyc-token')
+  if (token) {
+    const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+    const chefID = id;
+    let bookmarkersID = userData._id;
+    const data = {
+      bookmarkersID,
+      chefID
+    }
+    console.log(data);
+    if (localStorage.getItem('fyc-bookmark-id') === null) {
+      axios.post(`${baseURL}/bookmark/chef`, data, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      }).then((res) => {
+        console.log(res);
+        toastr.success(res.data.payload.data.message);
+        localStorage.setItem('fyc-bookmark-id', res.data.payload.data.chefID);
+      }).catch((err) => {
+        if (err.response && err.response.data) {
+          toastr.error(err.response.data.error.message);
+        } else {
+          toastr.error('Something went wrong, please try again');
+        }
+      });
+    } else {
+      toastr.error('This chef has already been bookmarked'); 
+    }
+  } else {
+    toastr.error('You need to login before bookmarking a chef');
+  }
+}
+
+
 const getPosition = (showPosition) => {
   const lat = showPosition.coords.latitude;
   const lng = showPosition.coords.longitude;
@@ -1676,7 +1679,7 @@ const deleteBookmark = (e, bookmarkID) => {
   const data = {
     bookmarkID
   }
-  axios.delete(`${baseURL}/bookmark`, {
+  axios.delete(`${baseURL}/bookmark?chef`, {
     headers: {
       Authorization: `Bearer ${token}`
     },
