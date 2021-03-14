@@ -1251,7 +1251,7 @@ e.stopPropagation();
         },
       }).then((res) => {
         console.log(res);
-        toastr.success(res.data.payload.data.message);
+        toastr.success('Chef bookmarked');
         localStorage.setItem('fyc-bookmark-id', res.data.payload.data._id);
       }).catch((err) => {
         if (err.response && err.response.data) {
