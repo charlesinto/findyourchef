@@ -1315,7 +1315,7 @@ const showLocation = () => {
         // const city = results[0].address_components[3].long_name;
         // const state = results[0].address_components[6].short_name;
         // const address = `${city}, ${state}`;
-        // const address = results[0].formatted_address
+        const address = results[0].formatted_address
         const locationInput = document.querySelector('#autocomplete-input');
         locationInput.value = address;
       } else {
