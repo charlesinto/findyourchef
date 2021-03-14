@@ -696,8 +696,6 @@ if (bookmark) {
       const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
       const bookmarkersID = userData._id;
       const chefID = localStorage.getItem('fyc-recipe-id');
-      console.log(chefID)
-      console.log(bookmarkersID)
       const data = {
         bookmarkersID,
         chefID
@@ -719,21 +717,21 @@ if (bookmark) {
             toastr.error('Something went wrong, please try again');
           }
         });
-      } else if(localStorage.getItem('fyc-bookmark-id')) {
+      } else if(localStorage.getItem('fyc-bookmark-id') !== null) {
          const bookmarkersID = userData._id;
-         console.log(bookmarkersID)
          const chefID = localStorage.getItem('fyc-recipe-id');
         const data = {
           bookmarkersID,
           chefID
         }
-        axios.delete(`${baseURL}/bookmark/chef`, data, {
+        console.log(data)
+        axios.delete(`${baseURL}/bookmark/chef`, {
           headers: {
-            Authorization: `Bearer ${token}`
-          },
-        }, data).then((res) => {
+            'Authorization': `Bearer ${token}`
+          }, data
+        }).then((res) => {
           console.log(res);
-          toastr.success(res.data.payload.data.message);
+          toastr.success('chef bookmark deleted');
           localStorage.removeItem('fyc-bookmark-id');
         }).catch((err) => {
           if (err.response && err.response.data) {
