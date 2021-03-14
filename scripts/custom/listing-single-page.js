@@ -702,6 +702,7 @@ if (bookmark) {
         bookmarkersID,
         chefID
       }
+      console.log(data)
       if (localStorage.getItem('fyc-bookmark-id') === null) {
         axios.post(`${baseURL}/bookmark/chef`, data, {
           headers: {
@@ -718,14 +719,15 @@ if (bookmark) {
             toastr.error('Something went wrong, please try again');
           }
         });
-      } else {
+      } else if(localStorage.getItem('fyc-bookmark-id')) {
          const bookmarkersID = userData._id;
+         console.log(bookmarkersID)
          const chefID = localStorage.getItem('fyc-recipe-id');
         const data = {
           bookmarkersID,
           chefID
         }
-        axios.delete(`${baseURL}/bookmark`, data, {
+        axios.delete(`${baseURL}/bookmark/chef`, data, {
           headers: {
             Authorization: `Bearer ${token}`
           },

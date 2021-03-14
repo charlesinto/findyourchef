@@ -1006,6 +1006,24 @@ const loadLatestRecipes = () => {
     })
 }
 
+ const loadRecipePage = (id) => {
+   localStorage.setItem('fyc-recipe-id', id)
+   location.href = '/listings-single-page.html'
+ }
+
+
+const carouselItem = document.querySelector('.simple-slick-carousel')
+if (carouselItem) {
+  carouselItem.addEventListener('click', (e) => {
+    const id = e.target.dataset.id
+    if (e.target.classList.contains('like-icon')) {
+      e.stopPropagation()
+      bookmarkChef(e, id)
+    } else {
+      loadRecipePage(id)
+    }
+  })
+}
 
 const popLatestRecipes = (recipes) => {
   const recipeContainer = document.querySelector('.simple-slick-carousel');
@@ -1049,23 +1067,7 @@ const popLatestRecipes = (recipes) => {
     recipeContainer.innerHTML += listItem;
   })
 
-  const loadRecipePage = (id) => {
-    localStorage.setItem('fyc-recipe-id', id)
-    location.href = '/listings-single-page.html'
-  }
-
-  const carouselItem = document.querySelector('.carousel-item');
-  if (carouselItem) {
-    carouselItem.addEventListener('click', (e) => {
-      const id = e.target.dataset.id
-      if (e.target.classList.contains('like-icon')) {
-        e.stopPropagation()
-        bookmarkChef(e, id)
-      } else {
-        loadRecipePage(id)
-      }
-    })
-  }
+ 
   
 /*----------------------------------------------------*/
 /*  Rating Overview Background Colors
