@@ -696,6 +696,8 @@ if (bookmark) {
       const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
       const bookmarkersID = userData._id;
       const chefID = localStorage.getItem('fyc-recipe-id');
+      console.log(chefID)
+      console.log(bookmarkersID)
       const data = {
         bookmarkersID,
         chefID
@@ -717,11 +719,13 @@ if (bookmark) {
           }
         });
       } else {
-        const bookmarkID = localStorage.getItem('fyc-bookmark-id');
+         const bookmarkersID = userData._id;
+         const chefID = localStorage.getItem('fyc-recipe-id');
         const data = {
-          bookmarkID
+          bookmarkersID,
+          chefID
         }
-        axios.delete(`${baseURL}/bookmark/chef`, {
+        axios.delete(`${baseURL}/bookmark`, data, {
           headers: {
             Authorization: `Bearer ${token}`
           },

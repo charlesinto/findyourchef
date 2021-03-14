@@ -1060,7 +1060,7 @@ const popLatestRecipes = (recipes) => {
       const id = e.target.dataset.id
       if (e.target.classList.contains('like-icon')) {
         e.stopPropagation()
-        bookmarkRecipe(e, id)
+        bookmarkChef(e, id)
       } else {
         loadRecipePage(id)
       }
@@ -1230,7 +1230,7 @@ function starRating(ratingElem) {
 
 /* BOOKMARK RECIPE */
 
-const bookmarkRecipe = (e, id) => {
+const bookmarkChef = (e, id) => {
 e.preventDefault();
 e.stopPropagation();
   const token =
@@ -1252,7 +1252,7 @@ e.stopPropagation();
       }).then((res) => {
         console.log(res);
         toastr.success(res.data.payload.data.message);
-        localStorage.setItem('fyc-bookmark-id', res.data.payload.data.chefID);
+        localStorage.setItem('fyc-bookmark-id', res.data.payload.data._id);
       }).catch((err) => {
         if (err.response && err.response.data) {
           toastr.error(err.response.data.error.message);
@@ -1315,7 +1315,7 @@ const showLocation = () => {
         // const city = results[0].address_components[3].long_name;
         // const state = results[0].address_components[6].short_name;
         // const address = `${city}, ${state}`;
-        const address = results[0].formatted_address
+        // const address = results[0].formatted_address
         const locationInput = document.querySelector('#autocomplete-input');
         locationInput.value = address;
       } else {
