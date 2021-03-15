@@ -18422,3 +18422,7 @@ body .category-box-btn:hover {
 		width: 300px;
 		margin: 15px 0;
 	}
+
+	.d-none {
+		visibility: hidden;
+	}

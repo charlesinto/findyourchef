@@ -513,7 +513,7 @@ function starRating(ratingElem) {
 } starRating('.star-rating');
 
 }
-const loadRecipePage = (id) => {
-  localStorage.setItem('fyc-recipe-id', id);
-  location.href = '/listings-single-page.html';
-}
+// const loadRecipePage = (id) => {
+//   localStorage.setItem('fyc-recipe-id', id);
+//   location.href = '/listings-single-page.html';
+// }

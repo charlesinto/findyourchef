@@ -53,6 +53,82 @@ const checkUser = () => {
         <input class="distance-radius" type="range" min="1" max="100" step="1" value="50" data-title="Radius around selected destination">
       </div>
     </div>
+    
+    <!-- Section -->
+    <!--<div class="add-listing-section margin-top-45">-->
+    <div class="margin-top-45">
+
+        <!-- Headline -->
+        <!--<div class="add-listing-headline">
+            <h3><i class="sl sl-icon-book-open"></i> Pricing</h3>
+            Switcher
+            <label class="switch"><input type="checkbox" checked><span class="slider round"></span></label>
+        </div>-->
+        <h3><i class="sl sl-icon-book-open"></i> Pricing</h3>
+
+        <!-- Switcher ON-OFF Content -->
+        <div class="switcher-content">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <table id="pricing-list-container">
+                        <tr class="pricing-list-item pattern">
+                            <td>
+                                <div class="fm-move"><i class="sl sl-icon-cursor-move"></i></div>
+                                <div class="fm-input pricing-name"><input type="text" placeholder="Per Person" disabled /></div>
+                                <div class="fm-input pricing-ingredients">
+                                    <select>
+        <option>No Ingredients</option>
+        <option>Ingredient</option>
+        <option>Premium Ingredient</option>
+      </select>
+                                    <div class="fm-input pricing-price"><input type="text" placeholder="Price" data-unit="USD" /></div>
+                                    <div class="fm-close"><a class="delete" href="#"><i class="fa fa-remove"></i></a></div>
+                            </td>
+                        </tr>
+                    </table>
+                    <a href="#" class="button add-pricing-list-item">Add Item</a>
+                    <a href="#" class="button add-pricing-submenu">Add Category</a>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Switcher ON-OFF Content / End -->
+
+        </div>
+        <!-- Section / End -->
+
+        <!-- Section -->
+        <div class="margin-top-45">
+          <!-- Row -->
+          <div class="row with-forms">
+              <!-- Address -->
+              <div class="col">
+                  <label>Primary Location</label>
+                  <!--<input id="location" type="text" placeholder="Laurel, MD 20708">-->
+                  <div class="main-search-input-item location">
+                      <div id="autocomplete-container">
+                          <input id="autocomplete-input" type="text" placeholder="Laurel, MD 20708">
+                      </div>
+                      <a href="#"><i class="fa fa-map-marker"></i></a>
+                  </div>
+              </div>
+          </div>
+            <!-- Row / End -->
+        </div>
+        <!-- Section / End -->
+
+        <label>Your Name</label>
+        <input class="fullname" value="Tom Perrin" type="text">
+
+        <label>Phone</label>
+        <input class="phoneNumber" value="(123) 123-456" type="text">
+
+        <label>Email</label>
+        <input class="email" value="tom@example.com" type="text">
+
+
+
     `;
     document.querySelector('.availability-div').innerHTML += `<!-- Section -->
     <div class="add-listing-section margin-top-45">
@@ -476,7 +552,7 @@ const checkUser = () => {
 
       </div>
       <!-- Switcher ON-OFF Content / End -->
-      <button onclick="updateAvailability()" class="button-available margin-top-15">Update Profile</button>
+      <button onclick="updateAvailability()" class="button margin-top-15">Update Profile</button>
 
   </div>
   <!-- Section / End -->
@@ -485,6 +561,22 @@ const checkUser = () => {
 `;
     loadCategories();
     setDetails();
+  } else {
+    document.querySelector('.edit').innerHTML += `
+    <label>Your Name</label>
+    <input class="fullname" value="Tom Perrin" type="text">
+
+    <label>Username</label>
+    <input class="username" value="Tommy" type="text">
+
+    <label>Phone</label>
+    <input class="phoneNumber" value="(123) 123-456" type="text">
+
+    <label>Email</label>
+    <input class="email" value="tom@example.com" type="text">
+
+  `;
+  setDetails();
   }
 }
 
@@ -499,6 +591,9 @@ const setDetails = () => {
     document.querySelector('.twitter').value = userData.twitter;
     document.querySelector('.facebook').value = userData.facebook;
     document.querySelector('.google').value = userData.google;
+    if (userData.location != "") {
+      document.querySelector('#autocomplete-input').value = userData.location;
+    }
     if (userData.perimeter != "") {
       document.querySelector('.distance-radius').value = parseFloat(userData.perimeter);
     } else {
@@ -507,6 +602,7 @@ const setDetails = () => {
   } else {
     document.querySelector('.user-img').src = userData.image;
     document.querySelector('.fullname').value = userData.fullname;
+    document.querySelector('.username').value = userData.username;
     document.querySelector('.phoneNumber').value = userData.phoneNumber;
     document.querySelector('.email').value = userData.email;
   }
@@ -546,81 +642,128 @@ const addList = (e) => {
 }
 const updateProfile = () => {
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-  const button = document.querySelector('.button');
+  const button = document.querySelector('.button-update');
 
   const data = {
   }
-
-  const catParent = document.querySelector('.category-edit').children;
-  let categories = [];
-  Array.prototype.forEach.call(catParent, function(cat) {
-    if (cat.children[1].checked) {
-      categories.push(cat.children[1].value);
+  if (userData.role == 'chef') {
+    const catParent = document.querySelector('.category-edit').children;
+    let categories = [];
+    Array.prototype.forEach.call(catParent, function(cat) {
+      if (cat.children[1].checked) {
+        categories.push(cat.children[1].value);
+      }
+    });
+    const perimeter = document.querySelector('.distance-radius').value;
+    const profilePic = document.querySelector('.user-img').src;
+    const fullname = document.querySelector('.fullname').value;
+    const phoneNumber = document.querySelector('.phoneNumber').value;
+    const email = document.querySelector('.email').value;
+    const notes = document.querySelector('#notes').value;
+    const twitter = document.querySelector('.twitter').value;
+    const facebook = document.querySelector('.facebook').value;
+    const google = document.querySelector('.google').value;
+    const coords = sessionStorage.getItem('fyc-profile-coords');
+    const location = document.querySelector('#autocomplete-input').value;
+    if (categories.length != 0 && userData.categories != categories) {
+      data.categories = categories;
     }
-  });
-  const perimeter = document.querySelector('.distance-radius').value;
-  const profilePic = document.querySelector('.user-img').src;
-  const fullname = document.querySelector('.fullname').value;
-  const phoneNumber = document.querySelector('.phoneNumber').value;
-  const email = document.querySelector('.email').value;
-  const notes = document.querySelector('#notes').value;
-  const twitter = document.querySelector('.twitter').value;
-  const facebook = document.querySelector('.facebook').value;
-  const google = document.querySelector('.google').value;
-  const coords = sessionStorage.getItem('fyc-profile-coords');
-  if (categories.length != 0 && userData.categories != categories) {
-    data.categories = categories;
-  }
-  if(userData.perimeter != perimeter) {
-    data.perimeter = perimeter;
-  }
-  if (userData.profilePic != profilePic) {
-    data.profilePic = profilePic;
-  }
-  if (userData.fullname != fullname) {
-    data.fullname = fullname;
-  }
-  if (userData.phoneNumber != phoneNumber) {
-    data.phoneNumber = phoneNumber;
-  }
-  if (userData.email != email) {
-    data.email = email;
-  }
-  if (userData.notes != notes) {
-    data.notes = notes;
-  }
-  if (userData.twitter != twitter) {
-    data.twitter = twitter;
-  }
-  if (userData.facebook != facebook) {
-    data.facebook = facebook;
-  }
-  if (userData.google != google) {
-    data.google = google;
-  }
-  if (userData.coords != coords) {
-    data.coords = coords;
-  }
-  button.innerHTML = '<div class="loader"></div>';
-  button.setAttribute('disabled', true);
-
-  axios.put(`${baseURL}/signup/chef`, data, {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    },
-  }).then((res) => {
-    console.log(res.data.payload.data);
-    toastr.success('Profile Updated');
-    button.innerHTML = 'Update Profile';
-    button.removeAttribute('disabled');
-    // fetchChefData();
-  }).catch((err) => {
-    if (err.response && err.response.data) {
-      toastr.error(err.response.data.error.message);
-    } else {
-      toastr.error('Something went wrong, please try again');
+    if(userData.perimeter != perimeter) {
+      data.perimeter = perimeter;
     }
-  })
+    if (userData.profilePic != profilePic) {
+      data.profilePic = profilePic;
+    }
+    if (userData.fullname != fullname) {
+      data.fullname = fullname;
+    }
+    if (userData.phoneNumber != phoneNumber) {
+      data.phoneNumber = phoneNumber;
+    }
+    if (userData.email != email) {
+      data.email = email;
+    }
+    if (userData.notes != notes) {
+      data.notes = notes;
+    }
+    if (userData.twitter != twitter) {
+      data.twitter = twitter;
+    }
+    if (userData.location != location) {
+      data.location = location;
+    }
+    if (userData.facebook != facebook) {
+      data.facebook = facebook;
+    }
+    if (userData.google != google) {
+      data.google = google;
+    }
+    if (userData.coords != coords) {
+      data.coords = coords;
+    }
+    button.innerHTML = '<div class="loader"></div>';
+    button.setAttribute('disabled', true);
+
+    axios.put(`${baseURL}/signup/chef`, data, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    }).then((res) => {
+      console.log(res.data.payload.data);
+      toastr.success('Profile Updated');
+      button.innerHTML = 'Update Profile';
+      button.removeAttribute('disabled');
+      // fetchChefData();
+    }).catch((err) => {
+      if (err.response && err.response.data) {
+        toastr.error(err.response.data.error.message);
+      } else {
+        toastr.error('Something went wrong, please try again');
+      }
+    })
+  } else {
+    const profilePic = document.querySelector('.user-img').src;
+    const fullname = document.querySelector('.fullname').value;
+    const username = document.querySelector('.username').value;
+    const phoneNumber = document.querySelector('.phoneNumber').value;
+    const email = document.querySelector('.email').value;
+    if (userData.profilePic != profilePic) {
+      data.profilePic = profilePic;
+    }
+    if (userData.fullname != fullname) {
+      data.fullname = fullname;
+    }
+    if (userData.username != username) {
+      data.username = username;
+    }
+    if (userData.phoneNumber != phoneNumber) {
+      data.phoneNumber = phoneNumber;
+    }
+    if (userData.email != email) {
+      data.email = email;
+    }
+    data.userId = userData._id;
+    button.innerHTML = '<div class="loader"></div>';
+    button.setAttribute('disabled', true);
+
+    axios.put(`${baseURL}/user/update`, data, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    }).then((res) => {
+      console.log(res.data.payload.data);
+      toastr.success('Profile Updated');
+      button.innerHTML = 'Update Profile';
+      button.removeAttribute('disabled');
+      fetchUserData();
+    }).catch((err) => {
+      if (err.response && err.response.data) {
+        toastr.error(err.response.data.error.message);
+      } else {
+        toastr.error('Something went wrong, please try again');
+      }
+    })
+  }
 }
 
 const updateAvailability = () => {
