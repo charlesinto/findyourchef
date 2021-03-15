@@ -53,7 +53,7 @@ const popChefData = (data, stars, count) => {
   const price = data.price;
   const category = data.categories;
   const location = data.coords;
-  const tags = data.tags;   
+  // const tags = data.tags;   
   const overview = data.notes;
   const availability = data.availability;
   sessionStorage.setItem('fyc-availability', JSON.stringify(availability))
@@ -118,16 +118,16 @@ const popChefData = (data, stars, count) => {
                           </p>
                           <div class="clearfix"></div>
 
-                          <h3 class="listing-desc-headline">Tags</h3>
+                         <!-- <h3 class="listing-desc-headline">Tags</h3>
                           <ul class="listing-features checkboxes margin-top-0">
-                          </ul>
+                          </ul> -->
   `;
   const listingFeatures = document.querySelector('.listing-features');
-  if(tags) {
-    tags.forEach(tag => {
-      listingFeatures.innerHTML += `<li>${tag}</li>`;
-    })
-  }
+  // if(tags) {
+  //   tags.forEach(tag => {
+  //     listingFeatures.innerHTML += `<li>${tag}</li>`;
+  //   })
+  // }
   const hostedTitle = document.querySelector('.hosted-by-title');
   hostedTitle.innerHTML = `
                         <h4><span>Recipe by</span> <a href="pages-user-profile.html">${name}</a></h4>
