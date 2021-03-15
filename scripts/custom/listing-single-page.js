@@ -2,15 +2,15 @@
 const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
 let star, length;
 
-/* FETCH RECIPE DATA */
-const fetchRecipeData = () => {
+/* FETCH CHEF DETAILS */
+const fetchChefDetails = () => {
   const id = localStorage.getItem('fyc-recipe-id');
   axios.get(`${baseURL}/chefs/${id}`).then((res) => {
     const recipe = res.data.payload.data.data;
     const stars = res.data.payload.data.stars;
     const count = res.data.payload.data.reviewCount;
     sessionStorage.setItem('fyc-recipe-chefID', recipe.chefID);
-    popRecipeData(recipe, stars, count);
+    popRecipeData(recipe,  stars, count);
     fetchRecipeReview(id);
   }).catch((err) => {
     console.log(err);

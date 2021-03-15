@@ -989,7 +989,7 @@ const findChef = () => {
   location.href='/explore.html';
 }
 
-const loadLatestRecipes = () => {
+const loadLatestChefs = () => {
   axios
     .get(`${baseURL}/chefs?page=1`)
     .then((res) => {
