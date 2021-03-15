@@ -10,7 +10,7 @@ const fetchChefDetails = () => {
     const stars = res.data.payload.data.stars;
     const count = res.data.payload.data.reviewCount;
     sessionStorage.setItem('fyc-recipe-chefID', recipe.chefID);
-    popRecipeData(recipe,  stars, count);
+    popChefData(recipe,  stars, count);
     fetchRecipeReview(id);
   }).catch((err) => {
     console.log(err);
@@ -46,7 +46,7 @@ const fetchChefDetails = () => {
 
 
 /* POPULATE DOM WITH RECIPE DATA */
-const popRecipeData = (data, stars, count) => {
+const popChefData = (data, stars, count) => {
   const name = data.fullname;
   // const chefName = data.chefName;
   const image = data.images;
