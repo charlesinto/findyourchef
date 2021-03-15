@@ -1008,7 +1008,7 @@ const loadLatestRecipes = () => {
 
  const loadRecipePage = (id) => {
    localStorage.setItem('fyc-recipe-id', id)
-   location.href = '/listings-single-page.html'
+   location.href = '/chef-single-page.html'
  }
 
 

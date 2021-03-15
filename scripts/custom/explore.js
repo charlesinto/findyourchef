@@ -333,6 +333,7 @@ const bookmarkRecipe = (e, id) => {
   }
 }
 
+
 const recipeContainer = document.querySelector('.recipe-container');
 if (recipeContainer) {
   recipeContainer.addEventListener('click', (e) => {
@@ -513,7 +514,4 @@ function starRating(ratingElem) {
 } starRating('.star-rating');
 
 }
-const loadRecipePage = (id) => {
-  localStorage.setItem('fyc-recipe-id', id);
-  location.href = '/listings-single-page.html';
-}
+
