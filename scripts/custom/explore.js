@@ -514,4 +514,3 @@ function starRating(ratingElem) {
 } starRating('.star-rating');
 
 }
-

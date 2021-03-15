@@ -123,7 +123,7 @@ $(document).ready(function(){
       if(query){
           geocoder.geocode(query, function(results) {
             for (var i = 0; i < results.length; i++) {
-              
+              console.log(results);
               output.push('<li data-latitude="'+results[i].center.lat+'" data-longitude="'+results[i].center.lng+'" >'+results[i].name+'</li>');
             }
             output.push('<li class="powered-by-osm">Powered by <strong>OpenStreetMap</strong></li>');

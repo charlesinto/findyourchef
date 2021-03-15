@@ -143,7 +143,6 @@ const verifyOTP = (e) => {
   });
 }
 
-
 const verifyChefOTP = (e) => {
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
@@ -179,7 +178,11 @@ const verifyChefOTP = (e) => {
 const fetchChefData = () => {
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   const id = userData._id;
-  axios.get(`${baseURL}/chefs/${id}`).then((res) => {
+  axios.get(`${baseURL}/chefs/${id}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+  }).then((res) => {
     // if (sessionStorage.getItem('fyc-user')) {
     //   sessionStorage.removeItem('fyc-user');
     // } else {
@@ -187,7 +190,7 @@ const fetchChefData = () => {
     // }
     const newData = res.data.payload.data;
     console.log(newData);
-    sessionStorage.setItem('fyc-user', newData);
+    sessionStorage.setItem('fyc-user', JSON.stringify(newData));
     location.reload();
   }).catch((err) => {
     console.log(err);
@@ -198,6 +201,34 @@ const fetchChefData = () => {
     }
   });
 }
+
+const fetchUserData = () => {
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  const id = userData._id;
+  axios.get(`${baseURL}/user/overview/${id}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+  }).then((res) => {
+    // if (sessionStorage.getItem('fyc-user')) {
+    //   sessionStorage.removeItem('fyc-user');
+    // } else {
+    //   localStorage.removeItem('fyc-user');
+    // }
+    const newData = res.data.payload.data.data;
+    console.log(newData);
+    sessionStorage.setItem('fyc-user', JSON.stringify(newData));
+    location.reload();
+  }).catch((err) => {
+    console.log(err);
+    if (err.response && err.response.data) {
+      toastr.error(err.response.data.error.message);
+    } else {
+      toastr.error('Something went wrong, please try again');
+    }
+  });
+}
+
 
 const resetOTP = (e) => {
   e.preventDefault();
@@ -357,31 +388,18 @@ if (addListingSection) {
       let category = document.querySelector('#category').value;
       let keywords = document.querySelector('#keywords').value;
       let tags = keywords.split(',');
-      let location = document.querySelector('#autocomplete-input').value;
-      let radius = document.querySelector('#radius').value;
-      // let dropzone = document.querySelector('#dropzone').value;
       let overview = document.querySelector('#summary').value;
-      const inputAddress = JSON.parse(sessionStorage.getItem('fyc-coords'));
-      const lat = inputAddress.lat;
-      const lng = inputAddress.lng;
       let perimeter = ["1.02433,0.84950", "2.4923,1.490493"];
-      const coords = "39.7993942,-78.9658362";
-      let price = "40";
       const data = {
         name,
-        location,
-        price,
-        // coords: `${lat},${lng}`,
-        coords,
         overview,
         category,
         perimeter,
-        tags,
-        radius
+        tags
       }
       console.log(data);
       const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
-      axios.post(`${baseURL}/chef/recipe`, data, {
+      axios.post(`https://pure-plains-91675.herokuapp.com/${baseURL}/chef/recipe`, data, {
         headers: {
           'Authorization': `Bearer ${token}`
         },
@@ -665,7 +683,7 @@ const setRecipeData = () => {
   })
   const keyword = keywords.slice(0, -1);
   document.querySelector('#keywords').value = keyword;
-  document.querySelector('#location').value = recipeData.location;
+  document.querySelector('#autocomplete-input').value = recipeData.location;
   document.querySelector('.WYSIWYG').value = recipeData.overview;
 }
 
@@ -678,10 +696,10 @@ const updateRecipe = (e) => {
   const category = document.querySelector('#category').value;
   const keywords = document.querySelector('#keywords').value;
   const tags = keywords.split(',');
-  const location = document.querySelector('#location').value = recipeData.location;
+  const location = document.querySelector('#autocomplete-input').value = recipeData.location;
   const overview = document.querySelector('.WYSIWYG').value = recipeData.overview;
   data.tags = tags;
-  if (category.value != "Select Category" && recipeData.category != category) {
+  if (category != "" && recipeData.category != category) {
     data.category = category;
   }
   if(recipeData.name != name) {
@@ -696,24 +714,30 @@ const updateRecipe = (e) => {
   button.innerHTML = '<div class="loader"></div>';
   button.setAttribute('disabled', true);
 
-  console.log(category);
+  console.log(data);
   axios.put(`${baseURL}/chef/recipe`, data, {
     headers: {
       'Authorization': `Bearer ${token}`
     },
   }).then((res) => {
-    console.log(res.data.payload.data);
-    toastr.success('Recipe Updated');
+    toastr.success(res.data.payload.data);
     button.innerHTML = 'Update Recipe';
     button.removeAttribute('disabled');
-    // fetchChefData();
+    backToRecipes();
   }).catch((err) => {
+    button.innerHTML = 'Update Recipe';
+    button.removeAttribute('disabled');
     if (err.response && err.response.data) {
       toastr.error(err.response.data.error.message);
     } else {
       toastr.error('Something went wrong, please try again');
     }
   })
+}
+
+const backToRecipes = () => {
+  localStorage.removeItem('fyc-single-recipe');
+  location.href = '/dashboard-my-active-listings.html';
 }
 
 
@@ -1293,6 +1317,7 @@ const getLocation = (showPosition) => {
   geocoder.geocode({location: latlng}, (results, status) => {
     if (status === "OK") {
         if (results[0]) {
+          console.log(results);
           const city = results[0].address_components[3].long_name;
           const state = results[0].address_components[6].short_name;
           const address = `${city}, ${state}`
@@ -1441,263 +1466,6 @@ function starRating(ratingElem) {
 
 } starRating('.star-rating');
 
-const loadAllBookmarks = () => {
-  const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
-  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-  let chefID = userData._id;
-  const pagination = document.querySelector('.recipe-pagination');
-  let page = 1;
-  axios.get(`${baseURL}/bookmark/${chefID}?page=${page}`, {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    },
-  }).then((res) => {
-    console.log(res);
-    const bookmarks = res.data.payload.data;
-    popAllBookmarks(bookmarks);
-    // const bookmarks = res.data.payload.data.data;
-    // const bookmarkCount = res.data.payload.data.total;
-    // popAllBookmarks(bookmarks);
-    // paginate(bookmarkCount);
-  }).catch((err) => {
-    if (err.response && err.response.data) {
-      toastr.error(err.response.data.error.message);
-    } else {
-      toastr.error('Something went wrong, please try again');
-    }
-  });
-  // pagination.addEventListener('click', (e) => {
-  //   const listingParent = document.querySelector('.dashboard-content');
-  //   listingParent.scrollIntoView({ behavior: 'smooth', block: 'start'});
-  //   const pageParent = e.target.parentElement.parentElement.children;
-  //   e.preventDefault();
-  //   if (e.target.classList.contains("next")) {
-  //     page;
-  //     let curPage,nxtPage;
-  //     for (let i = 0; i < pageParent.length; i++) {
-  //       const pageNode = pageParent[i].children[0];
-  //       if (pageNode.classList.contains('current-page')) {
-  //         curPage = i;
-  //         const prevPage = parseFloat(pageNode.innerText);
-  //         page = prevPage + 1;
-  //       } else {
-  //         false;
-  //       }
-  //     }
-  //     nxtPage = curPage + 1;
-  //     pageParent[curPage].children[0].classList.remove('current-page');
-  //     pageParent[nxtPage].children[0].classList.add('current-page');
-  //     axios.get(`${baseURL}/bookmark/${chefID}?page=${page}`, {
-  //       headers: {
-  //         'Authorization': `Bearer ${token}`
-  //       },
-  //     }).then((res) => {
-  //       console.log(res.data.payload.data);
-  //       const bookmarks = res.data.payload.data;
-  //       popAllBookmarks(bookmarks);
-  //     }).catch((err) => {
-  //       if (err.response && err.response.data) {
-  //         toastr.error(err.response.data.error.message);
-  //       } else {
-  //         toastr.error('Something went wrong, please try again');
-  //       }
-  //     });
-  //   } else {
-  //     for (let i = 0; i < pageParent.length; i++) {
-  //       const pageNode = pageParent[i].children[0];
-  //       if (pageNode.classList.contains('current-page')) {
-  //         pageNode.classList.remove('current-page');
-  //       } else {
-  //         false;
-  //       }
-  //     }
-  //     page = e.target.innerText;
-  //     e.target.classList.add('current-page');
-  //     axios.get(`${baseURL}/bookmark/${chefID}?page=${page}`, {
-  //       headers: {
-  //         'Authorization': `Bearer ${token}`
-  //       },
-  //     }).then((res) => {
-  //       console.log(res.data.payload.data);
-  //       const bookmarks = res.data.payload.data;
-  //       popAllBookmarks(bookmarks);
-  //     }).catch((err) => {
-  //       if (err.response && err.response.data) {
-  //         toastr.error(err.response.data.error.message);
-  //       } else {
-  //         toastr.error('Something went wrong, please try again');
-  //       }
-  //     });
-  //   }
-  // })
-}
-
-const popAllBookmarks = (bookmarks) => {
-  const bookmarkContainer = document.querySelector('.listing-container');
-  bookmarks.forEach(bookmark => {
-    const image = bookmark.recipesImage[0];
-    const name = bookmark.recipeName;
-    const location = bookmark.location;
-    const reviews = bookmark.reviewCount;
-    const bookmarkID = bookmark._id;
-    const event = window.Event;
-    bookmarkContainer.innerHTML += `
-    <li>
-      <div class="list-box-listing">
-        <div class="list-box-listing-img"><a href="#"><img src="${image}" alt=""></a></div>
-        <div class="list-box-listing-content">
-          <div class="inner">
-            <h3>${name}</h3>
-            <span>${location}</span>
-            <div class="star-rating" data-rating="5.0">
-              <div class="rating-counter">(${reviews} reviews)</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="buttons-to-right">
-        <a href="#" onclick="deleteBookmark(event, '${bookmarkID}')" class="button gray"><i class="sl sl-icon-close"></i> Delete</a>
-      </div>
-    </li>
-  `
-  })
-  
-
-/*----------------------------------------------------*/
-/*  Rating Overview Background Colors
-/*----------------------------------------------------*/
-function ratingOverview(ratingElem) {
-
-  $(ratingElem).each(function() {
-    var dataRating = $(this).attr('data-rating');
-    // Rules
-      if (dataRating >= 4.0) {
-          $(this).addClass('high');
-          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*100 + "%", });
-      } else if (dataRating >= 3.0) {
-          $(this).addClass('mid');
-          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*80 + "%", });
-      } else if (dataRating < 3.0) {
-          $(this).addClass('low');
-          $(this).find('.rating-bars-rating-inner').css({ width: (dataRating/5)*60 + "%", });
-      }
-
-  });
-} ratingOverview('.rating-bars-rating');
-
-$(window).on('resize', function() {
-  ratingOverview('.rating-bars-rating');
-});
-
-
-/*----------------------------------------------------*/
-/*  Ratings Script
-/*----------------------------------------------------*/
-
-/*  Numerical Script
-/*--------------------------*/
-function numericalRating(ratingElem) {
-
-	$(ratingElem).each(function() {
-		var dataRating = $(this).attr('data-rating');
-
-		// Rules
-	    if (dataRating >= 4.0) {
-	        $(this).addClass('high');
-	    } else if (dataRating >= 3.0) {
-	        $(this).addClass('mid');
-	    } else if (dataRating < 3.0) {
-	        $(this).addClass('low');
-	    }
-
-	});
-
-} numericalRating('.numerical-rating');
-
-
-/*  Star Rating
-/*--------------------------*/
-function starRating(ratingElem) {
-
-	$(ratingElem).each(function() {
-
-		var dataRating = $(this).attr('data-rating');
-		// Rating Stars Output
-		function starsOutput(firstStar, secondStar, thirdStar, fourthStar, fifthStar) {
-			return(''+
-				'<span class="'+firstStar+'"></span>'+
-				'<span class="'+secondStar+'"></span>'+
-				'<span class="'+thirdStar+'"></span>'+
-				'<span class="'+fourthStar+'"></span>'+
-				'<span class="'+fifthStar+'"></span>');
-		}
-
-		var fiveStars = starsOutput('star','star','star','star','star');
-
-		var fourHalfStars = starsOutput('star','star','star','star','star half');
-		var fourStars = starsOutput('star','star','star','star','star empty');
-
-		var threeHalfStars = starsOutput('star','star','star','star half','star empty');
-		var threeStars = starsOutput('star','star','star','star empty','star empty');
-
-		var twoHalfStars = starsOutput('star','star','star half','star empty','star empty');
-		var twoStars = starsOutput('star','star','star empty','star empty','star empty');
-
-		var oneHalfStar = starsOutput('star','star half','star empty','star empty','star empty');
-		var oneStar = starsOutput('star','star empty','star empty','star empty','star empty');
-
-    // Rules
-    console.log('dataRating');
-        if (dataRating >= 4.75) {
-            $(this).append(fiveStars);
-        } else if (dataRating >= 4.25) {
-            $(this).append(fourHalfStars);
-        } else if (dataRating >= 3.75) {
-            $(this).append(fourStars);
-            // document.querySelector('.star-rating').innerHTML += fourStars;
-        } else if (dataRating >= 3.25) {
-            $(this).append(threeHalfStars);
-            // document.querySelector('.star-rating').innerHTML += 'threeHalfStars';
-        } else if (dataRating >= 2.75) {
-            $(this).append(threeStars);
-        } else if (dataRating >= 2.25) {
-            $(this).append(twoHalfStars);
-        } else if (dataRating >= 1.75) {
-            $(this).append(twoStars);
-        } else if (dataRating >= 1.25) {
-            $(this).append(oneHalfStar);
-        } else if (dataRating < 1.25) {
-            $(this).append(oneStar);
-        }
-	});
-
-} starRating('.star-rating');
-
-}
-
-const deleteBookmark = (e, bookmarkID) => {
-  e.preventDefault();
-  const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
-  const data = {
-    bookmarkID
-  }
-  axios.delete(`${baseURL}/bookmark?chef`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    },
-  }, data).then((res) => {
-    console.log(res);
-    toastr.success(res.data.payload.data.message);
-    e.target.parentElement.parentElement.remove();
-  }).catch((err) => {
-    if (err.response && err.response.data) {
-      toastr.error(err.response.data.error.message);
-    } else {
-      toastr.error('Something went wrong, please try again');
-    }
-  }); 
-}
-
 const fetchOverview = () => {
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
@@ -1807,7 +1575,7 @@ const loadSidebar = () => {
 			</ul>
 			
 			<ul data-submenu-title="Recipe">
-				<li class="recipeState" onclick="toggleState()"><a><i class="sl sl-icon-layers"></i> My Recipes</a>
+				<li class="recipeState"><a onclick="toggleState(event)"><i class="sl sl-icon-layers"></i> My Recipes</a>
 					<ul>
 						<li><a id="activerecipe" href="dashboard-my-active-listings.html">Active <span class="nav-tag green">6</span></a></li>
 						<li><a href="dashboard-my-pending-listings.html">Pending <span class="nav-tag yellow">1</span></a></li>
@@ -1837,8 +1605,18 @@ const loadSidebar = () => {
     </ul>
     
     <ul data-submenu-title="Recipe">
-      <li><a href="dashboard-reviews.html"><i class="sl sl-icon-star"></i> Reviews</a></li>
-      <li><a href="dashboard-bookmarks.html"><i class="sl sl-icon-heart"></i> Bookmarks</a></li>
+      <li class=""><a onclick="toggleState(event)"><i class="sl sl-icon-star"></i> Reviews</a>
+        <ul>
+          <li><a href="dashboard-reviews.html">Chef</a></li>
+          <li><a href="dashboard-reviews.html">Recipe</a></li>
+        </ul>
+      </li>
+      <li class=""><a onclick="toggleState(event)"><i class="sl sl-icon-heart"></i> Bookmarks</a>
+      <ul>
+        <li><a href="dashboard-chef-bookmarks.html">Chef</a></li>
+        <li><a href="dashboard-recipe-bookmarks.html">Recipe</a></li>
+      </ul>
+    </li>
     </ul>	
 
     <ul data-submenu-title="Account">
@@ -1851,8 +1629,8 @@ const loadSidebar = () => {
   }
 } 
 
-const toggleState = () => {
-  document.querySelector('.recipeState').classList.toggle('active');
+const toggleState = (e) => {
+  e.target.parentElement.classList.toggle('active');
 }
 
 const loadProfile = () => {

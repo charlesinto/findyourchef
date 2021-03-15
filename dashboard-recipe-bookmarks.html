@@ -9,13 +9,11 @@
 
 <!-- CSS
 ================================================== -->
-<link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/main-color.css" id="colors">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
-<script type="text/javascript" src="https://unpkg.com/@passbase/button@v3/button.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjbSwlaIqraERZQGoSOPEnPspCgPsE8y8" defer ></script>
 <!-- PAGE RESTRICTION TO LOGGED IN USERS -->
 <script>
 	const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
@@ -130,13 +128,13 @@
 		<div id="titlebar">
 			<div class="row">
 				<div class="col-md-12">
-					<h2>My Profile</h2>
+					<h2>Bookmarks</h2>
 					<!-- Breadcrumbs -->
 					<nav id="breadcrumbs">
 						<ul>
 							<li><a href="#">Home</a></li>
 							<li><a href="#">Dashboard</a></li>
-							<li>My Profile</li>
+							<li>Bookmarks</li>
 						</ul>
 					</nav>
 				</div>
@@ -144,71 +142,37 @@
 		</div>
 
 		<div class="row">
-
-			<!-- Profile -->
-			<div class="col-lg-6 col-md-12">
-				<div class="dashboard-list-box passbase-container margin-top-0">
-					<h4 class="gray">Profile Details</h4>
-      <div id="passbase-button" class="passbaseBtn"></div>
-      <div class="dashboard-list-box-static top">
-        
-        <!-- Avatar -->
-        <div class="edit-profile-photo">
-          <img class="user-img" src="images/user-avatar.jpg" alt="">
-          <div class="change-photo-btn">
-            <div class="photoUpload">
-                <span><i class="fa fa-upload"></i> Upload Photo</span>
-                <input type="file" class="upload" />
-            </div>
-          </div>
-        </div>
-
-        <!-- Details -->
-        <div class="my-profile edit ">
-
-        </div>
-
-        <button onclick="updateProfile()" class="button button-update margin-top-15">Update Profile</button>
-
-      </div>
-				</div>
-			</div>
-
-			<!-- Change Password -->
-			<div class="col-lg-6 col-md-12">
-				<div class="dashboard-list-box availability-div margin-top-0">
-					
-				</div>
-			</div>
-
-			<!-- Change Password -->
-			<div class="col-lg-6 col-md-12">
+			
+			<!-- Listings -->
+			<div class="col-lg-12 col-md-12">
 				<div class="dashboard-list-box margin-top-0">
-					<h4 class="gray">Change Password</h4>
-					<div class="dashboard-list-box-static top ">
-						<!-- Change Password -->
-						<div class="my-profile">
-							<label class="margin-top-0">Current Password</label>
-							<input type="password">
+					<h4>Bookmarked Listings</h4>
+					<ul class="listing-container">
+					</ul>
+				</div>
+			</div>
 
-							<label>New Password</label>
-							<input type="password">
-
-							<label>Confirm New Password</label>
-							<input type="password">
-							<button class="button margin-top-15">Change Password</button>
-						</div>
-
+			<!-- Pagination -->
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-md-12">
+					<!-- Pagination -->
+					<div class="pagination-container margin-top-15 margin-bottom-40">
+						<nav class="pagination">
+							<ul class="recipe-pagination">
+							</ul>
+						</nav>
 					</div>
 				</div>
 			</div>
-
+			<div class="clearfix"></div>
+			<!-- Pagination / End -->
+			
 
 			<!-- Copyrights -->
 			<div class="col-md-12">
 				<div class="copyrights">© 2020 Find Your Chef. All Rights Reserved.</div>
 			</div>
-
 		</div>
 
 	</div>
@@ -231,39 +195,23 @@
 <script type="text/javascript" src="scripts/chosen.min.js"></script>
 <script type="text/javascript" src="scripts/slick.min.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script type="text/javascript" src="scripts/rangeslider.min.js"></script>
 <script type="text/javascript" src="scripts/magnific-popup.min.js"></script>
 <script type="text/javascript" src="scripts/waypoints.min.js"></script>
 <script type="text/javascript" src="scripts/counterup.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
 <script type="text/javascript" src="scripts/tooltips.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script type="text/javascript" src="scripts/custom.js"></script>
-<script type="text/javascript" src="scripts/maps.js"></script>
 <script type="text/javascript" src="scripts/custom/index.js"></script>
 <script type="text/javascript" src="scripts/custom/socket.js"></script>
-<script type="text/javascript" src="scripts/custom/profile.js"></script>
+<script type="text/javascript" src="scripts/custom/bookmarks.js"></script>
 
-
-
-
-<!-- Leaflet // Docs: https://leafletjs.com/ -->
-<script src="scripts/leaflet.min.js"></script>
-
-<!-- Leaflet Maps Scripts -->
-<script src="scripts/leaflet-markercluster.min.js"></script>
-<script src="scripts/leaflet-gesture-handling.min.js"></script>
-<script src="scripts/leaflet-listeo.js"></script>
-
-<!-- Leaflet Geocoder + Search Autocomplete // Docs: https://github.com/perliedman/leaflet-control-geocoder -->
-<script src="scripts/leaflet-autocomplete.js"></script>
-<script src="scripts/leaflet-control-geocoder.js"></script>
 <script>
+	/* LOAD ALL RECIPES */
 	window.addEventListener('load', function() {
 		loadSidebar();
-		loadProfile();
-		navigator.geolocation.getCurrentPosition(getCoords);
-		checkUser();
+		loadRecipeBookmarks();
 	});
 </script>
 
