@@ -342,7 +342,7 @@ if (recipeContainer) {
       e.stopPropagation();
       bookmarkRecipe(e, id);
     } else {
-      loadRecipePage(id);
+      loadChefPage(id);
     }
   })
 }

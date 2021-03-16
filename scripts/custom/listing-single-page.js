@@ -45,7 +45,7 @@ const fetchChefDetails = () => {
 	}
 
 
-/* POPULATE DOM WITH RECIPE DATA */
+/* POPULATE DOM WITH CHEF DATA */
 const popChefData = (data, stars, count) => {
   const name = data.fullname;
   // const chefName = data.chefName;
@@ -122,7 +122,7 @@ const popChefData = (data, stars, count) => {
                           <ul class="listing-features checkboxes margin-top-0">
                           </ul> -->
   `;
-  const listingFeatures = document.querySelector('.listing-features');
+  // const listingFeatures = document.querySelector('.listing-features');
   // if(tags) {
   //   tags.forEach(tag => {
   //     listingFeatures.innerHTML += `<li>${tag}</li>`;
@@ -905,6 +905,7 @@ const loadAllRecipes = () => {
 }
 
 
+
 const popChefRecipes = (recipes) => {
   const length = recipes.length;
   let result;
@@ -965,7 +966,7 @@ const popChefRecipes = (recipes) => {
 }
 
 const loadRecipePage = (id) => {
-  localStorage.setItem('fyc-chef-id', id)
+  localStorage.setItem('fyc-recipe-id', id)
   location.href = '/recipe-details.html'
 }
 
@@ -980,4 +981,183 @@ if (recipeContainer) {
       loadRecipePage(id)
     }
   })
+}
+
+/***************************
+  RECIPE CODEBASE
+****************************/ 
+
+const fetchRecipeData = () => {
+  const id = localStorage.getItem('fyc-recipe-id')
+  axios
+    .get(`${baseURL}/recipes/${id}`)
+    .then((res) => {
+      const recipe = res.data.payload.data.data
+      console.log(recipe)
+      const stars = res.data.payload.data.stars
+      const count = res.data.payload.data.reviewCount
+      sessionStorage.setItem('fyc-recipe-chefID', recipe.chefID)
+      popRecipeData(recipe, stars, count)
+      fetchRecipeReview(id)
+    })
+    .catch((err) => {
+      console.log(err)
+      if (err.response && err.response.data) {
+        toastr.error(err.response.data.error.message)
+      } else {
+        toastr.error('Something went wrong, please try again')
+      }
+    })
+}
+
+const popRecipeData = (data, stars, count) => {
+  const name = data.name
+  const chefName = data.chefName;
+  const image = data.images
+  const price = data.price
+  const category = data.category
+  const location = data.location
+  const tags = data.tags;
+  const overview = data.overview
+  const availability = data.availability
+  sessionStorage.setItem('fyc-availability', JSON.stringify(availability))
+  const phone = data.phoneNumber
+  const email = data.email
+  const slider = document.querySelector('.listing-slider')
+  slider.innerHTML = `
+                  <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 1"></a>
+                  <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 3"></a>
+                  <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 2"></a>
+                  <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 4"></a>
+                  `
+
+  $('.listing-slider').slick({
+    centerMode: true,
+    centerPadding: '20%',
+    slidesToShow: 2,
+    responsive: [
+      {
+        breakpoint: 1367,
+        settings: {
+          centerPadding: '15%',
+        },
+      },
+      {
+        breakpoint: 1025,
+        settings: {
+          centerPadding: '0',
+        },
+      },
+      {
+        breakpoint: 767,
+        settings: {
+          centerPadding: '0',
+          slidesToShow: 1,
+        },
+      },
+    ],
+  })
+  inlineCSS()
+  const titlebarTitle = document.querySelector('.listing-titlebar-title')
+  titlebarTitle.innerHTML = `
+                          <div class="listing-titlebar-title">
+                            <h2>${name}<span class="listing-tag">${category}</span></h2>
+                            <span>
+                              <a href="#listing-location" class="listing-address">
+                                <i class="fa fa-map-marker"></i>
+                                ${location}
+                              </a>
+                            </span>
+                            <div class="star-rating" data-rating="${stars.averageStars}">
+                              <div class="rating-counter"><a href="#listing-reviews">(${count} reviews)</a></div>
+                            </div>
+                          </div>
+  `
+  const listingOverview = document.querySelector('#listing-overview')
+  listingOverview.innerHTML = `
+  
+                            <p>
+                            ${overview}
+                          </p>
+                          <div class="clearfix"></div>
+
+                         <h3 class="listing-desc-headline">Tags</h3>
+                          <ul class="listing-features checkboxes margin-top-0">
+                          </ul>
+  `
+  const listingFeatures = document.querySelector('.listing-features')
+  
+    tags.forEach((tag) => {
+      listingFeatures.innerHTML += `<li>${tag}</li>`;
+    })
+ 
+  const hostedTitle = document.querySelector('.hosted-by-title')
+  hostedTitle.innerHTML = `
+                        <h4><span>Recipe by</span> <a href="pages-user-profile.html">${chefName}</a></h4>
+                        <a href="pages-user-profile.html" class="hosted-by-avatar"><img src=${image} alt=""></a>
+  `
+  const listingDetails = document.querySelector('.listing-details-sidebar')
+  listingDetails.innerHTML = `
+                          <li><i class="sl sl-icon-phone"></i>${phone}</li>
+                          <li><i class="fa fa-envelope-o"></i> <a href="#">${email}</a></li>
+  `
+  const dollarSign = document.querySelector('.bsf-left')
+  dollarSign.innerHTML = `
+                      <h4>Starting from $${price}</h4>
+                      <div class="star-rating" data-rating="${stars.averageStars}">
+                        <div class="rating-counter"></div>
+                      </div>
+  `
+  const star =
+    Math.round((parseFloat(stars.averageStars) + Number.EPSILON) * 10) / 10
+  const overviewBox = document.querySelector('.rating-overview-box')
+  overviewBox.innerHTML = `<span class="rating-overview-box-total">${star}</span>
+  <span class="rating-overview-box-percent">out of 5.0</span>
+  <div class="star-rating" data-rating="${star}"></div>`
+  const serviceStar =
+    Math.round((parseFloat(stars.serviceStars) + Number.EPSILON) * 10) / 10
+  const locationStar =
+    Math.round((parseFloat(stars.locationStars) + Number.EPSILON) * 10) / 10
+  const valueStar =
+    Math.round((parseFloat(stars.valueStars) + Number.EPSILON) * 10) / 10
+  const cleanlinessStar =
+    Math.round((parseFloat(stars.cleanlinessStars) + Number.EPSILON) * 10) / 10
+  document.querySelector(
+    '.rating-bars'
+  ).innerHTML = `<div class="rating-bars-item">
+  <span class="rating-bars-name">Service <i class="tip" data-tip-content="Quality of customer service and attitude to work with you"></i></span>
+  <span class="rating-bars-inner">
+    <span class="rating-bars-rating" data-rating="${serviceStar}">
+      <span class="rating-bars-rating-inner"></span>
+    </span>
+    <strong>${serviceStar}</strong>
+  </span>
+</div>
+<div class="rating-bars-item">
+  <span class="rating-bars-name">Value for Money <i class="tip" data-tip-content="Overall experience received for the amount spent"></i></span>
+  <span class="rating-bars-inner">
+    <span class="rating-bars-rating" data-rating="${valueStar}">
+      <span class="rating-bars-rating-inner"></span>
+    </span>
+    <strong>${valueStar}</strong>
+  </span>
+</div>
+<div class="rating-bars-item">
+  <span class="rating-bars-name">Location <i class="tip" data-tip-content="Visibility, commute or nearby parking spots"></i></span>
+  <span class="rating-bars-inner">
+    <span class="rating-bars-rating" data-rating="${locationStar}">
+      <span class="rating-bars-rating-inner"></span>
+    </span>
+    <strong>${locationStar}</strong>
+  </span>
+</div>
+<div class="rating-bars-item">
+  <span class="rating-bars-name">Cleanliness <i class="tip" data-tip-content="The physical condition of the business"></i></span>
+  <span class="rating-bars-inner">
+    <span class="rating-bars-rating" data-rating="${cleanlinessStar}">
+      <span class="rating-bars-rating-inner"></span>
+    </span>
+    <strong>${cleanlinessStar}</strong>
+  </span>
+</div>`
 }
