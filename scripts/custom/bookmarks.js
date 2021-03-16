@@ -234,20 +234,21 @@ const popChefBookmarks = (bookmarks) => {
 
 }
 
-const deleteChefBookmark = (e, bookmarkID, chefID) => {
+const deleteChefBookmark = (e, bookmarkersID, chefID) => {
   e.preventDefault();
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   const data = {
-    bookmarkID,
+    bookmarkersID,
     chefID
   }
+  console.log(data);
   axios.delete(`${baseURL}/bookmark/chef`, {
     headers: {
       Authorization: `Bearer ${token}`
     },
   }, data).then((res) => {
     console.log(res);
-    toastr.success(res.data.payload.data.message);
+    // toastr.success(res.data.payload.data.message);
     e.target.parentElement.parentElement.remove();
   }).catch((err) => {
     if (err.response && err.response.data) {
@@ -493,7 +494,7 @@ function starRating(ratingElem) {
 
 }
 
-const deleteBookmark = (e, bookmarkID) => {
+const deleterecipeBookmark = (e, bookmarkID) => {
   e.preventDefault();
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   const data = {

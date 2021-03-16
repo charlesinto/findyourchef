@@ -92,7 +92,6 @@ const popAllReviews = (reviews) => {
   const reviewContainer = document.querySelector('.chef-reviews');
   reviews.forEach(review => {
     const reviewID = review._id;
-    const reviewersID = review.reviewersID;
     const image = review.reviewersImage;
     const name = review.reviewersName;
     const comment = review.review;
@@ -114,7 +113,7 @@ const popAllReviews = (reviews) => {
                 <div class="star-rating" data-rating="${stars}"></div>
               </div>
               <p>${comment}</p>
-              <a href="#small-dialog" onclick="setReplyData(${reviewID.toString()}, ${reviewersID.toString()})" class="rate-review popup-with-zoom-anim"><i class="sl sl-icon-action-undo"></i> Reply to this review</a>
+              <a href="#small-dialog" onclick="setReplyData('${reviewID}')" class="rate-review popup-with-zoom-anim"><i class="sl sl-icon-action-undo"></i> Reply to this review</a>
             </div>
           </li>
         </ul>
@@ -250,8 +249,40 @@ function starRating(ratingElem) {
 } starRating('.star-rating');
 }
 
-const setReplyData = (reviewID, reviewersID) => {
-  console.log(reviewID, reviewersID);
+const setReplyData = (reviewID) => {
+  console.log(reviewID);
+
+  sessionStorage.setItem('fyc-replydata', reviewID);
+}
+
+const replyReview = () => {
+  const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  const repliersID = userData._id;
+  const reviewID = sessionStorage.getItem('fyc-replydata');
+  const reply = document.querySelector('.reply-text');
+  if (reply != "") {
+    const data = {
+      reviewID,
+      repliersID,
+      reply: reply.value
+    }
+    axios.post(`${baseURL}/reviews/reply`, data, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    }).then((res) => {
+      console.log(res);
+      reply.value = "";
+      toastr.success("Reply sent");
+    }).catch((err) => {
+      if (err.response && err.response.data) {
+        toastr.error(err.response.data.error.message);
+      } else {
+        toastr.error('Something went wrong, please try again');
+      }
+    })
+  }
 }
 
 document.querySelector('.reviewed-chefs').innerHTML = `
