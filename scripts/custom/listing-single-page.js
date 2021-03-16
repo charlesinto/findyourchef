@@ -4,7 +4,7 @@ let star, length;
 
 /* FETCH CHEF DETAILS */
 const fetchChefDetails = () => {
-  const id = localStorage.getItem('fyc-recipe-id');
+  const id = localStorage.getItem('fyc-chef-id');
   axios.get(`${baseURL}/chefs/${id}`).then((res) => {
     const recipe = res.data.payload.data.data;
     const stars = res.data.payload.data.stars;
@@ -642,7 +642,7 @@ if (ratingContainer) {
 
 const postReview = (e) => {
   e.preventDefault();
-  const chefID = localStorage.getItem('fyc-recipe-id');
+  const chefID = localStorage.getItem('fyc-chef-id');
   console.log(chefID)
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   if (!token) {
@@ -772,7 +772,7 @@ const bookRecipe = (e) => {
     const bookersID = userData._id;
     const amount = document.querySelector('.qtyTotal').innerText;
     const slotID = sessionStorage.getItem('fyc-book-id');
-    const chefID = localStorage.getItem('fyc-recipe-id');
+    const chefID = localStorage.getItem('fyc-chef-id');
     const success_url = "http://www.thepottersmind.com/fyc/payment_success.html";
     const cancel_url = "http://www.thepottersmind.com/fyc/payment_failure.html";
     const data = {
@@ -812,7 +812,7 @@ const loadAllRecipes = () => {
   /* LIST CHEF RECIPE */
   const token =
     sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token')
-    const chefID = localStorage.getItem('fyc-recipe-id')
+    const chefID = localStorage.getItem('fyc-chef-id')
     console.log(chefID, token)
 
     const data = {
@@ -962,4 +962,22 @@ const popChefRecipes = (recipes) => {
     recipeContainer.innerHTML += listItem;
   }) 
 
+}
+
+const loadRecipePage = (id) => {
+  localStorage.setItem('fyc-chef-id', id)
+  location.href = '/recipe-details.html'
+}
+
+const recipeContainer = document.querySelector('.recipe-container')
+if (recipeContainer) {
+  recipeContainer.addEventListener('click', (e) => {
+    const id = e.target.dataset.id
+    if (e.target.classList.contains('like-icon')) {
+      e.stopPropagation()
+      bookmarkChef(e, id)
+    } else {
+      loadRecipePage(id)
+    }
+  })
 }
