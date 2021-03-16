@@ -1030,7 +1030,7 @@ const loadLatestChefs = () => {
     })
 }
 
- const loadRecipePage = (id) => {
+ const loadChefPage = (id) => {
    localStorage.setItem('fyc-recipe-id', id)
    location.href = '/chef-details.html'
  }
@@ -1044,7 +1044,7 @@ if (carouselItem) {
       e.stopPropagation()
       bookmarkChef(e, id)
     } else {
-      loadRecipePage(id)
+      loadChefPage(id)
     }
   })
 }

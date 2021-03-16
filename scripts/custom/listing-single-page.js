@@ -803,3 +803,163 @@ const bookRecipe = (e) => {
     })
   }
 }
+
+//FETCH CHEF RECIPE
+
+const loadAllRecipes = () => {
+  const pagination = document.querySelector('.recipe-pagination')
+  let page = 1
+  /* LIST CHEF RECIPE */
+  const token =
+    sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token')
+    const chefID = localStorage.getItem('fyc-recipe-id')
+    console.log(chefID, token)
+
+    const data = {
+      chefID
+    }
+    axios
+      .post(
+        `${baseURL}/chef/recipe/list?status=active&page=${page}`, data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      .then((res) => {
+        console.log(res)
+        const recipes = res.data.payload.data.data
+        console.log(recipes)
+        const recipeCount = res.data.payload.data.total
+        popChefRecipes(recipes)
+        paginate(recipeCount)
+      })
+      .catch((err) => {
+        if (err.response && err.response.data) {
+          toastr.error(err.response.data.error.message)
+        } else {
+          toastr.error('Something went wrong, please try again')
+        }
+      })
+    pagination.addEventListener('click', (e) => {
+      const listingParent = document.querySelector('.fs-content')
+      listingParent.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      const pageParent = e.target.parentElement.parentElement.children
+      e.preventDefault()
+      if (e.target.classList.contains('next')) {
+        page
+        let curPage, nxtPage
+        for (let i = 0; i < pageParent.length; i++) {
+          const pageNode = pageParent[i].children[0]
+          if (pageNode.classList.contains('current-page')) {
+            curPage = i
+            const prevPage = parseFloat(pageNode.innerText)
+            page = prevPage + 1
+          } else {
+            false
+          }
+        }
+        nxtPage = curPage + 1
+        pageParent[curPage].children[0].classList.remove('current-page')
+        pageParent[nxtPage].children[0].classList.add('current-page')
+        axios
+          .get(`${baseURL}/recipes?page=${page}`)
+          .then((res) => {
+            console.log(res.data.payload.data)
+            const recipes = res.data.payload.data.data
+            popChefRecipes(recipes)
+          })
+          .catch((err) => {
+            if (err.response && err.response.data) {
+              toastr.error(err.response.data.error.message)
+            } else {
+              toastr.error('Something went wrong, please try again')
+            }
+          })
+      } else {
+        for (let i = 0; i < pageParent.length; i++) {
+          const pageNode = pageParent[i].children[0]
+          if (pageNode.classList.contains('current-page')) {
+            pageNode.classList.remove('current-page')
+          } else {
+            false
+          }
+        }
+        page = e.target.innerText
+        e.target.classList.add('current-page')
+        axios
+          .get(`${baseURL}/recipes?page=${page}`)
+          .then((res) => {
+            const recipes = res.data.payload.data.data
+            popChefRecipes(recipes)
+          })
+          .catch((err) => {
+            if (err.response && err.response.data) {
+              toastr.error(err.response.data.error.message)
+            } else {
+              toastr.error('Something went wrong, please try again')
+            }
+          })
+      }
+    })
+}
+
+
+const popChefRecipes = (recipes) => {
+  const length = recipes.length;
+  let result;
+  if (length === 1) {
+    result = 'Recipe'
+  } else {
+    result = 'Recipes'
+  }
+  const recipeContainer = document.querySelector('.recipe-container');
+  const resultsFound = document.querySelector('.results-found');
+  resultsFound.innerHTML = `
+  <h3 class="listing-desc-headline">${result}<span class="pop-review-count">(${length})</span></h3>`
+  recipeContainer.innerHTML = "";
+  recipes.forEach(recipe => {
+    const name = recipe.name;
+    const category = recipe.category;
+    const image = recipe.image;
+    const price = recipe.price;
+    const location = recipe.location;
+    const overview = recipe.overview;
+    const id = recipe._id;
+    const event = window.Event;
+    let listItem = `
+    <div class="col-lg-12 col-md-12">
+      <div data-id="${id}" class="listing-item-container list-layout" data-marker-id="1">
+        <a data-id="${id}" class="listing-item">
+          
+          <!-- Image -->
+          <div data-id="${id}" class="listing-item-image">
+            <img data-id="${id}" src="${image}" alt="">
+            <span class="tag">${category}</span>
+          </div>
+          
+          <!-- Content -->
+          <div data-id="${id}" class="listing-item-content">
+            <div data-id="${id}" class="listing-badge now-open">Available</div>
+
+            <div data-id="${id}" class="listing-item-inner">
+              <p data-id="${id}">${name}<i class="verified-icon"></i></p>
+              <p data-id="${id}"><i class="fa fa-map-marker"></i> ${location}</p>
+              <p data-id="${id}">${overview}</p>
+              <div data-id="${id}" class="star-rating" data-rating="3.75">
+                <div class="rating-counter">(12 reviews)</div>
+              </div>
+            </div>
+
+            <span data-id="${id}" class="like-icon"></span>
+            <div data-id="${id}" class="listing-item-details">Starting from $${price} per meal</div>
+
+          </div>
+        </a>
+      </div>
+    </div>
+    `
+    recipeContainer.innerHTML += listItem;
+  }) 
+
+}
