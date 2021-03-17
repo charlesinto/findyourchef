@@ -104,35 +104,22 @@ const validateAddRecipeForm = () => {
   const name = document.querySelector('#recipe-title')
   const category = document.querySelector('#category')
   const keywords = document.querySelector('#keywords')
-  const location = document.querySelector('#location')
-  const radius = document.querySelector('#radius')
-  const dropzone = document.querySelector('#dropzone')
   const overview = document.querySelector('#summary')
-  // const phoneOptional = document.querySelector('#phone-optional')
-  // const websiteOptional = document.querySelector('#website-optional')
-  // const emailOptional = document.querySelector('#email-optional')
-  // const coords = "39.7993942,-78.9658362";
-  // const perimeter = ["1.02433,0.84950", "2.4923,1.490493"];
-  // const price = "40";
+  const price = document.querySelector('.default-price');
   const button = document.querySelector('#post-recipe');
 
   // Initially disable the button
   if (
     name.value.length < 1 ||
-    category.value.length < 1 ||
+    category.value == "Select Category" ||
     keywords.value.length < 1 ||
-    location.value.length < 1 ||
-    radius.value.length < 1 ||
-    dropzone.value.length < 1 ||
     overview.value.length < 1 ||
-    coords.value.length < 1 ||
-    perimeter.value.length < 1 ||
     price.value.length < 1
   ) {
     button.setAttribute('disabled', true);
   }
 
-  const fields = [name, category, keywords, location, radius, dropzone, overview, coords, perimeter, price];
+  const fields = [name, category, keywords, overview, price];
 
   fields.forEach((field) => {
     field.addEventListener('input', (el) => {
@@ -140,12 +127,7 @@ const validateAddRecipeForm = () => {
         name.value &&
         category.value &&
         keywords.value &&
-        location.value &&
-        radius.value &&
-        dropzone.value &&
         overview.value &&
-        coords.value &&
-        perimeter.value &&
         price.value
       ) {
         button.removeAttribute('disabled');
@@ -170,4 +152,6 @@ if (pathname === '/login.html') {
 } else if (pathname === '/signup.html' || pathname === '/become-a-chef/onboard.html') {
   validateSignupForm();
   // validateOTPForm();
+} else if (pathname === '/dashboard-add-listing.html') {
+  validateAddRecipeForm();
 }

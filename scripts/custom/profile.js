@@ -54,50 +54,7 @@ const checkUser = () => {
       </div>
     </div>
     
-    <!-- Section -->
-    <!--<div class="add-listing-section margin-top-45">-->
-    <div class="margin-top-45">
-
-        <!-- Headline -->
-        <!--<div class="add-listing-headline">
-            <h3><i class="sl sl-icon-book-open"></i> Pricing</h3>
-            Switcher
-            <label class="switch"><input type="checkbox" checked><span class="slider round"></span></label>
-        </div>-->
-        <h3><i class="sl sl-icon-book-open"></i> Pricing</h3>
-
-        <!-- Switcher ON-OFF Content -->
-        <div class="switcher-content">
-
-            <div class="row">
-                <div class="col-md-12">
-                    <table id="pricing-list-container">
-                        <tr class="pricing-list-item pattern">
-                            <td>
-                                <div class="fm-move"><i class="sl sl-icon-cursor-move"></i></div>
-                                <div class="fm-input pricing-name"><input type="text" placeholder="Per Person" disabled /></div>
-                                <div class="fm-input pricing-ingredients">
-                                    <select>
-        <option>No Ingredients</option>
-        <option>Ingredient</option>
-        <option>Premium Ingredient</option>
-      </select>
-                                    <div class="fm-input pricing-price"><input type="text" placeholder="Price" data-unit="USD" /></div>
-                                    <div class="fm-close"><a class="delete" href="#"><i class="fa fa-remove"></i></a></div>
-                            </td>
-                        </tr>
-                    </table>
-                    <a href="#" class="button add-pricing-list-item">Add Item</a>
-                    <a href="#" class="button add-pricing-submenu">Add Category</a>
-                    </div>
-                </div>
-
-            </div>
-            <!-- Switcher ON-OFF Content / End -->
-
-        </div>
-        <!-- Section / End -->
-
+    
         <!-- Section -->
         <div class="margin-top-45">
           <!-- Row -->

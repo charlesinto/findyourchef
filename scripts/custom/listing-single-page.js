@@ -438,10 +438,17 @@ const addReviewToDOM = () => {
       parent.removeChild(parent.firstChild);
     }
   })
+  let image;
+  if(userData == 'chef') {
+    image = userData.profilePic;
+  } else {
+    image = userData.image;
+  }
+  console.log(image);
   const review_count = document.querySelector('.pop-review-count');
   review_count.innerText = `(${length})`;
   const name = userData.fullname;
-  const image = userData.image;
+  // const image = userData.image;
   const date = new Date();
   const year = date.getFullYear();
   const num = date.getMonth();

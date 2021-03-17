@@ -384,22 +384,48 @@ if (addListingSection) {
       e.preventDefault();
       e.target.innerHTML = '<div class="loader"></div>';
       e.target.setAttribute('disabled', true);
-      let name = document.querySelector('#recipe-title').value;
-      let category = document.querySelector('#category').value;
-      let keywords = document.querySelector('#keywords').value;
-      let tags = keywords.split(',');
-      let overview = document.querySelector('#summary').value;
+      let name = document.querySelector('#recipe-title');
+      let category = document.querySelector('#category');
+      let keywords = document.querySelector('#keywords');
+      let tags = keywords.value.split(',');
+      let overview = document.querySelector('#summary');
       let perimeter = ["1.02433,0.84950", "2.4923,1.490493"];
+      let priceVal = document.querySelector('.default-price');
+      let price = parseInt(priceVal.value);
+      const pricingTable = document.querySelector('.ui-sortable').children;
+      let priceShow = [];
+      let pricing = [];
+      Array.prototype.forEach.call(pricingTable, function(tab) {
+        if(tab.children.length != 0) {
+          priceShow.push(tab.children);
+        }
+      })
+      priceShow.forEach( price => {
+        if (price[0].children[0].children[0].value != "" &&
+            price[0].children[1].children[0].value != "" &&
+            price[0].children[2].children[1].value != "") {
+              pricing.push({
+                "title" : price[0].children[0].children[0].value,
+                "description" : price[0].children[1].children[0].value,
+                "price" : parseInt(price[0].children[2].children[1].value)
+              })
+            } else {
+              false;
+            }
+        console.log(pricing);
+      })
       const data = {
-        name,
-        overview,
-        category,
+        name: name.value,
+        overview: overview.value,
+        category: category.value,
         perimeter,
-        tags
+        tags,
+        price,
+        pricing
       }
       console.log(data);
       const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
-      axios.post(`https://pure-plains-91675.herokuapp.com/${baseURL}/chef/recipe`, data, {
+      axios.post(`${baseURL}/chef/recipe`, data, {
         headers: {
           'Authorization': `Bearer ${token}`
         },
@@ -407,6 +433,11 @@ if (addListingSection) {
         e.target.removeAttribute('disabled');
         e.target.innerHTML = 'Post Recipe <i class="fa fa-arrow-circle-right"></i>';
         console.log(res);
+        name.value = "";
+        overview.value = "";
+        category.value = "";
+        priceVal.value = "";
+        keywords.value = "";
         toastr.success('Recipe added successfully!');
       }).catch((err) => {
         e.target.removeAttribute('disabled');
@@ -1582,7 +1613,7 @@ const loadSidebar = () => {
 					</ul>	
 				</li>
 				<li><a href="dashboard-reviews.html"><i class="sl sl-icon-star"></i> Reviews</a></li>
-				<li><a href="dashboard-bookmarks.html"><i class="sl sl-icon-heart"></i> Bookmarks</a></li>
+				<!--<li><a href="dashboard-bookmarks.html"><i class="sl sl-icon-heart"></i> Bookmarks</a></li>-->
 				<li><a href="dashboard-add-listing.html"><i class="sl sl-icon-plus"></i> Add Recipe</a></li>
 			</ul>	
 
@@ -1605,13 +1636,13 @@ const loadSidebar = () => {
     </ul>
     
     <ul data-submenu-title="Recipe">
-      <li class=""><a onclick="toggleState(event)"><i class="sl sl-icon-star"></i> Reviews</a>
+      <li class="toggleReviews"><a onclick="toggleReviewState(event)"><i class="sl sl-icon-star"></i> Reviews</a>
         <ul>
           <li><a href="dashboard-reviews.html">Chef</a></li>
           <li><a href="dashboard-reviews.html">Recipe</a></li>
         </ul>
       </li>
-      <li class=""><a onclick="toggleState(event)"><i class="sl sl-icon-heart"></i> Bookmarks</a>
+      <li class="toggleBookmarks"><a onclick="toggleBookmarkState(event)"><i class="sl sl-icon-heart"></i> Bookmarks</a>
       <ul>
         <li><a href="dashboard-chef-bookmarks.html">Chef</a></li>
         <li><a href="dashboard-recipe-bookmarks.html">Recipe</a></li>
@@ -1629,8 +1660,24 @@ const loadSidebar = () => {
   }
 } 
 
-const toggleState = (e) => {
-  e.target.parentElement.classList.toggle('active');
+const toggleReviewState = (e) => {
+  // e.target.parentElement.classList.toggle('active');
+  const reviewParent = document.querySelector('.toggleReviews');
+  if (reviewParent.classList.contains('active')) {
+    reviewParent.classList.remove('active');
+  } else {
+    reviewParent.classList.add('active');
+  }
+}
+
+const toggleBookmarkState = (e) => {
+  // e.target.parentElement.classList.toggle('active');
+  const reviewParent = document.querySelector('.toggleBookmarks');
+  if (reviewParent.classList.contains('active')) {
+    reviewParent.classList.remove('active');
+  } else {
+    reviewParent.classList.add('active');
+  }
 }
 
 const loadProfile = () => {

@@ -18426,3 +18426,8 @@ body .category-box-btn:hover {
 	.d-none {
 		visibility: hidden;
 	}
+
+	.default {
+		display: flex;
+		justify-content: space-between;
+	}
