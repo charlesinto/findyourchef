@@ -384,14 +384,14 @@ if (addListingSection) {
       e.preventDefault();
       e.target.innerHTML = '<div class="loader"></div>';
       e.target.setAttribute('disabled', true);
-      let name = document.querySelector('#recipe-title').value;
-      let category = document.querySelector('#category').value;
-      let keywords = document.querySelector('#keywords').value;
-      let tags = keywords.split(',');
-      let overview = document.querySelector('#summary').value;
+      let name = document.querySelector('#recipe-title');
+      let category = document.querySelector('#category');
+      let keywords = document.querySelector('#keywords');
+      let tags = keywords.value.split(',');
+      let overview = document.querySelector('#summary');
       let perimeter = ["1.02433,0.84950", "2.4923,1.490493"];
-      let priceVal = document.querySelector('.default-price').value;
-      let price = parseInt(priceVal);
+      let priceVal = document.querySelector('.default-price');
+      let price = parseInt(priceVal.value);
       const pricingTable = document.querySelector('.ui-sortable').children;
       let priceShow = [];
       let pricing = [];
@@ -401,17 +401,23 @@ if (addListingSection) {
         }
       })
       priceShow.forEach( price => {
-        pricing.push({
-          "title" : price[0].children[0].children[0].value,
-          "description" : price[0].children[1].children[0].value,
-          "price" : parseInt(price[0].children[2].children[1].value)
-        })
+        if (price[0].children[0].children[0].value != "" &&
+            price[0].children[1].children[0].value != "" &&
+            price[0].children[2].children[1].value != "") {
+              pricing.push({
+                "title" : price[0].children[0].children[0].value,
+                "description" : price[0].children[1].children[0].value,
+                "price" : parseInt(price[0].children[2].children[1].value)
+              })
+            } else {
+              false;
+            }
         console.log(pricing);
       })
       const data = {
-        name,
-        overview,
-        category,
+        name: name.value,
+        overview: overview.value,
+        category: category.value,
         perimeter,
         tags,
         price,
@@ -427,6 +433,11 @@ if (addListingSection) {
         e.target.removeAttribute('disabled');
         e.target.innerHTML = 'Post Recipe <i class="fa fa-arrow-circle-right"></i>';
         console.log(res);
+        name.value = "";
+        overview.value = "";
+        category.value = "";
+        priceVal.value = "";
+        keywords.value = "";
         toastr.success('Recipe added successfully!');
       }).catch((err) => {
         e.target.removeAttribute('disabled');
