@@ -11,7 +11,7 @@ const fetchChefDetails = () => {
     const count = res.data.payload.data.reviewCount;
     sessionStorage.setItem('fyc-recipe-chefID', recipe.chefID);
     popChefData(recipe,  stars, count);
-    fetchRecipeReview(id);
+    fetchChefReview(id);
   }).catch((err) => {
     console.log(err);
     if (err.response && err.response.data) {
@@ -197,7 +197,7 @@ const popChefData = (data, stars, count) => {
   
 }
 
-const fetchRecipeReview = (id) => {
+const fetchChefReview = (id) => {
   const pagination = document.querySelector('.recipe-pagination');
   let page = 1;
   const data = {
@@ -243,18 +243,21 @@ const fetchRecipeReview = (id) => {
       nxtPage = curPage + 1;
       pageParent[curPage].children[0].classList.remove('current-page');
       pageParent[nxtPage].children[0].classList.add('current-page');
-      axios.get(`${baseURL}/reviews/${id}?page=${page}`, data).then( res => {
-        const reviews = res.data.payload.data.data;
-        console.log(reviews);
-        popReviews(reviews);
-      }).catch((err) => {
-        console.log(err)
-        if (err.response && err.response.data) {
-          toastr.error(err.response.data.error.message);
-        } else {
-          toastr.error('Something went wrong, please try again');
-        }
-      });
+      axios
+        .get(`${baseURL}/chef/reviews/${id}?page=${page}`, data)
+        .then((res) => {
+          const reviews = res.data.payload.data.data
+          console.log(reviews)
+          popReviews(reviews)
+        })
+        .catch((err) => {
+          console.log(err)
+          if (err.response && err.response.data) {
+            toastr.error(err.response.data.error.message)
+          } else {
+            toastr.error('Something went wrong, please try again')
+          }
+        })
     } else {
       for (let i = 0; i < pageParent.length; i++) {
         const pageNode = pageParent[i].children[0];
@@ -266,17 +269,20 @@ const fetchRecipeReview = (id) => {
       }
       page = e.target.innerText;
       e.target.classList.add('current-page');
-      axios.get(`${baseURL}/reviews/${id}?page=${page}`, data).then( res => {
-        const reviews = res.data.payload.data.data;
-        popReviews(reviews);
-      }).catch((err) => {
-        console.log(err)
-        if (err.response && err.response.data) {
-          toastr.error(err.response.data.error.message);
-        } else {
-          toastr.error('Something went wrong, please try again');
-        }
-      });
+      axios
+        .get(`${baseURL}/chef/reviews/${id}?page=${page}`, data)
+        .then((res) => {
+          const reviews = res.data.payload.data.data
+          popReviews(reviews)
+        })
+        .catch((err) => {
+          console.log(err)
+          if (err.response && err.response.data) {
+            toastr.error(err.response.data.error.message)
+          } else {
+            toastr.error('Something went wrong, please try again')
+          }
+        })
     }
   })
 }
@@ -1165,4 +1171,147 @@ const popRecipeData = (data, stars, count) => {
     <strong>${cleanlinessStar}</strong>
   </span>
 </div>`
+}
+
+const fetchRecipeReview = (id) => {
+  const pagination = document.querySelector('.recipe-pagination')
+  let page = 1
+  const data = {
+    chefID: id,
+  }
+  axios
+    .get(`${baseURL}/reviews/${id}`, data)
+    .then((res) => {
+      const reviews = res.data.payload.data.data
+      const reviewCount = res.data.payload.data.dataCount
+      popReviews(reviews, reviewCount)
+      if (reviewCount > 0) {
+        paginate(reviewCount)
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+      if (err.response && err.response.data) {
+        toastr.error(err.response.data.error.message)
+      } else {
+        toastr.error('Something went wrong, please try again')
+      }
+    })
+  pagination.addEventListener('click', (e) => {
+    const parentNode = document.querySelectorAll('.star-rating')
+    parentNode.forEach((parent) => {
+      while (parent.firstChild) {
+        parent.removeChild(parent.firstChild)
+      }
+    })
+    const listingParent = document.querySelector('#listing-reviews')
+    listingParent.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    const pageParent = e.target.parentElement.parentElement.children
+    e.preventDefault()
+    if (e.target.classList.contains('next')) {
+      page
+      let curPage, nxtPage
+      for (let i = 0; i < pageParent.length; i++) {
+        const pageNode = pageParent[i].children[0]
+        if (pageNode.classList.contains('current-page')) {
+          curPage = i
+          const prevPage = parseFloat(pageNode.innerText)
+          page = prevPage + 1
+        } else {
+          false
+        }
+      }
+      nxtPage = curPage + 1
+      pageParent[curPage].children[0].classList.remove('current-page')
+      pageParent[nxtPage].children[0].classList.add('current-page')
+      axios
+        .get(`${baseURL}/reviews/${id}?page=${page}`, data)
+        .then((res) => {
+          const reviews = res.data.payload.data.data
+          console.log(reviews)
+          popReviews(reviews)
+        })
+        .catch((err) => {
+          console.log(err)
+          if (err.response && err.response.data) {
+            toastr.error(err.response.data.error.message)
+          } else {
+            toastr.error('Something went wrong, please try again')
+          }
+        })
+    } else {
+      for (let i = 0; i < pageParent.length; i++) {
+        const pageNode = pageParent[i].children[0]
+        if (pageNode.classList.contains('current-page')) {
+          pageNode.classList.remove('current-page')
+        } else {
+          false
+        }
+      }
+      page = e.target.innerText
+      e.target.classList.add('current-page')
+      axios
+        .get(`${baseURL}/reviews/${id}?page=${page}`, data)
+        .then((res) => {
+          const reviews = res.data.payload.data.data
+          popReviews(reviews)
+        })
+        .catch((err) => {
+          console.log(err)
+          if (err.response && err.response.data) {
+            toastr.error(err.response.data.error.message)
+          } else {
+            toastr.error('Something went wrong, please try again')
+          }
+        })
+    }
+  })
+}
+
+const postRecipeReview = (e) => {
+  e.preventDefault()
+  const recipeID = localStorage.getItem('fyc-recipe-id')
+  console.log(recipeID)
+  const token =
+    sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token')
+  if (!token) {
+    toastr.error('You need to be signed in to be able to drop a review')
+  } else {
+    const userData =
+      JSON.parse(sessionStorage.getItem('fyc-user')) ||
+      JSON.parse(localStorage.getItem('fyc-user'))
+    let reviewersID = userData._id
+    console.log(reviewersID)
+    const review = document.querySelector('.review-area').value
+    // const stars = (serviceRate + moneyRate + cleanRate) / 3;
+
+    const data = {
+      reviewersID,
+      recipeID,
+      review,
+      serviceStars,
+      locationStars,
+      valueStars,
+      cleanlinessStars,
+    }
+
+    console.log(data)
+    axios
+      .post(`${baseURL}/review`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        addReviewToDOM()
+        toastr.success(res.data.payload.data.message)
+      })
+      .catch((err) => {
+        if (err.response && err.response.data) {
+          toastr.error(err.response.data.error.message)
+        } else {
+          toastr.error('Something went wrong, please try again')
+        }
+      })
+  }
 }
