@@ -820,8 +820,6 @@ const loadAllRecipes = () => {
   const token =
     sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token')
     const chefID = localStorage.getItem('fyc-chef-id')
-    console.log(chefID, token)
-
     const data = {
       chefID
     }
@@ -929,7 +927,7 @@ const popChefRecipes = (recipes) => {
   recipes.forEach(recipe => {
     const name = recipe.name;
     const category = recipe.category;
-    const image = recipe.image;
+    const image = recipe.images;
     const price = recipe.price;
     const location = recipe.location;
     const overview = recipe.overview;
