@@ -198,140 +198,140 @@ const loadUserBookmarks = () => {
   }
 }
 
-const bookmarkRecipe = (e, id) => {
-  const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
-  if (token) {
-    const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-    const bookmarkedRecipes = JSON.parse(localStorage.getItem('fyc-bookmarks'));
-    const bookmarkersID = userData._id;
-    const recipeID = id;
+// const bookmarkRecipe = (e, id) => {
+//   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
+//   if (token) {
+//     const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+//     const bookmarkedRecipes = JSON.parse(localStorage.getItem('fyc-bookmarks'));
+//     const bookmarkersID = userData._id;
+//     const recipeID = id;
 
-    if (bookmarkedRecipes === null) {
-      const bookmarkId = e.target.dataset.bookmarkId;
-      if (!bookmarkId) {
-        const data = {
-          bookmarkersID,
-          recipeID
-        }
-        axios.post(`${baseURL}/bookmark`, data, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
-        }).then((res) => {
-          console.log(res);
-          toastr.success("Recipe bookmarked");
-          e.target.dataset.bookmarkId = res.data.payload.data._id;
-          e.target.classList.add('liked');
-        }).catch((err) => {
-          if (err.response && err.response.data) {
-            toastr.error(err.response.data.error.message);
-          } else {
-            toastr.error('Something went wrong, please try again');
-          }
-        });
-      } else {
-        const data = {
-          bookmarkersID,
-          recipeID
-        }
-        axios.delete(`${baseURL}/bookmark`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
-        }, data).then((res) => {
-          console.log(res);
-          toastr.success(res.data.payload.data.message);
-          e.target.removeAttribute('data-bookmark-id');
-        }).catch((err) => {
-          if (err.response && err.response.data) {
-            toastr.error(err.response.data.error.message);
-          } else {
-            toastr.error('Something went wrong, please try again');
-          }
-        }); 
-      }
-    }else if (bookmarkedRecipes) {
-      const bookmarkId = e.target.dataset.bookmarkId;
-      if (!bookmarkId) {
-        let bookmarkID;
-        bookmarkedRecipes.forEach( bookmark => {
+//     if (bookmarkedRecipes === null) {
+//       const bookmarkId = e.target.dataset.bookmarkId;
+//       if (!bookmarkId) {
+//         const data = {
+//           bookmarkersID,
+//           recipeID
+//         }
+//         axios.post(`${baseURL}/bookmark`, data, {
+//           headers: {
+//             'Authorization': `Bearer ${token}`
+//           },
+//         }).then((res) => {
+//           console.log(res);
+//           toastr.success("Recipe bookmarked");
+//           e.target.dataset.bookmarkId = res.data.payload.data._id;
+//           e.target.classList.add('liked');
+//         }).catch((err) => {
+//           if (err.response && err.response.data) {
+//             toastr.error(err.response.data.error.message);
+//           } else {
+//             toastr.error('Something went wrong, please try again');
+//           }
+//         });
+//       } else {
+//         const data = {
+//           bookmarkersID,
+//           recipeID
+//         }
+//         axios.delete(`${baseURL}/bookmark`, {
+//           headers: {
+//             Authorization: `Bearer ${token}`
+//           },
+//         }, data).then((res) => {
+//           console.log(res);
+//           toastr.success(res.data.payload.data.message);
+//           e.target.removeAttribute('data-bookmark-id');
+//         }).catch((err) => {
+//           if (err.response && err.response.data) {
+//             toastr.error(err.response.data.error.message);
+//           } else {
+//             toastr.error('Something went wrong, please try again');
+//           }
+//         }); 
+//       }
+//     }else if (bookmarkedRecipes) {
+//       const bookmarkId = e.target.dataset.bookmarkId;
+//       if (!bookmarkId) {
+//         let bookmarkID;
+//         bookmarkedRecipes.forEach( bookmark => {
 
-          if (bookmark.recipeID === id) {
-            bookmarkID = bookmark._id;
-          } else {
-            false
-          }
-        })
+//           if (bookmark.recipeID === id) {
+//             bookmarkID = bookmark._id;
+//           } else {
+//             false
+//           }
+//         })
 
-        if (bookmarkID === undefined) {
-          const data = {
-            bookmarkersID,
-            recipeID
-          }
-          axios.post(`${baseURL}/bookmark`, data, {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            },
-          }).then((res) => {
-            console.log(res);
-            toastr.success("Recipe bookmarked");
-            e.target.dataset.bookmarkId = res.data.payload.data._id;
-          }).catch((err) => {
-            if (err.response && err.response.data) {
-              toastr.error(err.response.data.error.message);
-            } else {
-              toastr.error('Something went wrong, please try again');
-            }
-          });
-        } else {
-          console.log(bookmarkID);
-          const data = {
-            bookmarkersID,
-            recipeID
-          }
-          axios.delete(`${baseURL}/bookmark`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            },
-          }, data).then((res) => {
-            console.log(res);
-            toastr.success(res.data.payload.data.message);
-            e.target.removeAttribute('data-bookmark-id');
-          }).catch((err) => {
-            if (err.response && err.response.data) {
-              toastr.error(err.response.data.error.message);
-            } else {
-              toastr.error('Something went wrong, please try again');
-            }
-          });
-        }
-      } else {
-        // const bookmarkId = e.target.dataset.bookmarkId;
-        const data = {
-          bookmarkersID,
-          recipeID
-        }
-        axios.delete(`${baseURL}/bookmark`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
-        }, data).then((res) => {
-          console.log(res);
-          toastr.success(res.data.payload.data.message);
-          e.target.removeAttribute('data-bookmark-id');
-        }).catch((err) => {
-          if (err.response && err.response.data) {
-            toastr.error(err.response.data.error.message);
-          } else {
-            toastr.error('Something went wrong, please try again');
-          }
-        }); 
-      }
-    } 
-  } else {
-    toastr.err("You need to sign in to bookmark a recipe");
-  }
-}
+//         if (bookmarkID === undefined) {
+//           const data = {
+//             bookmarkersID,
+//             recipeID
+//           }
+//           axios.post(`${baseURL}/bookmark`, data, {
+//             headers: {
+//               'Authorization': `Bearer ${token}`
+//             },
+//           }).then((res) => {
+//             console.log(res);
+//             toastr.success("Recipe bookmarked");
+//             e.target.dataset.bookmarkId = res.data.payload.data._id;
+//           }).catch((err) => {
+//             if (err.response && err.response.data) {
+//               toastr.error(err.response.data.error.message);
+//             } else {
+//               toastr.error('Something went wrong, please try again');
+//             }
+//           });
+//         } else {
+//           console.log(bookmarkID);
+//           const data = {
+//             bookmarkersID,
+//             recipeID
+//           }
+//           axios.delete(`${baseURL}/bookmark`, {
+//             headers: {
+//               Authorization: `Bearer ${token}`
+//             },
+//           }, data).then((res) => {
+//             console.log(res);
+//             toastr.success(res.data.payload.data.message);
+//             e.target.removeAttribute('data-bookmark-id');
+//           }).catch((err) => {
+//             if (err.response && err.response.data) {
+//               toastr.error(err.response.data.error.message);
+//             } else {
+//               toastr.error('Something went wrong, please try again');
+//             }
+//           });
+//         }
+//       } else {
+//         // const bookmarkId = e.target.dataset.bookmarkId;
+//         const data = {
+//           bookmarkersID,
+//           recipeID
+//         }
+//         axios.delete(`${baseURL}/bookmark`, {
+//           headers: {
+//             Authorization: `Bearer ${token}`
+//           },
+//         }, data).then((res) => {
+//           console.log(res);
+//           toastr.success(res.data.payload.data.message);
+//           e.target.removeAttribute('data-bookmark-id');
+//         }).catch((err) => {
+//           if (err.response && err.response.data) {
+//             toastr.error(err.response.data.error.message);
+//           } else {
+//             toastr.error('Something went wrong, please try again');
+//           }
+//         }); 
+//       }
+//     } 
+//   } else {
+//     toastr.err("You need to sign in to bookmark a recipe");
+//   }
+// }
 
 
 const recipeContainer = document.querySelector('.recipe-container');

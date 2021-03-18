@@ -6487,7 +6487,7 @@ a.send-message-to-owner.button {
 
 
 /* Like Button */
-.like-button {
+.like-button, .recipe-like-button {
 	outline: none;
 	border: none;
 	color: #444;
@@ -6503,7 +6503,7 @@ a.send-message-to-owner.button {
 	cursor: pointer;
 }
 
-.like-button:hover {
+.like-button:hover, .recipe-like-button:hover {
 	background-color: #fafafa;
 	border: 1px solid #ddd;
 }
@@ -6521,12 +6521,12 @@ a.send-message-to-owner.button {
 }
 
 .like-button .like-icon:hover,
-.like-button .like-icon.liked {
+.like-button .like-icon.liked, .recipe-like-button .like-icon:hover, .recipe-like-button .like-icon.liked {
     background-color: transparent;
 	color: #f3103c;
 }
 
-.like-button .like-icon {
+.like-button .like-icon, .recipe-like-button .like-icon {
 	position: relative;
 	height: 20px;
 	display: inline-block;
@@ -6541,8 +6541,6 @@ a.send-message-to-owner.button {
 	margin-right: 8px;
 	font-size: 18px;
 }
-
-
 
 /* Listing Contacts */
 .listing-links-container {

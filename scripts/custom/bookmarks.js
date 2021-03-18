@@ -529,7 +529,7 @@ if (bookmark) {
         JSON.parse(sessionStorage.getItem('fyc-user')) ||
         JSON.parse(localStorage.getItem('fyc-user'))
       const bookmarkersID = userData._id
-      const chefID = localStorage.getItem('fyc-recipe-id')
+      const chefID = localStorage.getItem('fyc-chef-id')
       const data = {
         bookmarkersID,
         chefID,
@@ -556,7 +556,7 @@ if (bookmark) {
           })
       } else if (localStorage.getItem('fyc-bookmark-id') !== null) {
         const bookmarkersID = userData._id
-        const chefID = localStorage.getItem('fyc-recipe-id')
+        const chefID = localStorage.getItem('fyc-chef-id')
         const data = {
           bookmarkersID,
           chefID,
@@ -572,6 +572,75 @@ if (bookmark) {
           .then((res) => {
             console.log(res)
             toastr.success('chef bookmark deleted')
+            localStorage.removeItem('fyc-bookmark-id')
+          })
+          .catch((err) => {
+            if (err.response && err.response.data) {
+              toastr.error(err.response.data.error.message)
+            } else {
+              toastr.error('Something went wrong, please try again')
+            }
+          })
+      }
+    }
+  })
+}
+
+//BOOKMARK RECIPE IN THE RECIPE-DETAIL-PAGE
+const bookmarkRecipeInSinglePage = document.querySelector('.recipe-like-button')
+if (bookmarkRecipeInSinglePage) {
+  bookmarkRecipeInSinglePage.addEventListener('click', (e) => {
+    e.preventDefault()
+    const token =
+      localStorage.getItem('fyc-token') || sessionStorage.getItem('fyc-token')
+    if (token) {
+      const userData =
+        JSON.parse(sessionStorage.getItem('fyc-user')) ||
+        JSON.parse(localStorage.getItem('fyc-user'))
+      const bookmarkersID = userData._id
+      const recipeID = localStorage.getItem('fyc-recipe-id')
+      const data = {
+        bookmarkersID,
+        recipeID,
+      }
+      console.log(data)
+      if (localStorage.getItem('fyc-bookmark-id') === null) {
+        axios
+          .post(`${baseURL}/bookmark`, data, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((res) => {
+            console.log(res)
+            toastr.success('recipe bookmarked')
+            localStorage.setItem('fyc-bookmark-id', res.data.payload.data._id)
+          })
+          .catch((err) => {
+            if (err.response && err.response.data) {
+              toastr.error(err.response.data.error.message)
+            } else {
+              toastr.error('Something went wrong, please try again')
+            }
+          })
+      } else if (localStorage.getItem('fyc-bookmark-id') !== null) {
+        const bookmarkersID = userData._id
+        const chefID = localStorage.getItem('fyc-recipe-id')
+        const data = {
+          bookmarkersID,
+          chefID,
+        }
+        console.log(data)
+        axios
+          .delete(`${baseURL}/bookmark`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            data,
+          })
+          .then((res) => {
+            console.log(res)
+            toastr.success('recipe bookmark deleted')
             localStorage.removeItem('fyc-bookmark-id')
           })
           .catch((err) => {

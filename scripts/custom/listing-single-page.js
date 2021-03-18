@@ -8,6 +8,7 @@ const fetchChefDetails = () => {
   axios.get(`${baseURL}/chefs/${id}`).then((res) => {
     const recipe = res.data.payload.data.data;
     const stars = res.data.payload.data.stars;
+    console.log(stars)
     const count = res.data.payload.data.reviewCount;
     sessionStorage.setItem('fyc-recipe-chefID', recipe.chefID);
     popChefData(recipe,  stars, count);
@@ -445,7 +446,7 @@ const addReviewToDOM = () => {
     }
   })
   let image;
-  if(userData == 'chef') {
+  if(userData.role === 'chef') {
     image = userData.profilePic;
   } else {
     image = userData.image;
@@ -987,12 +988,58 @@ if (recipeContainer) {
     const id = e.target.dataset.id
     if (e.target.classList.contains('like-icon')) {
       e.stopPropagation()
-      bookmarkChef(e, id)
+      bookmarkRecipe(e, id)
     } else {
       loadRecipePage(id)
     }
   })
 }
+
+
+const bookmarkRecipe = (e, id) => {
+  e.preventDefault()
+  e.stopPropagation()
+  const token =
+    localStorage.getItem('fyc-token') || sessionStorage.getItem('fyc-token')
+  if (token) {
+    const userData =
+      JSON.parse(sessionStorage.getItem('fyc-user')) ||
+      JSON.parse(localStorage.getItem('fyc-user'))
+    const recipeID = id
+    let bookmarkersID = userData._id
+    const data = {
+      bookmarkersID,
+      recipeID,
+    }
+    console.log(data)
+    if (localStorage.getItem('fyc-bookmark-id') === null) {
+      axios
+        .post(`${baseURL}/bookmark`, data, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          console.log(res)
+          toastr.success('Recipe bookmarked')
+          localStorage.setItem('fyc-bookmark-id', res.data.payload.data._id)
+        })
+        .catch((err) => {
+          if (err.response && err.response.data) {
+            toastr.error(err.response.data.error.message)
+          } else {
+            toastr.error('Soething went wrong, please try again')
+          }
+        })
+    } else {
+      toastr.error('This Recipe has already been bookmarked')
+    }
+  } else {
+    toastr.error('You need to login before bookmarking a chef')
+  }
+}
+
+
 
 /***************************
   RECIPE CODEBASE
@@ -1004,8 +1051,9 @@ const fetchRecipeData = () => {
     .get(`${baseURL}/recipes/${id}`)
     .then((res) => {
       const recipe = res.data.payload.data.data
-      console.log(recipe)
+      console.log(res)
       const stars = res.data.payload.data.stars
+      console.log(stars)
       const count = res.data.payload.data.reviewCount
       sessionStorage.setItem('fyc-recipe-chefID', recipe.chefID)
       popRecipeData(recipe, stars, count)
@@ -1297,7 +1345,7 @@ const postRecipeReview = (e) => {
 
     console.log(data)
     axios
-      .post(`${baseURL}/review`, data, {
+      .post(`${baseURL}/reviews`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
