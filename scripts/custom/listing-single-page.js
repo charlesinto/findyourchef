@@ -1032,8 +1032,8 @@ const popRecipeData = (data, stars, count) => {
   const overview = data.overview
   const availability = data.availability
   sessionStorage.setItem('fyc-availability', JSON.stringify(availability))
-  const phone = data.phoneNumber
-  const email = data.email
+  const phone = data.chefNumber
+  const email = data.chefEmail
   const slider = document.querySelector('.listing-slider')
   slider.innerHTML = `
                   <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 1"></a>
@@ -1180,7 +1180,7 @@ const fetchRecipeReview = (id) => {
     chefID: id,
   }
   axios
-    .get(`${baseURL}/reviews/${id}`, data)
+    .get(`${baseURL}/reviews/${id}?page=${page}`, data)
     .then((res) => {
       const reviews = res.data.payload.data.data
       const reviewCount = res.data.payload.data.dataCount
