@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<head>
+
+<!-- Basic Page Needs
+================================================== -->
+<title>Find Your Chef</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<!-- CSS
+================================================== -->
+<link rel="stylesheet" href="css/plugins/dropzone.css">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/main-color.css" id="colors">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script type="text/javascript" src="https://unpkg.com/@passbase/button@v3/button.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjbSwlaIqraERZQGoSOPEnPspCgPsE8y8" defer ></script>
+<!-- PAGE RESTRICTION TO LOGGED IN USERS -->
+<script>
+	const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
+	if (!token) {
+		window.location.href = '/index.html';
+	} else {
+		false;
+	}
+</script>
+</head>
+
+<body>
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+<!-- Header Container
+================================================== -->
+<header id="header-container" class="fixed fullwidth dashboard">
+
+	<!-- Header -->
+	<div id="header" class="not-sticky">
+		<div class="container">
+			
+			<!-- Left Side Content -->
+			<div class="left-side">
+				
+				<!-- Logo -->
+				<div id="logo">
+					<a href="index.html"><img src="images/logo.png" alt=""></a>
+					<a href="index.html" class="dashboard-logo"><img src="images/logo2.png" alt=""></a>
+				</div>
+
+				<!-- Mobile Navigation -->
+				<div class="mmenu-trigger">
+					<button class="hamburger hamburger--collapse" type="button">
+						<span class="hamburger-box">
+							<span class="hamburger-inner"></span>
+						</span>
+					</button>
+				</div>
+
+				<!-- Main Navigation -->
+				<nav id="navigation" class="style-1">
+					<ul id="responsive">
+
+						<li><a class="current" href="index.html">Home</a></li>
+						<li><a href="become-a-chef/index.html">Become a Chef</a></li>
+						<li><a href="explore.html">Explore Chefs</a></li>
+						<li><a href="contact.html">Contact Us</a></li>
+						
+					</ul>
+				</nav>
+				<div class="clearfix"></div>
+				<!-- Main Navigation / End -->
+				
+			</div>
+			<!-- Left Side Content / End -->
+
+			<!-- Right Side Content / End -->
+			<div class="right-side">
+				<!-- Header Widget -->
+				<div class="header-widget">
+					
+					<!-- User Menu -->
+					<div class="user-menu">
+						<div class="user-name logged-username"></div>
+						<ul>
+							<li><a href="dashboard.html"><i class="sl sl-icon-settings"></i> Dashboard</a></li>
+							<li><a href="dashboard-messages.html"><i class="sl sl-icon-envelope-open"></i> Messages</a></li>
+							<li><a href="dashboard-bookings.html"><i class="fa fa-calendar-check-o"></i> Bookings</a></li>
+							<li><a href="#" onclick="handleLogout()"><i class="sl sl-icon-power"></i> Logout</a></li>
+						</ul>
+					</div>
+
+				</div>
+				<!-- Header Widget / End -->
+			</div>
+			<!-- Right Side Content / End -->
+
+		</div>
+	</div>
+	<!-- Header / End -->
+
+</header>
+<div class="clearfix"></div>
+<!-- Header Container / End -->
+
+
+<!-- Dashboard -->
+<div id="dashboard">
+
+	<!-- Navigation
+	================================================== -->
+
+	<!-- Responsive Navigation Trigger -->
+	<a href="#" class="dashboard-responsive-nav-trigger"><i class="fa fa-reorder"></i> Dashboard Navigation</a>
+
+	<div class="dashboard-nav">
+
+	</div>
+	<!-- Navigation / End -->
+
+
+
+	<!-- Content
+	================================================== -->
+	<div class="dashboard-content">
+
+		<!-- Titlebar -->
+		<div id="titlebar">
+			<div class="row">
+				<div class="col-md-12">
+					<h2>My Profile</h2>
+					<!-- Breadcrumbs -->
+					<nav id="breadcrumbs">
+						<ul>
+							<li><a href="#">Home</a></li>
+							<li><a href="#">Dashboard</a></li>
+							<li>My Profile</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+
+			<!-- Profile -->
+			<div class="col-lg-6 col-md-12">
+				<div class="dashboard-list-box passbase-container margin-top-0">
+					<h4 class="gray">Profile Details</h4>
+      <div id="passbase-button" class="passbaseBtn"></div>
+      <div class="dashboard-list-box-static top">
+        
+        <!-- Avatar -->
+        <form id="photoForm" enctype="multipart/form-data" class="edit-profile-photo">
+          <img class="user-img" src="images/user-avatar.jpg" alt="">
+          <div class="change-photo-btn">
+            <div class="photoUpload">
+                <span><i class="fa fa-upload"></i>Select Photo</span>
+                <input type="file" id="file" class="upload" />
+            </div>
+          </div>
+					<button type="submit" class="button button-upload margin-top-15">Update Photo</button>
+        </form>
+
+        <!-- Details -->
+        <div class="my-profile edit ">
+					<label>Notes</label>
+					<textarea name="notes" id="notes" cols="30" rows="10">Maecenas quis consequat libero, a feugiat eros. Nunc ut lacinia tortor morbi ultricies laoreet ullamcorper phasellus semper</textarea>
+			
+					<label><i class="fa fa-twitter"></i> Twitter</label>
+					<input class="twitter" placeholder="https://www.twitter.com/" type="text">
+			
+					<label><i class="fa fa-facebook-square"></i> Facebook</label>
+					<input class="facebook" placeholder="https://www.facebook.com/" type="text">
+			
+					<label><i class="fa fa-google-plus"></i> Google+</label>
+					<input class="google" placeholder="https://www.google.com/" type="text">
+			
+					<div class="category">
+						<h5 class="bold">Select Category</h5>
+						<div class="category-edit"></div>
+					</div>
+					<div class="radius">
+						<h5 class="bold">Distance Radius</h5>
+						<div class="panel-dropdown-content">
+							<input class="distance-radius" type="range" min="1" max="100" step="1" value="50" data-title="Radius around selected destination">
+						</div>
+					</div>
+					
+					
+							<!-- Section -->
+							<div class="margin-top-45">
+								<!-- Row -->
+								<div class="row with-forms">
+										<!-- Address -->
+										<div class="col">
+												<label>Primary Location</label>
+												<!--<input id="location" type="text" placeholder="Laurel, MD 20708">-->
+												<div class="main-search-input-item location">
+														<div id="autocomplete-container">
+																<input id="autocomplete-input" type="text" placeholder="Laurel, MD 20708">
+														</div>
+														<a href="#"><i class="fa fa-map-marker"></i></a>
+												</div>
+										</div>
+								</div>
+									<!-- Row / End -->
+							</div>
+							<!-- Section / End -->
+			
+							<label>Your Name</label>
+							<input class="fullname" value="Tom Perrin" type="text">
+			
+							<label>Phone</label>
+							<input class="phoneNumber" value="(123) 123-456" type="text">
+			
+							<label>Email</label>
+							<input class="email" value="tom@example.com" type="text">
+        </div>
+
+        <button onclick="updateProfile()" class="button button-update margin-top-15">Update Profile</button>
+
+      </div>
+				</div>
+			</div>
+
+			<!-- Change Password -->
+			<div class="col-lg-6 col-md-12">
+				<div class="row gallery">
+					<div class="dashboard-list-box">
+						<h4>Gallery</h4>
+						<form action="/file-upload"
+						class="dropzone"
+						id="my-awesome-dropzone"></form>
+						<button onclick="updateGallery()" class="button gallery-update margin-top-15">Update Gallery</button>
+						</div>
+				</div>
+			</div>
+			<div class="col-lg-6 col-md-12">
+				<div class="dashboard-list-box margin-top-0">
+					<h4>Gallery Images</h4>
+					<ul class="gallery-listing">
+					</ul>
+				</div>
+			</div>
+
+			<div class="col-lg-6 col-md-12">
+				<div class="dashboard-list-box availability-div margin-top-0">
+					<!-- Section -->
+					<div class="add-listing-section margin-top-45">
+			
+						<!-- Headline -->
+						<div class="add-listing-headline">
+								<h3><i class="fa fa-calendar-check-o"></i> Availability</h3>
+								<!-- Switcher -->
+								<label class="switch"><input type="checkbox" checked><span class="slider round"></span></label>
+						</div>
+			
+						<!-- Switcher ON-OFF Content -->
+						<div class="switcher-content">
+			
+								<!-- Availablity Slots -->
+								<!-- Set data-clock-type="24hr" to enable 24 hours clock type -->
+								<div class="availability-slots" data-clock-type="24hr">
+			
+										<!-- Single Day Slots -->
+										<div class="day-slots">
+												<div class="day-slot-headline">Monday</div>
+			
+												<!-- Slot For Cloning / Do NOT Remove-->
+												<div class="single-slot cloned">
+														<div class="single-slot-left">
+																<div class="single-slot-time"></div>
+																<button class="remove-slot"><i class="fa fa-close"></i></button>
+														</div>
+			
+														<div class="single-slot-right">
+																<strong>Slots:</strong>
+																<div class="plusminus horiz">
+																		<button></button>
+																		<input type="number" name="slot-qty" value="1" min="1" max="99">
+																		<button></button>
+																</div>
+														</div>
+												</div>
+												<!-- Slot For Cloning / Do NOT Remove-->
+			
+			
+												<!-- No slots -->
+												<div class="no-slots">No slots added</div>
+			
+												<!-- Slots Container -->
+												<div class="slots-container">
+			
+												</div>
+												<!-- Slots Container / End -->
+			
+			
+												<!-- Add Slot -->
+												<div class="add-slot">
+														<div class="add-slot-inputs">
+																<input id="start-monday-input" type="time" class="time-slot-start" min="00:00" max="12:00" />
+																<select class="time-slot-start twelve-hr" id="start-monday-select">
+			<option value="am">am</option>
+			<option value="pm">pm</option>
+			</select>
+																<span>-</span>
+			
+																<input id="end-monday-input" type="time" class="time-slot-end" min="00:00" max="12:00" />
+																<select class="time-slot-end twelve-hr" id="end-monday-select">
+			<option value="am">am</option>
+			<option value="pm">pm</option>
+			</select>
+														</div>
+														<div class="add-slot-btn">
+																<button onclick="addList(event)" id="addMondaySlot">Add</button>
+														</div>
+												</div>
+			
+										</div>
+										<!-- Single Day Slots / End -->
+			
+										<!-- Single Day Slots -->
+										<div class="day-slots">
+												<div class="day-slot-headline">Tuesday</div>
+			
+												<!-- Slot For Cloning / Do NOT Remove-->
+												<div class="single-slot cloned">
+														<div class="single-slot-left">
+																<div class="single-slot-time"></div>
+																<button class="remove-slot"><i class="fa fa-close"></i></button>
+														</div>
+			
+														<div class="single-slot-right">
+																<strong>Slots:</strong>
+																<div class="plusminus horiz">
+																		<button></button>
+																		<input type="number" name="slot-qty" value="1" min="1" max="99">
+																		<button></button>
+																</div>
+														</div>
+												</div>
+												<!-- Slot For Cloning / Do NOT Remove-->
+			
+			
+												<!-- No slots -->
+												<div class="no-slots">No slots added</div>
+			
+												<!-- Slots Container -->
+												<div class="slots-container">
+			
+												</div>
+												<!-- Slots Container / End -->
+			
+			
+												<!-- Add Slot -->
+												<div class="add-slot">
+														<div class="add-slot-inputs">
+																<input type="time" class="time-slot-start" min="00:00" max="12:00" />
+																<select class="time-slot-start twelve-hr" id="">
+			<option>am</option>
+			<option>pm</option>
+			</select>
+																<span>-</span>
+			
+																<input type="time" class="time-slot-end" min="00:00" max="12:00" />
+																<select class="time-slot-end twelve-hr" id="">
+			<option>am</option>
+			<option>pm</option>
+			</select>
+														</div>
+														<div class="add-slot-btn">
+																<button onclick="addList(event)">Add</button>
+														</div>
+												</div>
+			
+										</div>
+										<!-- Single Day Slots / End -->
+			
+										<!-- Single Day Slots -->
+										<div class="day-slots">
+												<div class="day-slot-headline">Wednesday</div>
+			
+												<!-- Slot For Cloning / Do NOT Remove-->
+												<div class="single-slot cloned">
+														<div class="single-slot-left">
+																<div class="single-slot-time"></div>
+																<button class="remove-slot"><i class="fa fa-close"></i></button>
+														</div>
+			
+														<div class="single-slot-right">
+																<strong>Slots:</strong>
+																<div class="plusminus horiz">
+																		<button></button>
+																		<input type="number" name="slot-qty" value="1" min="1" max="99">
+																		<button></button>
+																</div>
+														</div>
+												</div>
+												<!-- Slot For Cloning / Do NOT Remove-->
+			
+			
+												<!-- No slots -->
+												<div class="no-slots">No slots added</div>
+			
+												<!-- Slots Container -->
+												<div class="slots-container">
+			
+												</div>
+												<!-- Slots Container / End -->
+			
+			
+												<!-- Add Slot -->
+												<div class="add-slot">
+														<div class="add-slot-inputs">
+																<input type="time" class="time-slot-start" min="00:00" max="12:00" />
+																<select class="time-slot-start twelve-hr" id="">
+			<option>am</option>
+			<option>pm</option>
+			</select>
+																<span>-</span>
+			
+																<input type="time" class="time-slot-end" min="00:00" max="12:00" />
+																<select class="time-slot-end twelve-hr" id="">
+			<option>am</option>
+			<option>pm</option>
+			</select>
+														</div>
+														<div class="add-slot-btn">
+																<button onclick="addList(event)">Add</button>
+														</div>
+												</div>
+			
+										</div>
+										<!-- Single Day Slots / End -->
+			
+										<!-- Single Day Slots -->
+										<div class="day-slots">
+												<div class="day-slot-headline">Thursday</div>
+			
+												<!-- Slot For Cloning / Do NOT Remove-->
+												<div class="single-slot cloned">
+														<div class="single-slot-left">
+																<div class="single-slot-time"></div>
+																<button class="remove-slot"><i class="fa fa-close"></i></button>
+														</div>
+			
+														<div class="single-slot-right">
+																<strong>Slots:</strong>
+																<div class="plusminus horiz">
+																		<button></button>
+																		<input type="number" name="slot-qty" value="1" min="1" max="99">
+																		<button></button>
+																</div>
+														</div>
+												</div>
+												<!-- Slot For Cloning / Do NOT Remove-->
+			
+			
+												<!-- No slots -->
+												<div class="no-slots">No slots added</div>
+			
+												<!-- Slots Container -->
+												<div class="slots-container">
+			
+												</div>
+												<!-- Slots Container / End -->
+			
+			
+												<!-- Add Slot -->
+												<div class="add-slot">
+														<div class="add-slot-inputs">
+																<input type="time" class="time-slot-start" min="00:00" max="12:00" />
+																<select class="time-slot-start twelve-hr" id="">
+			<option>am</option>
+			<option>pm</option>
+			</select>
+																<span>-</span>
+			
+																<input type="time" class="time-slot-end" min="00:00" max="12:00" />
+																<select class="time-slot-end twelve-hr" id="">
+			<option>am</option>
+			<option>pm</option>
+			</select>
+														</div>
+														<div class="add-slot-btn">
+																<button onclick="addList(event)">Add</button>
+														</div>
+												</div>
+			
+										</div>
+										<!-- Single Day Slots / End -->
+			
+										<!-- Single Day Slots -->
+										<div class="day-slots">
+												<div class="day-slot-headline">Friday</div>
+			
+												<!-- Slot For Cloning / Do NOT Remove-->
+												<div class="single-slot cloned">
+														<div class="single-slot-left">
+																<div class="single-slot-time"></div>
+																<button class="remove-slot"><i class="fa fa-close"></i></button>
+														</div>
+			
+														<div class="single-slot-right">
+																<strong>Slots:</strong>
+																<div class="plusminus horiz">
+																		<button></button>
+																		<input type="number" name="slot-qty" value="1" min="1" max="99">
+																		<button></button>
+																</div>
+														</div>
+												</div>
+												<!-- Slot For Cloning / Do NOT Remove-->
+			
+			
+												<!-- No slots -->
+												<div class="no-slots">No slots added</div>
+			
+												<!-- Slots Container -->
+												<div class="slots-container">
+			
+			
+												</div>
+												<!-- Slots Container / End -->
+			
+			
+												<!-- Add Slot -->
+												<div class="add-slot">
+														<div class="add-slot-inputs">
+																<input type="time" class="time-slot-start" min="00:00" max="12:00" />
+																<select class="time-slot-start twelve-hr" id="">
+			<option>am</option>
+			<option>pm</option>
+			</select>
+																<span>-</span>
+			
+																<input type="time" class="time-slot-end" min="00:00" max="12:00" />
+																<select class="time-slot-end twelve-hr" id="">
+			<option>am</option>
+			<option>pm</option>
+			</select>
+														</div>
+														<div class="add-slot-btn">
+																<button onclick="addList(event)">Add</button>
+														</div>
+												</div>
+			
+										</div>
+										<!-- Single Day Slots / End -->
+			
+										<!-- Single Day Slots -->
+										<div class="day-slots">
+												<div class="day-slot-headline">Saturday</div>
+			
+												<!-- Slot For Cloning / Do NOT Remove-->
+												<div class="single-slot cloned">
+														<div class="single-slot-left">
+																<div class="single-slot-time"></div>
+																<button class="remove-slot"><i class="fa fa-close"></i></button>
+														</div>
+			
+														<div class="single-slot-right">
+																<strong>Slots:</strong>
+																<div class="plusminus horiz">
+																		<button></button>
+																		<input type="number" name="slot-qty" value="1" min="1" max="99">
+																		<button></button>
+																</div>
+														</div>
+												</div>
+												<!-- Slot For Cloning / Do NOT Remove-->
+			
+			
+												<!-- No slots -->
+												<div class="no-slots">No slots added</div>
+			
+												<!-- Slots Container -->
+												<div class="slots-container">
+			
+												</div>
+												<!-- Slots Container / End -->
+			
+			
+												<!-- Add Slot -->
+												<div class="add-slot">
+														<div class="add-slot-inputs">
+																<input type="time" class="time-slot-start" min="00:00" max="12:00" />
+																<select class="time-slot-start twelve-hr" id="">
+			<option>am</option>
+			<option>pm</option>
+			</select>
+																<span>-</span>
+			
+																<input type="time" class="time-slot-end" min="00:00" max="12:00" />
+																<select class="time-slot-end twelve-hr" id="">
+			<option>am</option>
+			<option>pm</option>
+			</select>
+														</div>
+														<div class="add-slot-btn">
+																<button onclick="addList(event)">Add</button>
+														</div>
+												</div>
+			
+										</div>
+										<!-- Single Day Slots / End -->
+			
+										<!-- Single Day Slots -->
+										<div class="day-slots">
+												<div class="day-slot-headline">Sunday</div>
+			
+												<!-- Slot For Cloning / Do NOT Remove-->
+												<div class="single-slot cloned">
+														<div class="single-slot-left">
+																<div class="single-slot-time"></div>
+																<button class="remove-slot"><i class="fa fa-close"></i></button>
+														</div>
+			
+														<div class="single-slot-right">
+																<strong>Slots:</strong>
+																<div class="plusminus horiz">
+																		<button></button>
+																		<input type="number" name="slot-qty" value="1" min="1" max="99">
+																		<button></button>
+																</div>
+														</div>
+												</div>
+												<!-- Slot For Cloning / Do NOT Remove-->
+			
+			
+												<!-- No slots -->
+												<div class="no-slots">No slots added</div>
+			
+												<!-- Slots Container -->
+												<div class="slots-container">
+			
+												</div>
+												<!-- Slots Container / End -->
+			
+			
+												<!-- Add Slot -->
+												<div class="add-slot">
+														<div class="add-slot-inputs">
+																<input type="time" class="time-slot-start" min="00:00" max="12:00" />
+																<select class="time-slot-start twelve-hr" id="">
+			<option>am</option>
+			<option>pm</option>
+			</select>
+																<span>-</span>
+			
+																<input type="time" class="time-slot-end" min="00:00" max="12:00" />
+																<select class="time-slot-end twelve-hr" id="">
+			<option>am</option>
+			<option>pm</option>
+			</select>
+														</div>
+														<div class="add-slot-btn">
+																<button onclick="addList(event)">Add</button>
+														</div>
+												</div>
+			
+										</div>
+										<!-- Single Day Slots / End -->
+			
+								</div>
+								<!-- Availablity Slots / End -->
+			
+						</div>
+						<!-- Switcher ON-OFF Content / End -->
+						<button onclick="updateAvailability()" class="button margin-top-15">Update Profile</button>
+			
+				</div>
+				<!-- Section / End -->			
+			
+				</div>
+			</div>
+
+			<!-- Change Password -->
+			<div class="col-lg-6 col-md-12">
+				<div class="dashboard-list-box password-update">
+					<h4 class="gray">Change Password</h4>
+					<div class="dashboard-list-box-static top ">
+						<!-- Change Password -->
+						<div class="my-profile">
+							<label class="margin-top-0">Current Password</label>
+							<input type="password">
+
+							<label>New Password</label>
+							<input type="password">
+
+							<label>Confirm New Password</label>
+							<input type="password">
+							<button class="button margin-top-15">Change Password</button>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Copyrights -->
+			<div class="col-md-12">
+				<div class="copyrights">© 2020 Find Your Chef. All Rights Reserved.</div>
+			</div>
+
+		</div>
+
+	</div>
+	<!-- Content / End -->
+
+
+</div>
+<!-- Dashboard / End -->
+
+
+</div>
+<!-- Wrapper / End -->
+
+
+<!-- Scripts
+================================================== -->
+<script type="text/javascript" src="scripts/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="scripts/jquery-migrate-3.3.1.min.js"></script>
+<script type="text/javascript" src="scripts/mmenu.min.js"></script>
+<script type="text/javascript" src="scripts/chosen.min.js"></script>
+<script type="text/javascript" src="scripts/slick.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script type="text/javascript" src="scripts/rangeslider.min.js"></script>
+<script type="text/javascript" src="scripts/magnific-popup.min.js"></script>
+<script type="text/javascript" src="scripts/waypoints.min.js"></script>
+<script type="text/javascript" src="scripts/counterup.min.js"></script>
+<script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
+<script type="text/javascript" src="scripts/tooltips.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script type="text/javascript" src="scripts/custom.js"></script>
+<script type="text/javascript" src="scripts/maps.js"></script>
+<script type="text/javascript" src="scripts/custom/index.js"></script>
+<script type="text/javascript" src="scripts/custom/socket.js"></script>
+<script type="text/javascript" src="scripts/custom/profile.js"></script>
+
+
+
+
+<!-- Leaflet // Docs: https://leafletjs.com/ -->
+<script src="scripts/leaflet.min.js"></script>
+
+<!-- Leaflet Maps Scripts -->
+<script src="scripts/leaflet-markercluster.min.js"></script>
+<script src="scripts/leaflet-gesture-handling.min.js"></script>
+<script src="scripts/leaflet-listeo.js"></script>
+
+<!-- Leaflet Geocoder + Search Autocomplete // Docs: https://github.com/perliedman/leaflet-control-geocoder -->
+<script src="scripts/leaflet-autocomplete.js"></script>
+<script src="scripts/leaflet-control-geocoder.js"></script>
+<script type="text/javascript" src="scripts/dropzone.js"></script>
+<script>
+	window.addEventListener('load', function() {
+		loadSidebar();
+		loadProfile();
+		navigator.geolocation.getCurrentPosition(getCoords);
+		loadCategories();
+    setDetails();
+	});
+</script>
+
+</body>
+</html>

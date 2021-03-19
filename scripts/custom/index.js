@@ -1525,7 +1525,7 @@ const fetchOverview = () => {
         userData.notes == "" || 
         userData.perimeter == "" ||
         userData.profilePic == "" ||
-        userData.twittwe == "" ) {
+        userData.twitter == "" ) {
       toastr.error('Please update your profile!!');
     }
   }
@@ -1618,7 +1618,7 @@ const loadSidebar = () => {
 			</ul>	
 
 			<ul data-submenu-title="Account">
-				<li><a href="dashboard-my-profile.html"><i class="sl sl-icon-user"></i> My Profile</a></li>
+				<li><a href="dashboard-my-chef-profile.html"><i class="sl sl-icon-user"></i> My Profile</a></li>
 				<li><a href="#" onclick="handleLogout()"><i class="sl sl-icon-power"></i> Logout</a></li>
 			</ul>
 			
@@ -1651,7 +1651,7 @@ const loadSidebar = () => {
     </ul>	
 
     <ul data-submenu-title="Account">
-      <li><a href="dashboard-my-profile.html"><i class="sl sl-icon-user"></i> My Profile</a></li>
+      <li><a href="dashboard-my-user-profile.html"><i class="sl sl-icon-user"></i> My Profile</a></li>
       <li><a href="#" onclick="handleLogout()"><i class="sl sl-icon-power"></i> Logout</a></li>
     </ul>
     

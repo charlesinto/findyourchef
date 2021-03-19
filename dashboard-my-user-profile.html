@@ -9,6 +9,7 @@
 
 <!-- CSS
 ================================================== -->
+<link rel="stylesheet" href="css/plugins/dropzone.css">
 <link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/main-color.css" id="colors">
@@ -165,7 +166,17 @@
 
         <!-- Details -->
         <div class="my-profile edit ">
-
+					<label>Your Name</label>
+					<input class="fullname" value="Tom Perrin" type="text">
+			
+					<label>Username</label>
+					<input class="username" value="Tommy" type="text">
+			
+					<label>Phone</label>
+					<input class="phoneNumber" value="(123) 123-456" type="text">
+			
+					<label>Email</label>
+					<input class="email" value="tom@example.com" type="text">
         </div>
 
         <button onclick="updateProfile()" class="button button-update margin-top-15">Update Profile</button>
@@ -173,17 +184,9 @@
       </div>
 				</div>
 			</div>
-
 			<!-- Change Password -->
 			<div class="col-lg-6 col-md-12">
-				<div class="dashboard-list-box availability-div margin-top-0">
-					
-				</div>
-			</div>
-
-			<!-- Change Password -->
-			<div class="col-lg-6 col-md-12">
-				<div class="dashboard-list-box margin-top-0">
+				<div class="dashboard-list-box password-update">
 					<h4 class="gray">Change Password</h4>
 					<div class="dashboard-list-box-static top ">
 						<!-- Change Password -->
@@ -240,6 +243,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script type="text/javascript" src="scripts/custom.js"></script>
 <script type="text/javascript" src="scripts/maps.js"></script>
+<script type="text/javascript" src="scripts/dropzone.js"></script>
 <script type="text/javascript" src="scripts/custom/index.js"></script>
 <script type="text/javascript" src="scripts/custom/socket.js"></script>
 <script type="text/javascript" src="scripts/custom/profile.js"></script>

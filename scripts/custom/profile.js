@@ -27,515 +27,7 @@ const popCategories = (categories) => {
   });
 }
 
-const checkUser = () => {
-  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-  if (userData.role == "chef") {
-    document.querySelector('.edit').innerHTML += `
-    <label>Notes</label>
-    <textarea name="notes" id="notes" cols="30" rows="10">Maecenas quis consequat libero, a feugiat eros. Nunc ut lacinia tortor morbi ultricies laoreet ullamcorper phasellus semper</textarea>
-
-    <label><i class="fa fa-twitter"></i> Twitter</label>
-    <input class="twitter" placeholder="https://www.twitter.com/" type="text">
-
-    <label><i class="fa fa-facebook-square"></i> Facebook</label>
-    <input class="facebook" placeholder="https://www.facebook.com/" type="text">
-
-    <label><i class="fa fa-google-plus"></i> Google+</label>
-    <input class="google" placeholder="https://www.google.com/" type="text">
-
-    <div class="category">
-      <h5 class="bold">Select Category</h5>
-      <div class="category-edit"></div>
-    </div>
-    <div class="radius">
-      <h5 class="bold">Distance Radius</h5>
-      <div class="panel-dropdown-content">
-        <input class="distance-radius" type="range" min="1" max="100" step="1" value="50" data-title="Radius around selected destination">
-      </div>
-    </div>
-    
-    
-        <!-- Section -->
-        <div class="margin-top-45">
-          <!-- Row -->
-          <div class="row with-forms">
-              <!-- Address -->
-              <div class="col">
-                  <label>Primary Location</label>
-                  <!--<input id="location" type="text" placeholder="Laurel, MD 20708">-->
-                  <div class="main-search-input-item location">
-                      <div id="autocomplete-container">
-                          <input id="autocomplete-input" type="text" placeholder="Laurel, MD 20708">
-                      </div>
-                      <a href="#"><i class="fa fa-map-marker"></i></a>
-                  </div>
-              </div>
-          </div>
-            <!-- Row / End -->
-        </div>
-        <!-- Section / End -->
-
-        <label>Your Name</label>
-        <input class="fullname" value="Tom Perrin" type="text">
-
-        <label>Phone</label>
-        <input class="phoneNumber" value="(123) 123-456" type="text">
-
-        <label>Email</label>
-        <input class="email" value="tom@example.com" type="text">
-
-
-
-    `;
-    document.querySelector('.availability-div').innerHTML += `<!-- Section -->
-    <div class="add-listing-section margin-top-45">
-
-      <!-- Headline -->
-      <div class="add-listing-headline">
-          <h3><i class="fa fa-calendar-check-o"></i> Availability</h3>
-          <!-- Switcher -->
-          <label class="switch"><input type="checkbox" checked><span class="slider round"></span></label>
-      </div>
-
-      <!-- Switcher ON-OFF Content -->
-      <div class="switcher-content">
-
-          <!-- Availablity Slots -->
-          <!-- Set data-clock-type="24hr" to enable 24 hours clock type -->
-          <div class="availability-slots" data-clock-type="24hr">
-
-              <!-- Single Day Slots -->
-              <div class="day-slots">
-                  <div class="day-slot-headline">Monday</div>
-
-                  <!-- Slot For Cloning / Do NOT Remove-->
-                  <div class="single-slot cloned">
-                      <div class="single-slot-left">
-                          <div class="single-slot-time"></div>
-                          <button class="remove-slot"><i class="fa fa-close"></i></button>
-                      </div>
-
-                      <div class="single-slot-right">
-                          <strong>Slots:</strong>
-                          <div class="plusminus horiz">
-                              <button></button>
-                              <input type="number" name="slot-qty" value="1" min="1" max="99">
-                              <button></button>
-                          </div>
-                      </div>
-                  </div>
-                  <!-- Slot For Cloning / Do NOT Remove-->
-
-
-                  <!-- No slots -->
-                  <div class="no-slots">No slots added</div>
-
-                  <!-- Slots Container -->
-                  <div class="slots-container">
-
-                  </div>
-                  <!-- Slots Container / End -->
-
-
-                  <!-- Add Slot -->
-                  <div class="add-slot">
-                      <div class="add-slot-inputs">
-                          <input id="start-monday-input" type="time" class="time-slot-start" min="00:00" max="12:00" />
-                          <select class="time-slot-start twelve-hr" id="start-monday-select">
-<option value="am">am</option>
-<option value="pm">pm</option>
-</select>
-                          <span>-</span>
-
-                          <input id="end-monday-input" type="time" class="time-slot-end" min="00:00" max="12:00" />
-                          <select class="time-slot-end twelve-hr" id="end-monday-select">
-<option value="am">am</option>
-<option value="pm">pm</option>
-</select>
-                      </div>
-                      <div class="add-slot-btn">
-                          <button onclick="addList(event)" id="addMondaySlot">Add</button>
-                      </div>
-                  </div>
-
-              </div>
-              <!-- Single Day Slots / End -->
-
-              <!-- Single Day Slots -->
-              <div class="day-slots">
-                  <div class="day-slot-headline">Tuesday</div>
-
-                  <!-- Slot For Cloning / Do NOT Remove-->
-                  <div class="single-slot cloned">
-                      <div class="single-slot-left">
-                          <div class="single-slot-time"></div>
-                          <button class="remove-slot"><i class="fa fa-close"></i></button>
-                      </div>
-
-                      <div class="single-slot-right">
-                          <strong>Slots:</strong>
-                          <div class="plusminus horiz">
-                              <button></button>
-                              <input type="number" name="slot-qty" value="1" min="1" max="99">
-                              <button></button>
-                          </div>
-                      </div>
-                  </div>
-                  <!-- Slot For Cloning / Do NOT Remove-->
-
-
-                  <!-- No slots -->
-                  <div class="no-slots">No slots added</div>
-
-                  <!-- Slots Container -->
-                  <div class="slots-container">
-
-                  </div>
-                  <!-- Slots Container / End -->
-
-
-                  <!-- Add Slot -->
-                  <div class="add-slot">
-                      <div class="add-slot-inputs">
-                          <input type="time" class="time-slot-start" min="00:00" max="12:00" />
-                          <select class="time-slot-start twelve-hr" id="">
-<option>am</option>
-<option>pm</option>
-</select>
-                          <span>-</span>
-
-                          <input type="time" class="time-slot-end" min="00:00" max="12:00" />
-                          <select class="time-slot-end twelve-hr" id="">
-<option>am</option>
-<option>pm</option>
-</select>
-                      </div>
-                      <div class="add-slot-btn">
-                          <button onclick="addList(event)">Add</button>
-                      </div>
-                  </div>
-
-              </div>
-              <!-- Single Day Slots / End -->
-
-              <!-- Single Day Slots -->
-              <div class="day-slots">
-                  <div class="day-slot-headline">Wednesday</div>
-
-                  <!-- Slot For Cloning / Do NOT Remove-->
-                  <div class="single-slot cloned">
-                      <div class="single-slot-left">
-                          <div class="single-slot-time"></div>
-                          <button class="remove-slot"><i class="fa fa-close"></i></button>
-                      </div>
-
-                      <div class="single-slot-right">
-                          <strong>Slots:</strong>
-                          <div class="plusminus horiz">
-                              <button></button>
-                              <input type="number" name="slot-qty" value="1" min="1" max="99">
-                              <button></button>
-                          </div>
-                      </div>
-                  </div>
-                  <!-- Slot For Cloning / Do NOT Remove-->
-
-
-                  <!-- No slots -->
-                  <div class="no-slots">No slots added</div>
-
-                  <!-- Slots Container -->
-                  <div class="slots-container">
-
-                  </div>
-                  <!-- Slots Container / End -->
-
-
-                  <!-- Add Slot -->
-                  <div class="add-slot">
-                      <div class="add-slot-inputs">
-                          <input type="time" class="time-slot-start" min="00:00" max="12:00" />
-                          <select class="time-slot-start twelve-hr" id="">
-<option>am</option>
-<option>pm</option>
-</select>
-                          <span>-</span>
-
-                          <input type="time" class="time-slot-end" min="00:00" max="12:00" />
-                          <select class="time-slot-end twelve-hr" id="">
-<option>am</option>
-<option>pm</option>
-</select>
-                      </div>
-                      <div class="add-slot-btn">
-                          <button onclick="addList(event)">Add</button>
-                      </div>
-                  </div>
-
-              </div>
-              <!-- Single Day Slots / End -->
-
-              <!-- Single Day Slots -->
-              <div class="day-slots">
-                  <div class="day-slot-headline">Thursday</div>
-
-                  <!-- Slot For Cloning / Do NOT Remove-->
-                  <div class="single-slot cloned">
-                      <div class="single-slot-left">
-                          <div class="single-slot-time"></div>
-                          <button class="remove-slot"><i class="fa fa-close"></i></button>
-                      </div>
-
-                      <div class="single-slot-right">
-                          <strong>Slots:</strong>
-                          <div class="plusminus horiz">
-                              <button></button>
-                              <input type="number" name="slot-qty" value="1" min="1" max="99">
-                              <button></button>
-                          </div>
-                      </div>
-                  </div>
-                  <!-- Slot For Cloning / Do NOT Remove-->
-
-
-                  <!-- No slots -->
-                  <div class="no-slots">No slots added</div>
-
-                  <!-- Slots Container -->
-                  <div class="slots-container">
-
-                  </div>
-                  <!-- Slots Container / End -->
-
-
-                  <!-- Add Slot -->
-                  <div class="add-slot">
-                      <div class="add-slot-inputs">
-                          <input type="time" class="time-slot-start" min="00:00" max="12:00" />
-                          <select class="time-slot-start twelve-hr" id="">
-<option>am</option>
-<option>pm</option>
-</select>
-                          <span>-</span>
-
-                          <input type="time" class="time-slot-end" min="00:00" max="12:00" />
-                          <select class="time-slot-end twelve-hr" id="">
-<option>am</option>
-<option>pm</option>
-</select>
-                      </div>
-                      <div class="add-slot-btn">
-                          <button onclick="addList(event)">Add</button>
-                      </div>
-                  </div>
-
-              </div>
-              <!-- Single Day Slots / End -->
-
-              <!-- Single Day Slots -->
-              <div class="day-slots">
-                  <div class="day-slot-headline">Friday</div>
-
-                  <!-- Slot For Cloning / Do NOT Remove-->
-                  <div class="single-slot cloned">
-                      <div class="single-slot-left">
-                          <div class="single-slot-time"></div>
-                          <button class="remove-slot"><i class="fa fa-close"></i></button>
-                      </div>
-
-                      <div class="single-slot-right">
-                          <strong>Slots:</strong>
-                          <div class="plusminus horiz">
-                              <button></button>
-                              <input type="number" name="slot-qty" value="1" min="1" max="99">
-                              <button></button>
-                          </div>
-                      </div>
-                  </div>
-                  <!-- Slot For Cloning / Do NOT Remove-->
-
-
-                  <!-- No slots -->
-                  <div class="no-slots">No slots added</div>
-
-                  <!-- Slots Container -->
-                  <div class="slots-container">
-
-
-                  </div>
-                  <!-- Slots Container / End -->
-
-
-                  <!-- Add Slot -->
-                  <div class="add-slot">
-                      <div class="add-slot-inputs">
-                          <input type="time" class="time-slot-start" min="00:00" max="12:00" />
-                          <select class="time-slot-start twelve-hr" id="">
-<option>am</option>
-<option>pm</option>
-</select>
-                          <span>-</span>
-
-                          <input type="time" class="time-slot-end" min="00:00" max="12:00" />
-                          <select class="time-slot-end twelve-hr" id="">
-<option>am</option>
-<option>pm</option>
-</select>
-                      </div>
-                      <div class="add-slot-btn">
-                          <button onclick="addList(event)">Add</button>
-                      </div>
-                  </div>
-
-              </div>
-              <!-- Single Day Slots / End -->
-
-              <!-- Single Day Slots -->
-              <div class="day-slots">
-                  <div class="day-slot-headline">Saturday</div>
-
-                  <!-- Slot For Cloning / Do NOT Remove-->
-                  <div class="single-slot cloned">
-                      <div class="single-slot-left">
-                          <div class="single-slot-time"></div>
-                          <button class="remove-slot"><i class="fa fa-close"></i></button>
-                      </div>
-
-                      <div class="single-slot-right">
-                          <strong>Slots:</strong>
-                          <div class="plusminus horiz">
-                              <button></button>
-                              <input type="number" name="slot-qty" value="1" min="1" max="99">
-                              <button></button>
-                          </div>
-                      </div>
-                  </div>
-                  <!-- Slot For Cloning / Do NOT Remove-->
-
-
-                  <!-- No slots -->
-                  <div class="no-slots">No slots added</div>
-
-                  <!-- Slots Container -->
-                  <div class="slots-container">
-
-                  </div>
-                  <!-- Slots Container / End -->
-
-
-                  <!-- Add Slot -->
-                  <div class="add-slot">
-                      <div class="add-slot-inputs">
-                          <input type="time" class="time-slot-start" min="00:00" max="12:00" />
-                          <select class="time-slot-start twelve-hr" id="">
-<option>am</option>
-<option>pm</option>
-</select>
-                          <span>-</span>
-
-                          <input type="time" class="time-slot-end" min="00:00" max="12:00" />
-                          <select class="time-slot-end twelve-hr" id="">
-<option>am</option>
-<option>pm</option>
-</select>
-                      </div>
-                      <div class="add-slot-btn">
-                          <button onclick="addList(event)">Add</button>
-                      </div>
-                  </div>
-
-              </div>
-              <!-- Single Day Slots / End -->
-
-              <!-- Single Day Slots -->
-              <div class="day-slots">
-                  <div class="day-slot-headline">Sunday</div>
-
-                  <!-- Slot For Cloning / Do NOT Remove-->
-                  <div class="single-slot cloned">
-                      <div class="single-slot-left">
-                          <div class="single-slot-time"></div>
-                          <button class="remove-slot"><i class="fa fa-close"></i></button>
-                      </div>
-
-                      <div class="single-slot-right">
-                          <strong>Slots:</strong>
-                          <div class="plusminus horiz">
-                              <button></button>
-                              <input type="number" name="slot-qty" value="1" min="1" max="99">
-                              <button></button>
-                          </div>
-                      </div>
-                  </div>
-                  <!-- Slot For Cloning / Do NOT Remove-->
-
-
-                  <!-- No slots -->
-                  <div class="no-slots">No slots added</div>
-
-                  <!-- Slots Container -->
-                  <div class="slots-container">
-
-                  </div>
-                  <!-- Slots Container / End -->
-
-
-                  <!-- Add Slot -->
-                  <div class="add-slot">
-                      <div class="add-slot-inputs">
-                          <input type="time" class="time-slot-start" min="00:00" max="12:00" />
-                          <select class="time-slot-start twelve-hr" id="">
-<option>am</option>
-<option>pm</option>
-</select>
-                          <span>-</span>
-
-                          <input type="time" class="time-slot-end" min="00:00" max="12:00" />
-                          <select class="time-slot-end twelve-hr" id="">
-<option>am</option>
-<option>pm</option>
-</select>
-                      </div>
-                      <div class="add-slot-btn">
-                          <button onclick="addList(event)">Add</button>
-                      </div>
-                  </div>
-
-              </div>
-              <!-- Single Day Slots / End -->
-
-          </div>
-          <!-- Availablity Slots / End -->
-
-      </div>
-      <!-- Switcher ON-OFF Content / End -->
-      <button onclick="updateAvailability()" class="button margin-top-15">Update Profile</button>
-
-  </div>
-  <!-- Section / End -->
-  
-
-`;
-    loadCategories();
-    setDetails();
-  } else {
-    document.querySelector('.edit').innerHTML += `
-    <label>Your Name</label>
-    <input class="fullname" value="Tom Perrin" type="text">
-
-    <label>Username</label>
-    <input class="username" value="Tommy" type="text">
-
-    <label>Phone</label>
-    <input class="phoneNumber" value="(123) 123-456" type="text">
-
-    <label>Email</label>
-    <input class="email" value="tom@example.com" type="text">
-
-  `;
-  setDetails();
-  }
-}
+let myDropzone;
 
 const setDetails = () => {
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
@@ -548,6 +40,8 @@ const setDetails = () => {
     document.querySelector('.twitter').value = userData.twitter;
     document.querySelector('.facebook').value = userData.facebook;
     document.querySelector('.google').value = userData.google;
+    document.querySelector('#my-awesome-dropzone').action = `${baseURL}/chef/images/${userData._id}`;
+    document.querySelector('body').innerHTML += `<script type="text/javascript" src="scripts/dropzone.js"></script>`;
     if (userData.location != "") {
       document.querySelector('#autocomplete-input').value = userData.location;
     }
@@ -556,6 +50,33 @@ const setDetails = () => {
     } else {
       document.querySelector('.distance-radius').value = 50;
     }
+    if (userData.images.length > 0) {
+      const images = userData.images;
+      images.forEach( image => {
+        document.querySelector('.gallery-listing').innerHTML += `    <li>
+        <div class="list-box-listing">
+          <div class="list-box-listing-img"><a href="#"><img src="${image}" alt=""></a></div>
+        </div>
+        <div class="buttons-to-right">
+          <!--<a href="#" onclick="deleteChefBookmark(event,'bookmarkersID','chefID')" class="button gray"><i class="sl sl-icon-close"></i> Delete</a>-->
+          <a href="#" class="button gray"><i class="sl sl-icon-close"></i> Delete</a>
+        </div>
+      </li>`
+      })
+      
+    }
+    Dropzone.autoDiscover = false;
+    
+    myDropzone = new Dropzone(".dropzone", {
+      autoProcessQueue: false,
+      addRemoveLinks: true,
+      parallelUploads: 10,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    })
+
+    
   } else {
     document.querySelector('.user-img').src = userData.image;
     document.querySelector('.fullname').value = userData.fullname;
@@ -858,3 +379,24 @@ document.addEventListener('DOMContentLoaded', () => {
 //     })
 //   }
 // }
+
+// Dropzone.autoDiscover = false;
+
+// let myDropzone = new Dropzone(".dropzone", {
+//   autoProcessQueue: false,
+//   parallelUploads: 10
+// })
+
+// document.querySelector('.gallery-update').addEventListener('click', function() {
+//   myDropzone.processQueue();
+//   alert('works');
+// })
+
+const updateGallery = () => {
+  myDropzone.processQueue();
+  // alert('works');
+}
+
+// $('.gallery-update').on('click', function() {
+//   myDropzone.processQueue();
+// })
