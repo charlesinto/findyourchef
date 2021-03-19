@@ -7,6 +7,7 @@ const fetchChefDetails = () => {
   const id = localStorage.getItem('fyc-chef-id');
   axios.get(`${baseURL}/chefs/${id}`).then((res) => {
     const recipe = res.data.payload.data.data;
+    console.log(res)
     const stars = res.data.payload.data.stars;
     console.log(stars)
     const count = res.data.payload.data.reviewCount;
@@ -710,6 +711,7 @@ const popAvailability = () => {
   const date = new Date(picker).getDay();
   const day = weekDay[date];
   const daySlots = availability[day];
+  console.log(daySlots)
   const panel = document.querySelector('.panel-dropdown-scrollable');
   panel.innerHTML = '';
   // const display = document.querySelector('.final-display');
@@ -750,6 +752,7 @@ dropPanel.addEventListener('click', (e) => {
 dropdown.addEventListener('click', (e) => {
   e.preventDefault();
   if (e.target.hasAttribute('for')) {
+    console.log(e.target.children[0])
     const timing = e.target.children[0].innerText;
     document.querySelector('.final-display').innerText = timing;
     const id = e.target.children[0].id;
@@ -776,7 +779,7 @@ function close_panel_dropdown() {
   }
 
 
-const bookRecipe = (e) => {
+const bookChef = (e) => {
   e.preventDefault();
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   if (userData.role === 'chef') {
@@ -786,19 +789,19 @@ const bookRecipe = (e) => {
     const bookersID = userData._id;
     const amount = document.querySelector('.qtyTotal').innerText;
     const slotID = sessionStorage.getItem('fyc-book-id');
-    const chefID = localStorage.getItem('fyc-chef-id');
+    const recipeID = localStorage.getItem('fyc-chef-id');
     const success_url = "http://www.thepottersmind.com/fyc/payment_success.html";
     const cancel_url = "http://www.thepottersmind.com/fyc/payment_failure.html";
     const data = {
       bookersID,
-      chefID,
+      recipeID,
       amount,
       slotID,
       success_url,
       cancel_url
     }
     console.log(data);
-    axios.post(`${baseURL}/recipe/book`, data, {
+    axios.post(`${baseURL}/recipe/book?chef`, data, {
       headers: {
         'Authorization': `Bearer ${token}`
       },
@@ -1079,6 +1082,7 @@ const popRecipeData = (data, stars, count) => {
   const tags = data.tags;
   const overview = data.overview
   const availability = data.availability
+  console.log(availability)
   sessionStorage.setItem('fyc-availability', JSON.stringify(availability))
   const phone = data.chefNumber
   const email = data.chefEmail
