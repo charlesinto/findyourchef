@@ -786,3 +786,75 @@ const getCoords = (showPosition) => {
   });
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('photoForm');
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    let data = e.target.querySelector('#file').files[0];
+    console.log("data is => ", data);
+    const formData = new FormData(this);
+    console.log(formData);
+    formData.append('Data', data);
+    const body = {
+      data: formData
+    }
+    if (userData.role == 'chef') {
+      let options = {
+        method: 'POST',
+        headers: {
+              Authorization: `Bearer ${token}`
+        },
+        body: formData
+    }
+
+      fetch('https://thepotters-api.herokuapp.com/api/v1/user/profile-image', options)
+      .then(res => res.json())
+  .then(res => console.log("res is ", res))
+  .catch(err => console.error(err));
+    } else {
+      let options = {
+        method: 'POST',
+        headers: {
+              Authorization: `Bearer ${token}`
+        },
+        body: formData
+    }
+
+      fetch('https://thepotters-api.herokuapp.com/api/v1/user/profile-image', options)
+      .then(res => res.json())
+  .then(res => console.log("res is ", res))
+  .catch(err => console.error(err));
+    }
+  })
+})
+
+// function uploadPhoto(e) {
+//   e.preventDefault();
+//   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+//   const photo = document.querySelector('#file').files[0];
+//   console.log("data is => ", photo);
+//   const formData = new FormData(this);
+//   console.log(formData);
+//   formData.append('file', photo);
+//   const data = {
+//     body : formData
+//   }
+//   console.log(formData.entries());
+//   if (userData.role == 'chef') {
+//     axios.post(`${baseURL}/chef/profile-image`, data, {
+//       headers: {
+//         'Authorization': `Bearer ${token}`
+//       },
+//     }).then((res) => {
+//       // toastr.success('OTP verification successful');
+//       console.log(res);
+//     }).catch((err) => {
+//       if (err.response && err.response.data) {
+//         toastr.error(err.response.data.error.message);
+//       } else {
+//         toastr.error('Something went wrong, please try again');
+//       }
+//     })
+//   }
+// }
