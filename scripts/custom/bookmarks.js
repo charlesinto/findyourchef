@@ -582,6 +582,8 @@ if (bookmark) {
             }
           })
       }
+    } else {
+      toastr.error('You need to login before bookmarking a chef')
     }
   })
 }
@@ -651,6 +653,8 @@ if (bookmarkRecipeInSinglePage) {
             }
           })
       }
+    } else {
+      toastr.error('You need to login before bookmarking a chef');
     }
   })
 }
