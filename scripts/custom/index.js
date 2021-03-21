@@ -1612,7 +1612,7 @@ const loadSidebar = () => {
 						<li><a href="dashboard-my-pending-listings.html">Pending <span class="nav-tag yellow">1</span></a></li>
 					</ul>	
 				</li>
-				<li><a href="dashboard-reviews.html"><i class="sl sl-icon-star"></i> Reviews</a></li>
+				<li><a href="dashboard-chef-reviews.html"><i class="sl sl-icon-star"></i> Reviews</a></li>
 				<!--<li><a href="dashboard-bookmarks.html"><i class="sl sl-icon-heart"></i> Bookmarks</a></li>-->
 				<li><a href="dashboard-add-listing.html"><i class="sl sl-icon-plus"></i> Add Recipe</a></li>
 			</ul>	
@@ -1638,8 +1638,8 @@ const loadSidebar = () => {
     <ul data-submenu-title="Recipe">
       <li class="toggleReviews"><a onclick="toggleReviewState(event)"><i class="sl sl-icon-star"></i> Reviews</a>
         <ul>
-          <li><a href="dashboard-reviews.html">Chef</a></li>
-          <li><a href="dashboard-reviews.html">Recipe</a></li>
+          <li><a href="dashboard-usertchef-reviews.html">Chef</a></li>
+          <li><a href="dashboard-user-reviews.html">Recipe</a></li>
         </ul>
       </li>
       <li class="toggleBookmarks"><a onclick="toggleBookmarkState(event)"><i class="sl sl-icon-heart"></i> Bookmarks</a>
