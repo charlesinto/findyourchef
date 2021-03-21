@@ -2,16 +2,17 @@
 const loadAllReviews = () => {
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-  let chefID = userData._id;
+  let reviewersID = userData._id;
+  const data = {reviewersID};
   // const pagination = document.querySelector('.recipe-pagination');
   // let page = 1;
-  axios.get(`${baseURL}/chef/reviews/${chefID}`, {
+  axios.post(`${baseURL}/chef/chef-reviews`, data, {
     headers: {
       'Authorization': `Bearer ${token}`
     },
   }).then((res) => {
     const reviews = res.data.payload.data.data;
-    console.log(reviews);
+    console.log(res);
     // const reviewCount = res.data.payload.data.dataCount;
     popAllReviews(reviews);
     // paginate(bookmarkCount);

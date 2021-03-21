@@ -360,10 +360,11 @@ const popAllRecipes = (recipes) => {
   resultsFound.innerHTML = `<p class="showing-results">${length} ${result} Found </p>`
   recipeContainer.innerHTML = "";
   recipes.forEach(recipe => {
+    console.log(recipe);
     const name = recipe.fullname;
     const category = recipe.categories;
     const chefName = recipe.chefName;
-    const image = recipe.images;
+    const image = recipe.images[1];
     const price = recipe.price;
     const location = recipe.coords;
     const notes = recipe.notes;

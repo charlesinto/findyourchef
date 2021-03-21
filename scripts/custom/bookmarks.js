@@ -2,10 +2,10 @@
 const loadChefBookmarks = () => {
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-  let chefID = userData._id;
+  let userID = userData._id;
   const pagination = document.querySelector('.recipe-pagination');
   let page = 1;
-  axios.get(`${baseURL}/bookmark/chef/${chefID}?page=${page}`, {
+  axios.get(`${baseURL}/bookmark/chef/${userID}?page=${page}`, {
     headers: {
       'Authorization': `Bearer ${token}`
     },
@@ -248,7 +248,7 @@ const deleteChefBookmark = (e, bookmarkersID, chefID) => {
     },
   }, data).then((res) => {
     console.log(res);
-    // toastr.success(res.data.payload.data.message);
+    toastr.success("Bookmark Removed");
     e.target.parentElement.parentElement.remove();
   }).catch((err) => {
     if (err.response && err.response.data) {
