@@ -1049,8 +1049,10 @@ const loadLatestChefs = () => {
     .get(`${baseURL}/chefs?page=1`)
     .then((res) => {
       console.log(res.data.payload.data)
-      const recipes = res.data.payload.data.data
-      popLatestRecipes(recipes)
+      const recipes = res.data.payload.data.data;
+      const stars = res.data.payload.data.stars;
+      const count = res.data.payload.data.reviewCount;
+      popLatestRecipes(recipes, stars, count)
     })
     .catch((err) => {
       if (err.response && err.response.data) {
@@ -1080,19 +1082,19 @@ if (carouselItem) {
   })
 }
 
-const popLatestRecipes = (recipes) => {
+const popLatestRecipes = (recipes, stars, count) => {
   const recipeContainer = document.querySelector('.simple-slick-carousel');
   recipes.forEach(recipe => {
     const name = recipe.name;
     const category = recipe.categories;
     const chefName = recipe.fullname
-    const image = recipe.images;
+    const image = recipe.profilePic;
     const price = recipe.price;
     const location = recipe.coords;
     const id = recipe._id;
     const event = window.Event;
 
-    let listItem =  `
+    let listItem = `
 
     <!-- Listing Item -->
     <div data-id="${id}" class="carousel-item">
@@ -1112,13 +1114,13 @@ const popLatestRecipes = (recipes) => {
                 </div>
                 <span data-id="${id}" class="like-icon"></span>
             </div>
-            <div class="star-rating" data-rating="3.75">
-                <div class="rating-counter">(12 reviews)</div>
+            <div class="star-rating" data-rating="${stars}">
+                <div class="rating-counter"><a href="#listing-reviews">(${count} reviews)</a></div>
             </div>
         </a>
     </div>
     <!-- Listing Item / End -->
-    `;
+    `
     recipeContainer.innerHTML += listItem;
   })
 
@@ -1612,7 +1614,7 @@ const loadSidebar = () => {
 						<li><a href="dashboard-my-pending-listings.html">Pending <span class="nav-tag yellow">1</span></a></li>
 					</ul>	
 				</li>
-				<li><a href="dashboard-chef-reviews.html"><i class="sl sl-icon-star"></i> Reviews</a></li>
+				<li><a href="dashboard-reviews.html"><i class="sl sl-icon-star"></i> Reviews</a></li>
 				<!--<li><a href="dashboard-bookmarks.html"><i class="sl sl-icon-heart"></i> Bookmarks</a></li>-->
 				<li><a href="dashboard-add-listing.html"><i class="sl sl-icon-plus"></i> Add Recipe</a></li>
 			</ul>	
@@ -1638,8 +1640,8 @@ const loadSidebar = () => {
     <ul data-submenu-title="Recipe">
       <li class="toggleReviews"><a onclick="toggleReviewState(event)"><i class="sl sl-icon-star"></i> Reviews</a>
         <ul>
-          <li><a href="dashboard-usertchef-reviews.html">Chef</a></li>
-          <li><a href="dashboard-user-reviews.html">Recipe</a></li>
+          <li><a href="dashboard-reviews.html">Chef</a></li>
+          <li><a href="dashboard-reviews.html">Recipe</a></li>
         </ul>
       </li>
       <li class="toggleBookmarks"><a onclick="toggleBookmarkState(event)"><i class="sl sl-icon-heart"></i> Bookmarks</a>

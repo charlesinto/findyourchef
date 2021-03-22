@@ -53,6 +53,7 @@ const popChefData = (data, stars, count) => {
   // const chefName = data.chefName;
   const image = data.images;
   const price = data.price;
+  const profileImage = data.profilePic;
   const category = data.categories;
   const location = data.coords;
   // const tags = data.tags;   
@@ -62,12 +63,12 @@ const popChefData = (data, stars, count) => {
   const phone = data.phoneNumber
   const email = data.email
   const slider = document.querySelector('.listing-slider');
-  slider.innerHTML = `
-                  <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 1"></a>
-                  <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 3"></a>
-                  <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 2"></a>
-                  <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 4"></a>
-                  `;
+  image.forEach(img => {
+    console.log(img)
+    slider.innerHTML += `
+                    <a href="${img}" data-background-image="${img}" class="item mfp-gallery" title="Title 1"></a>
+                    `;
+  })
   
 
                   $('.listing-slider').slick({
@@ -133,7 +134,7 @@ const popChefData = (data, stars, count) => {
   const hostedTitle = document.querySelector('.hosted-by-title');
   hostedTitle.innerHTML = `
                         <h4><span>Recipe by</span> <a href="pages-user-profile.html">${name}</a></h4>
-                        <a href="pages-user-profile.html" class="hosted-by-avatar"><img src=${image} alt=""></a>
+                        <a href="pages-user-profile.html" class="hosted-by-avatar"><img src=${profileImage} alt=""></a>
   `;
   const listingDetails = document.querySelector('.listing-details-sidebar');
   listingDetails.innerHTML = `
@@ -291,6 +292,7 @@ const fetchChefReview = (id) => {
 
 const popReviews = (reviews) => {
   length = reviews.length;
+  console.log(reviews)
   const review_count = document.querySelector('.pop-review-count');
   review_count.innerText = `(${length})`;
   const reviewBody = document.querySelector('.listing-reviews-body');
