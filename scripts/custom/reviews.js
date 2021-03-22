@@ -1,17 +1,109 @@
+const fetchChefReview = () => {
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  let chefID = userData._id;
+  const pagination = document.querySelector('.recipe-pagination');
+  let page = 1;
+  const data = {
+    chefID
+  }
+  axios.get(`${baseURL}/chef/reviews/${chefID}`, data).then( res => {
+    const reviews = res.data.payload.data.data;
+    const reviewCount = res.data.payload.data.dataCount;
+    popAllReviews(reviews);
+    // if (reviewCount > 0) {paginate(reviewCount);}
+  }).catch((err) => {
+    console.log(err)
+    if (err.response && err.response.data) {
+      toastr.error(err.response.data.error.message);
+    } else {
+      toastr.error('Something went wrong, please try again');
+    }
+  });
+  pagination.addEventListener('click', (e) => {
+    const parentNode = document.querySelectorAll('.star-rating');
+    parentNode.forEach( parent => {
+      while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+      }
+    })
+    const listingParent = document.querySelector('#listing-reviews');
+    listingParent.scrollIntoView({ behavior: 'smooth', block: 'start'});
+    const pageParent = e.target.parentElement.parentElement.children;
+    e.preventDefault();
+    if (e.target.classList.contains("next")) {
+      page;
+      let curPage,nxtPage;
+      for (let i = 0; i < pageParent.length; i++) {
+        const pageNode = pageParent[i].children[0];
+        if (pageNode.classList.contains('current-page')) {
+          curPage = i;
+          const prevPage = parseFloat(pageNode.innerText);
+          page = prevPage + 1;
+        } else {
+          false;
+        }
+      }
+      nxtPage = curPage + 1;
+      pageParent[curPage].children[0].classList.remove('current-page');
+      pageParent[nxtPage].children[0].classList.add('current-page');
+      axios
+        .get(`${baseURL}/chef/reviews/${id}?page=${page}`, data)
+        .then((res) => {
+          const reviews = res.data.payload.data.data
+          console.log(reviews)
+          popReviews(reviews)
+        })
+        .catch((err) => {
+          console.log(err)
+          if (err.response && err.response.data) {
+            toastr.error(err.response.data.error.message)
+          } else {
+            toastr.error('Something went wrong, please try again')
+          }
+        })
+    } else {
+      for (let i = 0; i < pageParent.length; i++) {
+        const pageNode = pageParent[i].children[0];
+        if (pageNode.classList.contains('current-page')) {
+          pageNode.classList.remove('current-page');
+        } else {
+          false;
+        }
+      }
+      page = e.target.innerText;
+      e.target.classList.add('current-page');
+      axios
+        .get(`${baseURL}/chef/reviews/${id}?page=${page}`, data)
+        .then((res) => {
+          const reviews = res.data.payload.data.data
+          popReviews(reviews)
+        })
+        .catch((err) => {
+          console.log(err)
+          if (err.response && err.response.data) {
+            toastr.error(err.response.data.error.message)
+          } else {
+            toastr.error('Something went wrong, please try again')
+          }
+        })
+    }
+  })
+}
 
 const loadAllReviews = () => {
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-  let chefID = userData._id;
+  let reviewersID = userData._id;
+  const data = {reviewersID};
   // const pagination = document.querySelector('.recipe-pagination');
   // let page = 1;
-  axios.get(`${baseURL}/chef/reviews/${chefID}`, {
+  axios.post(`${baseURL}/chef/chef-reviews`, data, {
     headers: {
       'Authorization': `Bearer ${token}`
     },
   }).then((res) => {
     const reviews = res.data.payload.data.data;
-    console.log(reviews);
+    console.log(res);
     // const reviewCount = res.data.payload.data.dataCount;
     popAllReviews(reviews);
     // paginate(bookmarkCount);
