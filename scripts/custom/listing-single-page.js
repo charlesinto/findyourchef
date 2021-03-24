@@ -950,6 +950,12 @@ const popChefRecipes = (recipes) => {
     const stars = recipe.stars;
     const count = recipe.reviewCount;
     const event = window.Event;
+    if (count <= 1) {
+      review = 'review'
+    } else {
+      review = 'reviews'
+    }
+
     let listItem = `
     <div class="col-lg-12 col-md-12">
       <div data-id="${id}" class="listing-item-container list-layout" data-marker-id="1">
@@ -969,11 +975,13 @@ const popChefRecipes = (recipes) => {
               <p data-id="${id}">${name}<i class="verified-icon"></i></p>
               <p data-id="${id}"><i class="fa fa-map-marker"></i> ${location}</p>
               <p data-id="${id}">${overview}</p>
-              <div data-id="${id}" class="star-rating" data-rating=${stars}>
-                <div class="rating-counter">(${count}reviews)</div>
-              </div>
-            </div>
+            
+              <div data-id="${id}" class="star-rating" data-rating="${stars}">
+                <div class="rating-counter">(${count} ${review})</div>
+             </div>
 
+            </div>
+              
             <span data-id="${id}" class="like-icon"></span>
             <div data-id="${id}" class="listing-item-details">Starting from $${price} per meal</div>
 

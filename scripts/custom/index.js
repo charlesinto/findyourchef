@@ -1050,9 +1050,7 @@ const loadLatestChefs = () => {
     .then((res) => {
       console.log(res.data.payload.data)
       const recipes = res.data.payload.data.data;
-      const stars = res.data.payload.data.stars;
-      const count = res.data.payload.data.reviewCount;
-      popLatestRecipes(recipes, stars, count)
+      popLatestRecipes(recipes)
     })
     .catch((err) => {
       if (err.response && err.response.data) {
@@ -1082,7 +1080,7 @@ if (carouselItem) {
   })
 }
 
-const popLatestRecipes = (recipes, stars, count) => {
+const popLatestRecipes = (recipes) => {
   const recipeContainer = document.querySelector('.simple-slick-carousel');
   recipes.forEach(recipe => {
     const name = recipe.name;
@@ -1092,7 +1090,15 @@ const popLatestRecipes = (recipes, stars, count) => {
     const price = recipe.price;
     const location = recipe.coords;
     const id = recipe._id;
+    const stars = recipe.stars;
+    const count = recipe.reviewCount;
     const event = window.Event;
+    if (count <= 1) {
+      review = 'review'
+    } else {
+      review = 'reviews'
+    }
+
 
     let listItem = `
 
@@ -1114,8 +1120,8 @@ const popLatestRecipes = (recipes, stars, count) => {
                 </div>
                 <span data-id="${id}" class="like-icon"></span>
             </div>
-            <div class="star-rating" data-rating="${stars}">
-                <div class="rating-counter"><a href="#listing-reviews">(${count} reviews)</a></div>
+            <div data-id="${id}" class="star-rating" data-rating="${stars}">
+                <div class="rating-counter">(${count} ${review})</div>
             </div>
         </a>
     </div>
