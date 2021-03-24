@@ -754,7 +754,6 @@ dropPanel.addEventListener('click', (e) => {
 dropdown.addEventListener('click', (e) => {
   e.preventDefault();
   if (e.target.hasAttribute('for')) {
-    console.log(e.target.children[0])
     const timing = e.target.children[0].innerText;
     document.querySelector('.final-display').innerText = timing;
     const id = e.target.children[0].id;
@@ -784,42 +783,47 @@ function close_panel_dropdown() {
 const bookChef = (e) => {
   e.preventDefault();
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-  if (userData.role === 'chef') {
-    toastr.error("You need a user account before booking a recipe");
-  }
-  else {
-    const bookersID = userData._id;
-    const amount = document.querySelector('.qtyTotal').innerText;
-    const slotID = sessionStorage.getItem('fyc-book-id');
-    const recipeID = localStorage.getItem('fyc-chef-id');
-    const success_url = "http://www.thepottersmind.com/fyc/payment_success.html";
-    const cancel_url = "http://www.thepottersmind.com/fyc/payment_failure.html";
-    const data = {
-      bookersID,
-      recipeID,
-      amount,
-      slotID,
-      success_url,
-      cancel_url
+  const token = localStorage.getItem('fyc-token') || sessionStorage.getItem('fyc-token')
+  if (token) {
+    if (userData.role === 'chef') {
+      toastr.error("You need a user account before booking a recipe");
     }
-    console.log(data);
-    axios.post(`${baseURL}/recipe/book?chef`, data, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-    }).then((res) => {
-      console.log(res);
-      const paymentID = res.data.payload.data.id;
-      console.log(paymentID);
-      var stripe = Stripe("pk_test_51I1DVaBUbM1BcmYudXugXJGteb66XL2NS7IMWHRDCLcNwWbwdOgJJD4b1hyo2DUaNgH4HxGn5RamRO4djeX4usXg00rM6sJg8k");
-      return stripe.redirectToCheckout({ sessionId: paymentID });
-    }).catch((err) => {
-      if (err.response && err.response.data) {
-        toastr.error(err.response.data.error.message);
-      } else {
-        toastr.error('Something went wrong, please try again');
+    else {
+      const bookersID = userData._id;
+      const amount = document.querySelector('#numberOfGuest').options[numberOfGuest.selectedIndex].text
+      const slotID = sessionStorage.getItem('fyc-book-id');
+      const recipeID = localStorage.getItem('fyc-chef-id');
+      const success_url = "http://www.thepottersmind.com/fyc/payment_success.html";
+      const cancel_url = "http://www.thepottersmind.com/fyc/payment_failure.html";
+      const data = {
+        bookersID,
+        recipeID,
+        amount,
+        slotID,
+        success_url,
+        cancel_url
       }
-    })
+      console.log(data);
+      axios.post(`${baseURL}/recipe/book`, data, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      }).then((res) => {
+        console.log(res);
+        const paymentID = res.data.payload.data.id;
+        console.log(paymentID);
+        var stripe = Stripe("pk_test_51I1DVaBUbM1BcmYudXugXJGteb66XL2NS7IMWHRDCLcNwWbwdOgJJD4b1hyo2DUaNgH4HxGn5RamRO4djeX4usXg00rM6sJg8k");
+        return stripe.redirectToCheckout({ sessionId: paymentID });
+      }).catch((err) => {
+        if (err.response && err.response.data) {
+          toastr.error(err.response.data.error.message);
+        } else {
+          toastr.error('Something went wrong, please try again');
+        }
+      })
+    }
+  } else {
+    toastr.error('You need to login before booking a chef')
   }
 }
 
@@ -1002,45 +1006,40 @@ if (recipeContainer) {
 
 
 const bookmarkRecipe = (e, id) => {
-  e.preventDefault()
-  e.stopPropagation()
+  e.preventDefault();
+  e.stopPropagation();
   const token =
-    localStorage.getItem('fyc-token') || sessionStorage.getItem('fyc-token')
+    localStorage.getItem('fyc-token') || sessionStorage.getItem('fyc-token');
   if (token) {
-    const userData =
-      JSON.parse(sessionStorage.getItem('fyc-user')) ||
-      JSON.parse(localStorage.getItem('fyc-user'))
-    const recipeID = id
-    let bookmarkersID = userData._id
+    const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+    const recipeID = id;
+    let bookmarkersID = userData._id;
     const data = {
       bookmarkersID,
-      recipeID,
+      recipeID
     }
     console.log(data)
-    if (localStorage.getItem('fyc-bookmark-id') === null) {
-      axios
-        .post(`${baseURL}/bookmark`, data, {
+    if (localStorage.getItem('fyc-bookmark-recipe-id') === null) {
+      axios.post(`${baseURL}/bookmark`, data, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            'Authorization': `Bearer ${token}`
           },
-        })
-        .then((res) => {
-          console.log(res)
-          toastr.success('Recipe bookmarked')
-          localStorage.setItem('fyc-bookmark-id', res.data.payload.data._id)
-        })
-        .catch((err) => {
+        }).then((res) => {
+          console.log(res);
+          toastr.success('Recipe bookmarked');
+          localStorage.setItem('fyc-bookmark-recipe-id', res.data.payload.data._id);
+        }).catch((err) => {
           if (err.response && err.response.data) {
-            toastr.error(err.response.data.error.message)
+            toastr.error(err.response.data.error.message);
           } else {
-            toastr.error('Soething went wrong, please try again')
+            toastr.error('Something went wrong, please try again');
           }
-        })
+        });
     } else {
-      toastr.error('This Recipe has already been bookmarked')
+      toastr.error('This Recipe has already been bookmarked');
     }
   } else {
-    toastr.error('You need to login before bookmarking a chef')
+    toastr.error('You need to login before bookmarking a Recipe');
   }
 }
 
