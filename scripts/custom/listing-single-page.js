@@ -49,6 +49,11 @@ const fetchChefDetails = () => {
 
 /* POPULATE DOM WITH CHEF DATA */
 const popChefData = (data, stars, count) => {
+  if (count <= 1) {
+    review = 'review'
+  } else {
+    review = 'reviews'
+  }
   const name = data.fullname;
   // const chefName = data.chefName;
   const image = data.images;
@@ -109,7 +114,7 @@ const popChefData = (data, stars, count) => {
                               </a>
                             </span>
                             <div class="star-rating" data-rating="${stars.averageStars}">
-                              <div class="rating-counter"><a href="#listing-reviews">(${count} reviews)</a></div>
+                              <div class="rating-counter"><a href="#listing-reviews">(${count} ${review})</a></div>
                             </div>
                           </div>
   `;
