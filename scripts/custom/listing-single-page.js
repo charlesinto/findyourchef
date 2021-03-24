@@ -1102,12 +1102,13 @@ const popRecipeData = (data, stars, count) => {
   const phone = data.chefNumber
   const email = data.chefEmail
   const slider = document.querySelector('.listing-slider')
-  slider.innerHTML = `
-                  <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 1"></a>
-                  <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 3"></a>
-                  <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 2"></a>
-                  <a href="${image}" data-background-image="${image}" class="item mfp-gallery" title="Title 4"></a>
-                  `
+
+ image.forEach((img) => {
+   console.log(img)
+   slider.innerHTML += `
+                    <a href="${img}" data-background-image="${img}" class="item mfp-gallery" title="Title 1"></a>
+                    `
+ })
 
   $('.listing-slider').slick({
     centerMode: true,
