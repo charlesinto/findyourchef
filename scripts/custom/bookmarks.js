@@ -534,7 +534,6 @@ if (bookmark) {
         bookmarkersID,
         chefID,
       }
-      console.log(data)
       if (localStorage.getItem('fyc-bookmark-id') === null) {
         axios
           .post(`${baseURL}/bookmark/chef`, data, {
@@ -543,7 +542,6 @@ if (bookmark) {
             },
           })
           .then((res) => {
-            console.log(res)
             toastr.success('Chef bookmarked')
             localStorage.setItem('fyc-bookmark-id', res.data.payload.data._id)
           })
@@ -561,7 +559,6 @@ if (bookmark) {
           bookmarkersID,
           chefID,
         }
-        console.log(data)
         axios
           .delete(`${baseURL}/bookmark/chef`, {
             headers: {
@@ -569,8 +566,7 @@ if (bookmark) {
             },
             data,
           })
-          .then((res) => {
-            console.log(res)
+          .then(() => {
             toastr.success('chef bookmark deleted')
             localStorage.removeItem('fyc-bookmark-id')
           })

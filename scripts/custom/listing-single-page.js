@@ -713,7 +713,6 @@ const popAvailability = () => {
   const date = new Date(picker).getDay();
   const day = weekDay[date];
   const daySlots = availability[day];
-  console.log(daySlots)
   const panel = document.querySelector('.panel-dropdown-scrollable');
   panel.innerHTML = '';
   // const display = document.querySelector('.final-display');
@@ -948,6 +947,8 @@ const popChefRecipes = (recipes) => {
     const location = recipe.location;
     const overview = recipe.overview;
     const id = recipe._id;
+    const stars = recipe.stars;
+    const count = recipe.reviewCount;
     const event = window.Event;
     let listItem = `
     <div class="col-lg-12 col-md-12">
@@ -968,8 +969,8 @@ const popChefRecipes = (recipes) => {
               <p data-id="${id}">${name}<i class="verified-icon"></i></p>
               <p data-id="${id}"><i class="fa fa-map-marker"></i> ${location}</p>
               <p data-id="${id}">${overview}</p>
-              <div data-id="${id}" class="star-rating" data-rating="3.75">
-                <div class="rating-counter">(12 reviews)</div>
+              <div data-id="${id}" class="star-rating" data-rating=${stars}>
+                <div class="rating-counter">(${count}reviews)</div>
               </div>
             </div>
 
