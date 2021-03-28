@@ -538,7 +538,7 @@ if (bookmark) {
         axios
           .post(`${baseURL}/bookmark/chef`, data, {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${token}`
             },
           })
           .then((res) => {

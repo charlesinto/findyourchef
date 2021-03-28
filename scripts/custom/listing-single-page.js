@@ -794,7 +794,7 @@ const bookChef = (e) => {
     }
     else {
       const bookersID = userData._id;
-      const amount = document.querySelector('#numberOfGuest').options[numberOfGuest.selectedIndex].text
+      const amount = document.querySelector('#numberOfGuest').value
       const slotID = sessionStorage.getItem('fyc-book-id');
       const recipeID = localStorage.getItem('fyc-chef-id');
       const success_url = "http://www.thepottersmind.com/fyc/payment_success.html";
@@ -808,7 +808,7 @@ const bookChef = (e) => {
         cancel_url
       }
       console.log(data);
-      axios.post(`${baseURL}/recipe/book`, data, {
+      axios.post(`${baseURL}/recipe/book?chef`, data, {
         headers: {
           'Authorization': `Bearer ${token}`
         },

@@ -301,34 +301,34 @@
 
 					<!-- Panel Dropdown -->
 					<div class="col-lg-12">
-						<!-- <div class="panel-dropdown">
+						<div class="panel-dropdown">
 							<a href="#">Guests <span class="qtyTotal" name="qtyTotal">1</span></a>
 							<div class="panel-dropdown-content">
 
-								Quantity Buttons -->
-								<!-- <div class="qtyButtons">
-									<div class="qtyTitle">Adults</div>
+								<!--Quantity Buttons -->
+								<div class="qtyButtons">
+									<!-- <div class="qtyTitle">Adults</div> -->
 									<input type="text" name="qtyInput" value="1">
 								</div>
 
-								<div class="qtyButtons">
+								<!-- <div class="qtyButtons">
 									<div class="qtyTitle">Childrens</div>
 									<input type="text" name="qtyInput" value="0">
-								</div>
+								</div> -->
 
 							</div>
-						</div> -->
-						<div class="panel-dropdown-content time-slots-dropdown">
-							<select id="numberOfGuest">
-								<option value='' selected disabled>No of Guests</option>
-								<option value="1 Guests">1 guest</option>
-								<option value="2 Guests">2 guests</option>
-								<option value="3 - 5 Guests">3 - 5 guests</option>
-								<option value="6 - 10 Guests">6 - 10 guests</option>
-								<option value="11-20 Guests">11 - 20 guests</option>
-								<option value="20 and above">20 guests and above</option>
-							</select>
 						</div>
+						<!-- <div class="panel-dropdown-content time-slots-dropdown">
+							<select id="numberOfGuest">
+								<option value='0' selected disabled>No of Guests</option>
+								<option value="100">1 guest</option>
+								<option value="200">2 guests</option>
+								<option value="300">3 - 5 guests</option>
+								<option value="400">6 - 10 guests</option>
+								<option value="500">11 - 20 guests</option>
+								<option value="600">20 guests and above</option>
+							</select>
+						</div> -->
 
 
 					</div>
@@ -339,9 +339,9 @@
 						<div class="panel-dropdown time-slots-dropdown">
 							<select>
 								<option value="" disabled selected>Special Instructions</option>
-								<option value="1 Guests">I will get the ingredients by myself</option>
-								<option value="2 Guests">Standard ingredients</option>
-								<option value="3 - 5 Guests">Premium ingredients</option>
+								<option value="">I will get the ingredients by myself</option>
+								<option value="">Standard ingredients</option>
+								<option value="">Premium ingredients</option>
 							</select>
 						</div>
 					</div>
@@ -357,9 +357,12 @@
 					</div>
 
 				</div>
+				<!-- Booking Total -->
+				<a class="button book-now  margin-top-5">Total: <span>$300.00</span></a>
+				<!-- Booking Total End -->
 				
 				<!-- Book Now -->
-				<a href="#" onclick="bookChef(event)" class="button book-now fullwidth margin-top-5">Request To Book</a>
+				<a href="#" onclick="bookChef(event)" class="button book-now  margin-top-5">Request To Book</a>
 			</div>
 			<!-- Book Now / End -->
 
