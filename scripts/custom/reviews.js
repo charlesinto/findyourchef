@@ -1,15 +1,15 @@
-const fetchChefReview = () => {
+const fetchReviewstoChef = () => {
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   let chefID = userData._id;
-  const pagination = document.querySelector('.recipe-pagination');
-  let page = 1;
+  // const pagination = document.querySelector('.recipe-pagination');
+  // let page = 1;
   const data = {
     chefID
   }
   axios.get(`${baseURL}/chef/reviews/${chefID}`, data).then( res => {
     const reviews = res.data.payload.data.data;
     const reviewCount = res.data.payload.data.dataCount;
-    popAllReviews(reviews);
+    popReviews(reviews);
     // if (reviewCount > 0) {paginate(reviewCount);}
   }).catch((err) => {
     console.log(err)
@@ -19,103 +19,14 @@ const fetchChefReview = () => {
       toastr.error('Something went wrong, please try again');
     }
   });
-  pagination.addEventListener('click', (e) => {
-    const parentNode = document.querySelectorAll('.star-rating');
-    parentNode.forEach( parent => {
-      while (parent.firstChild) {
-        parent.removeChild(parent.firstChild);
-      }
-    })
-    const listingParent = document.querySelector('#listing-reviews');
-    listingParent.scrollIntoView({ behavior: 'smooth', block: 'start'});
-    const pageParent = e.target.parentElement.parentElement.children;
-    e.preventDefault();
-    if (e.target.classList.contains("next")) {
-      page;
-      let curPage,nxtPage;
-      for (let i = 0; i < pageParent.length; i++) {
-        const pageNode = pageParent[i].children[0];
-        if (pageNode.classList.contains('current-page')) {
-          curPage = i;
-          const prevPage = parseFloat(pageNode.innerText);
-          page = prevPage + 1;
-        } else {
-          false;
-        }
-      }
-      nxtPage = curPage + 1;
-      pageParent[curPage].children[0].classList.remove('current-page');
-      pageParent[nxtPage].children[0].classList.add('current-page');
-      axios
-        .get(`${baseURL}/chef/reviews/${id}?page=${page}`, data)
-        .then((res) => {
-          const reviews = res.data.payload.data.data
-          console.log(reviews)
-          popReviews(reviews)
-        })
-        .catch((err) => {
-          console.log(err)
-          if (err.response && err.response.data) {
-            toastr.error(err.response.data.error.message)
-          } else {
-            toastr.error('Something went wrong, please try again')
-          }
-        })
-    } else {
-      for (let i = 0; i < pageParent.length; i++) {
-        const pageNode = pageParent[i].children[0];
-        if (pageNode.classList.contains('current-page')) {
-          pageNode.classList.remove('current-page');
-        } else {
-          false;
-        }
-      }
-      page = e.target.innerText;
-      e.target.classList.add('current-page');
-      axios
-        .get(`${baseURL}/chef/reviews/${id}?page=${page}`, data)
-        .then((res) => {
-          const reviews = res.data.payload.data.data
-          popReviews(reviews)
-        })
-        .catch((err) => {
-          console.log(err)
-          if (err.response && err.response.data) {
-            toastr.error(err.response.data.error.message)
-          } else {
-            toastr.error('Something went wrong, please try again')
-          }
-        })
-    }
-  })
-}
-
-const loadAllReviews = () => {
-  const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
-  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-  let reviewersID = userData._id;
-  const data = {reviewersID};
-  // const pagination = document.querySelector('.recipe-pagination');
-  // let page = 1;
-  axios.post(`${baseURL}/chef/chef-reviews`, data, {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    },
-  }).then((res) => {
-    const reviews = res.data.payload.data.data;
-    console.log(res);
-    // const reviewCount = res.data.payload.data.dataCount;
-    popAllReviews(reviews);
-    // paginate(bookmarkCount);
-  }).catch((err) => {
-    if (err.response && err.response.data) {
-      toastr.error(err.response.data.error.message);
-    } else {
-      toastr.error('Something went wrong, please try again');
-    }
-  });
   // pagination.addEventListener('click', (e) => {
-  //   const listingParent = document.querySelector('.dashboard-content');
+  //   const parentNode = document.querySelectorAll('.star-rating');
+  //   parentNode.forEach( parent => {
+  //     while (parent.firstChild) {
+  //       parent.removeChild(parent.firstChild);
+  //     }
+  //   })
+  //   const listingParent = document.querySelector('#listing-reviews');
   //   listingParent.scrollIntoView({ behavior: 'smooth', block: 'start'});
   //   const pageParent = e.target.parentElement.parentElement.children;
   //   e.preventDefault();
@@ -135,21 +46,21 @@ const loadAllReviews = () => {
   //     nxtPage = curPage + 1;
   //     pageParent[curPage].children[0].classList.remove('current-page');
   //     pageParent[nxtPage].children[0].classList.add('current-page');
-  //     axios.get(`${baseURL}/bookmark/${chefID}?page=${page}`, {
-  //       headers: {
-  //         'Authorization': `Bearer ${token}`
-  //       },
-  //     }).then((res) => {
-  //       console.log(res.data.payload.data);
-  //       const bookmarks = res.data.payload.data;
-  //       popAllBookmarks(bookmarks);
-  //     }).catch((err) => {
-  //       if (err.response && err.response.data) {
-  //         toastr.error(err.response.data.error.message);
-  //       } else {
-  //         toastr.error('Something went wrong, please try again');
-  //       }
-  //     });
+  //     axios
+  //       .get(`${baseURL}/chef/reviews/${id}?page=${page}`, data)
+  //       .then((res) => {
+  //         const reviews = res.data.payload.data.data
+  //         console.log(reviews)
+  //         popReviews(reviews)
+  //       })
+  //       .catch((err) => {
+  //         console.log(err)
+  //         if (err.response && err.response.data) {
+  //           toastr.error(err.response.data.error.message)
+  //         } else {
+  //           toastr.error('Something went wrong, please try again')
+  //         }
+  //       })
   //   } else {
   //     for (let i = 0; i < pageParent.length; i++) {
   //       const pageNode = pageParent[i].children[0];
@@ -161,29 +72,29 @@ const loadAllReviews = () => {
   //     }
   //     page = e.target.innerText;
   //     e.target.classList.add('current-page');
-  //     axios.get(`${baseURL}/bookmark/${chefID}?page=${page}`, {
-  //       headers: {
-  //         'Authorization': `Bearer ${token}`
-  //       },
-  //     }).then((res) => {
-  //       console.log(res.data.payload.data);
-  //       const bookmarks = res.data.payload.data;
-  //       popAllBookmarks(bookmarks);
-  //     }).catch((err) => {
-  //       if (err.response && err.response.data) {
-  //         toastr.error(err.response.data.error.message);
-  //       } else {
-  //         toastr.error('Something went wrong, please try again');
-  //       }
-  //     });
+  //     axios
+  //       .get(`${baseURL}/chef/reviews/${id}?page=${page}`, data)
+  //       .then((res) => {
+  //         const reviews = res.data.payload.data.data
+  //         popReviews(reviews)
+  //       })
+  //       .catch((err) => {
+  //         console.log(err)
+  //         if (err.response && err.response.data) {
+  //           toastr.error(err.response.data.error.message)
+  //         } else {
+  //           toastr.error('Something went wrong, please try again')
+  //         }
+  //       })
   //   }
   // })
 }
 
-const popAllReviews = (reviews) => {
+const popReviews = (reviews) => {
   const reviewContainer = document.querySelector('.chef-reviews');
   reviews.forEach(review => {
     const reviewID = review._id;
+    fetchReviewReply(reviewID);
     const image = review.reviewersImage;
     const name = review.reviewersName;
     const comment = review.review;
@@ -196,7 +107,7 @@ const popAllReviews = (reviews) => {
     const formattedDate = `${month} ${year}`;
     reviewContainer.innerHTML += `
     <li>
-      <div class="comments listing-reviews">
+      <div class="comments listing-reviews reviewsToChef" data-reply="${reviewID}">
         <ul>
           <li>
             <div class="avatar"><img src="${image}" alt="" /></div>
@@ -341,6 +252,61 @@ function starRating(ratingElem) {
 } starRating('.star-rating');
 }
 
+const fetchReviewReply = (id) => {
+
+  axios.get(`${baseURL}/reviews/reply/${id}?page=1`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+  }).then((res) => {
+    const replies = res.data.payload.data
+    if(replies.length > 0) {
+      popReviewReply(replies);
+    };
+    // const reviews = res.data.payload.data.data;
+    // const reviewCount = res.data.payload.data.dataCount;
+    // popReviewtoChef(reviews);
+    // if (reviewCount > 0) {paginate(reviewCount);}
+  }).catch((err) => {
+    console.log(err)
+    if (err.response && err.response.data) {
+      toastr.error(err.response.data.error.message);
+    } else {
+      toastr.error('Something went wrong, please try again');
+    }
+  });
+}
+
+const popReviewReply = (replies) => {
+  let allReviews = document.querySelectorAll('.reviewsToChef');
+  allReviews.forEach(review => {
+    replies.forEach(reply => {
+      const image = reply.repliersImage;
+      const name = reply.repliersName;
+      const comment = reply.reply;
+      const date = new Date(reply.created);
+      const year = date.getFullYear();
+      const num = date.getMonth();
+      const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"];
+      const month = months[num];
+      const formattedDate = `${month} ${year}`;
+      let reviewAttr = review.attributes[1].value;
+      if (reviewAttr === reply.reviewID){
+        let selectedReview = document.querySelector(`[data-reply = '${reviewAttr}']`);
+        selectedReview.children[0].children[0].children[1].innerHTML += `<li>
+          <div class="avatar"><img src="${image}" alt="" /></div>
+          <div class="comment-content"><div class="arrow-comment"></div>
+            <div class="comment-by">${name}<span class="date">${formattedDate}</span>
+            </div>
+            <p>${comment}</p>
+            <a href="#small-dialog" class="rate-review popup-with-zoom-anim"><i class="sl sl-icon-note"></i></i> Edit</a>
+            </div>
+        </li>`;
+      }
+    })
+  })
+}
+
 const setReplyData = (reviewID) => {
   console.log(reviewID);
 
@@ -348,12 +314,11 @@ const setReplyData = (reviewID) => {
 }
 
 const replyReview = () => {
-  const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   const repliersID = userData._id;
   const reviewID = sessionStorage.getItem('fyc-replydata');
   const reply = document.querySelector('.reply-text');
-  if (reply != "") {
+  if (reply.value != "") {
     const data = {
       reviewID,
       repliersID,
@@ -365,6 +330,7 @@ const replyReview = () => {
       },
     }).then((res) => {
       console.log(res);
+      addReplytoDOM(reply.value);
       reply.value = "";
       toastr.success("Reply sent");
     }).catch((err) => {
@@ -375,6 +341,32 @@ const replyReview = () => {
       }
     })
   }
+}
+
+const addReplytoDOM = (reply) => {
+  const reviewAttr = sessionStorage.getItem('fyc-replydata');
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  const name = userData.fullname;
+  const image = userData.profilePic;
+  const date = new Date();
+  const year = date.getFullYear();
+  const num = date.getMonth();
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"];
+  const month = months[num];
+  const formattedDate = `${month} ${year}`;
+  const reviewBody = document.querySelector('.listing-reviews-body');
+
+  let selectedReview = document.querySelector(`[data-reply = '${reviewAttr}']`);
+    console.log(selectedReview.children[0].children[0].children[1]);
+    selectedReview.children[0].children[0].children[1].innerHTML += `<li>
+      <div class="avatar"><img src="${image}" alt="" /></div>
+      <div class="comment-content"><div class="arrow-comment"></div>
+        <div class="comment-by">${name}<span class="date">${formattedDate}</span>
+        </div>
+        <p>${reply}</p>
+        <a href="#small-dialog" class="rate-review popup-with-zoom-anim"><i class="sl sl-icon-note"></i></i> Edit</a>
+        </div>
+    </li>`;
 }
 
 document.querySelector('.reviewed-chefs').innerHTML = `
@@ -388,7 +380,7 @@ document.querySelector('.reviewed-chefs').innerHTML = `
             <div class="star-rating" data-rating="4.5"></div>
           </div>
           <p>Commodo est luctus eget. Proin in nunc laoreet justo volutpat blandit enim. Sem felis, ullamcorper vel aliquam non, varius eget justo. Duis quis nunc tellus sollicitudin mauris.</p>
-          <a href="#" class="rate-review"><i class="sl sl-icon-note"></i> Edit</a>
+          <a href="#small-dialog" class="rate-review popup-with-zoom-anim"><i class="sl sl-icon-note"></i></i> Edit</a>
         </div>
 
       </li>
@@ -414,3 +406,129 @@ document.querySelector('.reviewed-chefs').innerHTML = `
   </div>
 </li>
 `;
+
+const fetchChefReviewtoChef = () => {
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  let chefID = userData._id;
+  // const pagination = document.querySelector('.recipe-pagination');
+  // let page = 1;
+  const data = {
+    chefID
+  }
+  axios.get(`${baseURL}/chefs/chef-reviews`, data, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+  }).then((res) => {
+    console.log(res);
+    // const reviews = res.data.payload.data.data;
+    // const reviewCount = res.data.payload.data.dataCount;
+    // popReviewtoChef(reviews);
+    // if (reviewCount > 0) {paginate(reviewCount);}
+  }).catch((err) => {
+    console.log(err)
+    if (err.response && err.response.data) {
+      toastr.error(err.response.data.error.message);
+    } else {
+      toastr.error('Something went wrong, please try again');
+    }
+  });
+  
+}
+
+const fetchRecipeReview = (id) => {
+  const pagination = document.querySelector('.recipe-pagination')
+  let page = 1
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  let chefID = userData._id;
+  const data = {
+    chefID
+  }
+  axios
+    .get(`${baseURL}/reviews/${id}?page=${page}`, data)
+    .then((res) => {
+      const reviews = res.data.payload.data.data
+      // const reviewCount = res.data.payload.data.dataCount
+      popReviews(reviews)
+      if (reviewCount > 0) {
+        paginate(reviewCount)
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+      if (err.response && err.response.data) {
+        toastr.error(err.response.data.error.message)
+      } else {
+        toastr.error('Something went wrong, please try again')
+      }
+    })
+  pagination.addEventListener('click', (e) => {
+    const parentNode = document.querySelectorAll('.star-rating')
+    parentNode.forEach((parent) => {
+      while (parent.firstChild) {
+        parent.removeChild(parent.firstChild)
+      }
+    })
+    const listingParent = document.querySelector('#listing-reviews')
+    listingParent.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    const pageParent = e.target.parentElement.parentElement.children
+    e.preventDefault()
+    if (e.target.classList.contains('next')) {
+      page
+      let curPage, nxtPage
+      for (let i = 0; i < pageParent.length; i++) {
+        const pageNode = pageParent[i].children[0]
+        if (pageNode.classList.contains('current-page')) {
+          curPage = i
+          const prevPage = parseFloat(pageNode.innerText)
+          page = prevPage + 1
+        } else {
+          false
+        }
+      }
+      nxtPage = curPage + 1
+      pageParent[curPage].children[0].classList.remove('current-page')
+      pageParent[nxtPage].children[0].classList.add('current-page')
+      axios
+        .get(`${baseURL}/reviews/${id}?page=${page}`, data)
+        .then((res) => {
+          const reviews = res.data.payload.data.data
+          // console.log(reviews)
+          popReviews(reviews)
+        })
+        .catch((err) => {
+          console.log(err)
+          if (err.response && err.response.data) {
+            toastr.error(err.response.data.error.message)
+          } else {
+            toastr.error('Something went wrong, please try again')
+          }
+        })
+    } else {
+      for (let i = 0; i < pageParent.length; i++) {
+        const pageNode = pageParent[i].children[0]
+        if (pageNode.classList.contains('current-page')) {
+          pageNode.classList.remove('current-page')
+        } else {
+          false
+        }
+      }
+      page = e.target.innerText
+      e.target.classList.add('current-page')
+      axios
+        .get(`${baseURL}/reviews/${id}?page=${page}`, data)
+        .then((res) => {
+          const reviews = res.data.payload.data.data
+          popReviews(reviews)
+        })
+        .catch((err) => {
+          console.log(err)
+          if (err.response && err.response.data) {
+            toastr.error(err.response.data.error.message)
+          } else {
+            toastr.error('Something went wrong, please try again')
+          }
+        })
+    }
+  })
+}

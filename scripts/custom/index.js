@@ -1620,10 +1620,16 @@ const loadSidebar = () => {
 						<li><a href="dashboard-my-pending-listings.html">Pending <span class="nav-tag yellow">1</span></a></li>
 					</ul>	
 				</li>
-				<li><a href="dashboard-reviews.html"><i class="sl sl-icon-star"></i> Reviews</a></li>
+				<!--<li><a href="dashboard-chef-reviews.html"><i class="sl sl-icon-star"></i> Reviews</a></li>-->
 				<!--<li><a href="dashboard-bookmarks.html"><i class="sl sl-icon-heart"></i> Bookmarks</a></li>-->
-				<li><a href="dashboard-add-listing.html"><i class="sl sl-icon-plus"></i> Add Recipe</a></li>
-			</ul>	
+				<li class="toggleReviews"><a onclick="toggleReviewState(event)"><i class="sl sl-icon-star"></i> Reviews</a>
+          <ul>
+            <li><a href="dashboard-chef-reviews.html">Chef</a></li>
+            <li><a href="dashboard-recipe-reviews.html">Recipe</a></li>
+          </ul>
+        </li>
+        <li><a href="dashboard-add-listing.html"><i class="sl sl-icon-plus"></i> Add Recipe</a></li>
+      </ul>	
 
 			<ul data-submenu-title="Account">
 				<li><a href="dashboard-my-chef-profile.html"><i class="sl sl-icon-user"></i> My Profile</a></li>
@@ -1644,17 +1650,14 @@ const loadSidebar = () => {
     </ul>
     
     <ul data-submenu-title="Recipe">
-      <li class="toggleReviews"><a onclick="toggleReviewState(event)"><i class="sl sl-icon-star"></i> Reviews</a>
+      <!--<li class="toggleReviews"><a onclick="toggleReviewState(event)"><i class="sl sl-icon-star"></i> Reviews</a>
         <ul>
-          <li><a href="dashboard-reviews.html">Chef</a></li>
-          <li><a href="dashboard-reviews.html">Recipe</a></li>
+          <li><a href="dashboard-usertchef-reviews.html">Chef</a></li>
+          <li><a href="dashboard-user-reviews.html">Recipe</a></li>
         </ul>
-      </li>
-      <li class="toggleBookmarks"><a onclick="toggleBookmarkState(event)"><i class="sl sl-icon-heart"></i> Bookmarks</a>
-      <ul>
-        <li><a href="dashboard-chef-bookmarks.html">Chef</a></li>
-        <li><a href="dashboard-recipe-bookmarks.html">Recipe</a></li>
-      </ul>
+      </li>-->
+      <li><a href="dashboard-user-reviews.html"><i class="sl sl-icon-star"></i> Reviews</a></li>
+      <li><a href="dashboard-bookmarks.html"><i class="sl sl-icon-heart"></i> Bookmarks</a>
     </li>
     </ul>	
 
@@ -1671,20 +1674,35 @@ const loadSidebar = () => {
 const toggleReviewState = (e) => {
   // e.target.parentElement.classList.toggle('active');
   const reviewParent = document.querySelector('.toggleReviews');
-  if (reviewParent.classList.contains('active')) {
-    reviewParent.classList.remove('active');
+  if (reviewParent.className === 'toggleReviews active') {
+    console.log('removing active class');
+    reviewParent.className = 'toggleReviews';
   } else {
-    reviewParent.classList.add('active');
+    reviewParent.className += ' active';
+    console.log('adding active class');
   }
 }
 
 const toggleBookmarkState = (e) => {
   // e.target.parentElement.classList.toggle('active');
   const reviewParent = document.querySelector('.toggleBookmarks');
-  if (reviewParent.classList.contains('active')) {
-    reviewParent.classList.remove('active');
+  if (reviewParent.className === 'toggleBookmarks active') {
+    console.log('removing active class');
+    reviewParent.className = 'toggleBookmarks';
   } else {
-    reviewParent.classList.add('active');
+    console.log('adding active class');
+    reviewParent.className += ' active';
+  }
+}
+
+const toggleState = (e) => {
+  const reviewParent = document.querySelector('.recipeState');
+  if (reviewParent.className === 'recipeState active') {
+    console.log('removing active class');
+    reviewParent.className = 'recipeState';
+  } else {
+    console.log('adding active class');
+    reviewParent.className += ' active';
   }
 }
 

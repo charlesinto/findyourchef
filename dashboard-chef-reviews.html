@@ -140,6 +140,42 @@
 
 		<div class="row">
 			
+					<!-- Reply to review popup
+					<div class="mfp-bg my-mfp-zoom-in mfp-ready"></div>
+					<div class="mfp-wrap mfp-close-btn-in mfp-auto-cursor my-mfp-zoom-in mfp-ready" tabindex="-1" style="top: 0px; position: absolute; height: 900px;">
+						<div class="mfp-container mfp-inline-holder">
+							<div class="mfp-content">
+								<div id="small-dialog" class="zoom-anim-dialog">
+									<div class="small-dialog-header">
+										<h3>Reply to review</h3>
+									</div>
+									<div class="message-reply margin-top-0">
+										<textarea class="reply-text" cols="40" rows="3"></textarea>
+										<button onclick="replyReview()" class="button reply-btn">Reply</button>
+									</div>
+									<button title="Close (Esc)" type="button" class="mfp-close"></button>
+								</div>
+							</div>
+						</div>
+					</div> -->
+					
+			
+
+			 
+			<!-- Listings -->
+			<div class="col-lg-6 col-md-12">
+				<div class="dashboard-list-box margin-top-0">
+					<h4>Your Reviews</h4>
+
+
+					<ul class="reviewed-chefs">
+
+					</ul>
+				</div>
+			</div>
+
+
+
 			<!-- Listings -->
 			<div class="col-lg-6 col-md-12">
 
@@ -171,6 +207,7 @@
 							<textarea class="reply-text" cols="40" rows="3"></textarea>
 							<button onclick="replyReview()" class="button reply-btn">Reply</button>
 						</div>
+						<button title="Close (Esc)" type="button" class="mfp-close"></button>
 					</div>
 
 					<ul class="chef-reviews">
@@ -271,23 +308,23 @@
 
 			</div>
 
-			<!-- Listings -->
-			<div class="col-lg-6 col-md-12">
-				<div class="dashboard-list-box margin-top-0">
-					<h4>Your Reviews</h4>
-					<ul class="reviewed-chefs">
-
-					</ul>
-				</div>
-			</div>
-
-
 			<!-- Copyrights -->
 			<div class="col-md-12">
 				<div class="copyrights">© 2020 Find Your Chef. All Rights Reserved.</div>
 			</div>
 		</div>
-
+	
+					<!-- Reply to review popup -->
+			<!-- 				<div id="small-dialog2" class="zoom-anim-dialog mfp-hide">
+						<div class="small-dialog-header">
+							<h3>Reply to review</h3>
+						</div>
+						<div class="message-reply margin-top-0">
+							<textarea class="reply-text" cols="40" rows="3"></textarea>
+							<button onclick="replyReview()" class="button reply-btn">Reply</button>
+						</div>
+					</div> -->
+			
 	</div>
 	<!-- Content / End -->
 
@@ -322,7 +359,8 @@
 <script>
 	window.addEventListener('load', function() {
 		loadSidebar();
-		fetchChefReview();
+		fetchReviewstoChef();
+		fetchChefReviewtoChef();
 	});
 </script>
 
