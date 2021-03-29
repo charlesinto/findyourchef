@@ -144,13 +144,24 @@
 		<div class="row">
 			
 			<!-- Listings -->
-			<div class="col-lg-12 col-md-12">
+			<div class="col-lg-6 col-md-12">
 				<div class="dashboard-list-box margin-top-0">
 					<h4>Bookmarked Chef Listings</h4>
-					<ul class="listing-container">
+					<ul class="listing-chef-container">
 					</ul>
 				</div>
 			</div>
+
+						
+			<!-- Listings -->
+			<div class="col-lg-6 col-md-12">
+				<div class="dashboard-list-box margin-top-0">
+					<h4>Bookmarked Recipe Listings</h4>
+					<ul class="listing-recipe-container">
+					</ul>
+				</div>
+			</div>
+
 
 			<!-- Pagination -->
 			<div class="clearfix"></div>
@@ -212,6 +223,7 @@
 	window.addEventListener('load', function() {
 		loadSidebar();
 		loadChefBookmarks();
+		loadRecipeBookmarks();
 	});
 </script>
 

@@ -173,10 +173,10 @@
 					<input class="username" value="Tommy" type="text">
 			
 					<label>Phone</label>
-					<input class="phoneNumber" value="(123) 123-456" type="text">
+					<input class="phoneNumber" value="(123) 123-456" type="text" disabled>
 			
 					<label>Email</label>
-					<input class="email" value="tom@example.com" type="text">
+					<input class="email" value="tom@example.com" type="text" disabled>
         </div>
 
         <button onclick="updateProfile()" class="button button-update margin-top-15">Update Profile</button>
@@ -267,7 +267,7 @@
 		loadSidebar();
 		loadProfile();
 		navigator.geolocation.getCurrentPosition(getCoords);
-		checkUser();
+    setDetails();
 	});
 </script>
 

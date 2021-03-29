@@ -91,7 +91,7 @@ const loadChefBookmarks = () => {
 }
 
 const popChefBookmarks = (bookmarks) => {
-  const bookmarkContainer = document.querySelector('.listing-container');
+  const bookmarkContainer = document.querySelector('.listing-chef-container');
   bookmarks.forEach(bookmark => {
     const image = bookmark.chefImages[0];
     const name = bookmark.chefName;
@@ -246,7 +246,8 @@ const deleteChefBookmark = (e, bookmarkersID, chefID) => {
     headers: {
       Authorization: `Bearer ${token}`
     },
-  }, data).then((res) => {
+    data,
+  }).then((res) => {
     console.log(res);
     toastr.success("Bookmark Removed");
     e.target.parentElement.parentElement.remove();
@@ -352,7 +353,7 @@ const loadRecipeBookmarks = () => {
 }
 
 const popRecipeBookmarks = (bookmarks) => {
-  const bookmarkContainer = document.querySelector('.listing-container');
+  const bookmarkContainer = document.querySelector('.listing-recipe-container');
   bookmarks.forEach(bookmark => {
     const image = bookmark.recipesImage[0];
     const name = bookmark.recipeName;

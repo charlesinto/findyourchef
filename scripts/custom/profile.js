@@ -33,15 +33,16 @@ const setDetails = () => {
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   if(userData.role == "chef") {
     document.querySelector('.user-img').src = userData.profilePic;
-    document.querySelector('.fullname').value = userData.fullname;
+    document.getElementById('fn').value = userData.fullname;
+    console.log(document.querySelector('.fullname').value);
     document.querySelector('.phoneNumber').value = userData.phoneNumber;
+    console.log(userData.fullname);
     document.querySelector('.email').value = userData.email;
     document.querySelector('#notes').value = userData.notes;
     document.querySelector('.twitter').value = userData.twitter;
     document.querySelector('.facebook').value = userData.facebook;
     document.querySelector('.google').value = userData.google;
     document.querySelector('#my-awesome-dropzone').action = `${baseURL}/chef/images/${userData._id}`;
-    document.querySelector('body').innerHTML += `<script type="text/javascript" src="scripts/dropzone.js"></script>`;
     if (userData.location != "") {
       document.querySelector('#autocomplete-input').value = userData.location;
     }
@@ -54,10 +55,10 @@ const setDetails = () => {
       const images = userData.images;
       images.forEach( image => {
         document.querySelector('.gallery-listing').innerHTML += `    <li>
-        <div class="list-box-listing">
+        <div class="">
           <div class="list-box-listing-img"><a href="#"><img src="${image}" alt=""></a></div>
         </div>
-        <div class="buttons-to-right">
+        <div class="image-delete">
           <!--<a href="#" onclick="deleteChefBookmark(event,'bookmarkersID','chefID')" class="button gray"><i class="sl sl-icon-close"></i> Delete</a>-->
           <a href="#" class="button gray"><i class="sl sl-icon-close"></i> Delete</a>
         </div>
@@ -75,6 +76,7 @@ const setDetails = () => {
         'Authorization': `Bearer ${token}`
       },
     })
+    document.querySelector('body').innerHTML += `<script type="text/javascript" src="scripts/dropzone.js"></script>`;
 
     
   } else {
@@ -155,12 +157,6 @@ const updateProfile = () => {
     if (userData.fullname != fullname) {
       data.fullname = fullname;
     }
-    if (userData.phoneNumber != phoneNumber) {
-      data.phoneNumber = phoneNumber;
-    }
-    if (userData.email != email) {
-      data.email = email;
-    }
     if (userData.notes != notes) {
       data.notes = notes;
     }
@@ -203,8 +199,6 @@ const updateProfile = () => {
     const profilePic = document.querySelector('.user-img').src;
     const fullname = document.querySelector('.fullname').value;
     const username = document.querySelector('.username').value;
-    const phoneNumber = document.querySelector('.phoneNumber').value;
-    const email = document.querySelector('.email').value;
     if (userData.profilePic != profilePic) {
       data.profilePic = profilePic;
     }
@@ -213,12 +207,6 @@ const updateProfile = () => {
     }
     if (userData.username != username) {
       data.username = username;
-    }
-    if (userData.phoneNumber != phoneNumber) {
-      data.phoneNumber = phoneNumber;
-    }
-    if (userData.email != email) {
-      data.email = email;
     }
     data.userId = userData._id;
     button.innerHTML = '<div class="loader"></div>';
@@ -350,53 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 })
 
-// function uploadPhoto(e) {
-//   e.preventDefault();
-//   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-//   const photo = document.querySelector('#file').files[0];
-//   console.log("data is => ", photo);
-//   const formData = new FormData(this);
-//   console.log(formData);
-//   formData.append('file', photo);
-//   const data = {
-//     body : formData
-//   }
-//   console.log(formData.entries());
-//   if (userData.role == 'chef') {
-//     axios.post(`${baseURL}/chef/profile-image`, data, {
-//       headers: {
-//         'Authorization': `Bearer ${token}`
-//       },
-//     }).then((res) => {
-//       // toastr.success('OTP verification successful');
-//       console.log(res);
-//     }).catch((err) => {
-//       if (err.response && err.response.data) {
-//         toastr.error(err.response.data.error.message);
-//       } else {
-//         toastr.error('Something went wrong, please try again');
-//       }
-//     })
-//   }
-// }
-
-// Dropzone.autoDiscover = false;
-
-// let myDropzone = new Dropzone(".dropzone", {
-//   autoProcessQueue: false,
-//   parallelUploads: 10
-// })
-
-// document.querySelector('.gallery-update').addEventListener('click', function() {
-//   myDropzone.processQueue();
-//   alert('works');
-// })
 
 const updateGallery = () => {
   myDropzone.processQueue();
-  // alert('works');
 }
-
-// $('.gallery-update').on('click', function() {
-//   myDropzone.processQueue();
-// })
