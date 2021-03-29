@@ -1293,7 +1293,7 @@ function starRating(ratingElem) {
 //   });
 // } makeSlider();
 
-/* BOOKMARK RECIPE */
+/* BOOKMARK CHEF */
 
 const bookmarkChef = (e, id) => {
 e.preventDefault();
