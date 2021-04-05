@@ -190,7 +190,7 @@
 					<h4 class="gray">Change Password</h4>
 					<div class="dashboard-list-box-static top ">
 						<!-- Change Password -->
-						<div class="my-profile">
+						<!-- <div class="my-profile">
 							<label class="margin-top-0">Current Password</label>
 							<input type="password">
 
@@ -200,13 +200,65 @@
 							<label>Confirm New Password</label>
 							<input type="password">
 							<button class="button margin-top-15">Change Password</button>
-						</div>
-
+						</div> -->
+						<form class="login" onsubmit="resetOTP(event)">
+  
+							<p class="form-row form-row-wide">
+								<label for="email">Email:
+									<i class="im im-icon-Email"></i>
+									<input type="email" class="input-text" name="email" id="email" value="" />
+								</label>
+							</p>
+			
+							<button id="resetpassword-btn" type="submit" class="button border margin-top-5">
+									Update Password
+								</button>
+							</div>
+							
+						</form>
 					</div>
 				</div>
 			</div>
 
 
+			<div id="otp-dialog" class="zoom-anim-dialog mfp-hide">
+				<div class="small-dialog-header">
+					<h3>Verify OTP</h3>
+				</div>
+	
+				Tabs
+				<div class="sign-in-form style-1">
+					<h5>Enter the 4-digit code sent to your device and Enter a new password</h5>
+					<div class="tabs-container alt">
+						<div class="tab-content">
+							<form class="login" onsubmit="verifypasswordOTP(event)">
+	
+								<p class="form-row form-row-wide">
+									<label for="otp">OTP:
+										<i class="im im-icon-Phone"></i>
+										<input type="text" class="input-text" name="otp" id="otp" />
+									</label>
+								</p>
+								
+								<p class="form-row form-row-wide">
+									<label for="password">New Password:
+										<i class="im im-icon-Lock-2"></i>
+										<input class="input-text" type="password" name="password" id="password"/>
+									</label>
+								</p>
+	
+								<div class="form-row">
+									<button id="otp-btn" type="submit" class="button border margin-top-5">
+										Verify
+									</button>
+								</div>
+								
+							</form>
+						</div>
+	
+					</div>
+				</div>
+			</div>
 			<!-- Copyrights -->
 			<div class="col-md-12">
 				<div class="copyrights">© 2020 Find Your Chef. All Rights Reserved.</div>
