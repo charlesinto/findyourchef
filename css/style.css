@@ -12028,6 +12028,14 @@ a.dashboard-responsive-nav-trigger { display: none; }
 /* Single Message */
 .messages-container-inner {
 	display: flex;
+	height: calc(100vh - 280px);
+	overflow: hidden;
+}
+
+.messages-inbox, 
+.message-content {
+	height: 100%;
+	overflow-y: scroll;
 }
 
 .messages-container-inner .messages-inbox,
@@ -12091,15 +12099,15 @@ a.dashboard-responsive-nav-trigger { display: none; }
 
 /* Message Bubbles */
 .message-bubble {
-	display: block;
+	display: flex;
 	position: relative;
 	margin-bottom: 25px;
 }
 
 .message-bubble .message-avatar {
-	position: absolute;
+	/* position: absolute;
 	left: 0;
-	top: 0;
+	top: 0; */
 }
 
 .message-bubble .message-avatar img {
@@ -12108,11 +12116,13 @@ a.dashboard-responsive-nav-trigger { display: none; }
 }
 
 .message-bubble .message-text {
-	margin-left: 70px;
+	margin-left: 20px;
 	background-color: #f6f6f6;
 	border-radius: 4px;
 	padding: 20px;
 	position: relative;
+	width: fit-content;
+	max-width: 60%;
 }
 
 .message-bubble .message-text p {
@@ -12133,6 +12143,10 @@ a.dashboard-responsive-nav-trigger { display: none; }
 }
 
 /* Message Bubble "me" */
+.message-bubble.me {
+	display: flex;
+	flex-direction: row-reverse;
+}
 .message-bubble.me .message-avatar {
 	left: auto;
 	right: 0;
@@ -12140,7 +12154,7 @@ a.dashboard-responsive-nav-trigger { display: none; }
 
 .message-bubble.me .message-text {
 	margin-left: 0;
-	margin-right: 70px;
+	margin-right: 20px;
 }
 
 .message-bubble.me .message-text:before {
@@ -17982,8 +17996,14 @@ body .category-box-btn:hover {
 	    text-align: center;
 	}
 
-	.message-bubble .message-text { margin-left: 55px; }
-	.message-bubble.me .message-text { margin-right: 55px; }
+	.message-bubble .message-text {
+		margin-left: 55px;
+		position: relative;
+	}
+	.message-bubble.me .message-text {
+		margin-right: 55px;
+		position: relative;
+	}
 
 	.message-bubble .message-avatar img{
 		width: 35px;
@@ -18487,4 +18507,19 @@ ul.gallery-listing li {
 	bottom: 0;
 	right: 50%;
 	transform: translateX(-50%);
+}
+
+.custom-dialog {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+}
+
+.message-text span {
+	font-size: 10px;
+	position: absolute;
+	bottom: -20px;
+	right: 0;
+	color: gray;
 }

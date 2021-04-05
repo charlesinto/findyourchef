@@ -12,6 +12,7 @@ const loadChefBookmarks = () => {
   }).then((res) => {
     console.log(res);
     const bookmarks = res.data.payload.data;
+    console.log(bookmarks);
     popChefBookmarks(bookmarks);
     // const bookmarks = res.data.payload.data.data;
     // const bookmarkCount = res.data.payload.data.total;

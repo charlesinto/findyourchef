@@ -317,26 +317,59 @@ document.addEventListener('DOMContentLoaded', () => {
         body: formData
     }
 
-      fetch('https://thepotters-api.herokuapp.com/api/v1/user/profile-image', options)
+      fetch(`${baseURL}/chef/profile-image`, options)
       .then(res => res.json())
-  .then(res => console.log("res is ", res))
+  .then(res => {
+    console.log("res is ", res)
+    toastr.success('Picture uploaded!');
+    const userData = res.payload.data;
+    setData(userData);
+  })
   .catch(err => console.error(err));
     } else {
-      let options = {
-        method: 'POST',
-        headers: {
-              Authorization: `Bearer ${token}`
-        },
-        body: formData
-    }
+  let options = {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    body: formData
+  }
 
-      fetch('https://thepotters-api.herokuapp.com/api/v1/user/profile-image', options)
-      .then(res => res.json())
-  .then(res => console.log("res is ", res))
+    fetch(`${baseURL}/user/profile-image`, options)
+    .then(res => res.json())
+    .then(res => {
+      console.log("res is ", res)
+      toastr.success('Picture uploaded!');
+      const userData = res.payload.data;
+      setData(userData);
+    })
   .catch(err => console.error(err));
     }
   })
 })
+
+const setData = (data) => {
+  const username = document.querySelector('.logged-username');
+if (username) {
+  const userData = data;
+  document.querySelector('.user-img').src = userData.profilePic;
+  const user = userData.username;
+  let image;
+  if (userData.role == "chef") {
+    image = userData.profilePic;
+  } else {
+    image = userData.image;
+  }
+  username.innerHTML = `<span><img src="${image}" alt=""></span>Hi, ${user}!`;
+}
+const headername = document.querySelector('.header-name');
+if (headername) {
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  const user = userData.username;
+  headername.innerHTML = `Howdy, ${user}!`;
+}
+
+}
 
 
 const updateGallery = () => {

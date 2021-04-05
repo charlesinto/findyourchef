@@ -116,7 +116,7 @@ const popReviews = (reviews) => {
                 <div class="star-rating" data-rating="${stars}"></div>
               </div>
               <p>${comment}</p>
-              <a href="#small-dialog" onclick="setReplyData('${reviewID}')" class="rate-review popup-with-zoom-anim"><i class="sl sl-icon-action-undo"></i> Reply to this review</a>
+              <!--<a href="#small-dialog" onclick="setReplyData('${reviewID}')" class="rate-review popup-with-zoom-anim"><i class="sl sl-icon-action-undo"></i> Reply to this review</a>-->
             </div>
           </li>
         </ul>
@@ -292,6 +292,7 @@ const popReviewReply = (replies) => {
       const formattedDate = `${month} ${year}`;
       let reviewAttr = review.attributes[1].value;
       if (reviewAttr === reply.reviewID){
+        console.log('this is where it should be');
         let selectedReview = document.querySelector(`[data-reply = '${reviewAttr}']`);
         selectedReview.children[0].children[0].children[1].innerHTML += `<li>
           <div class="avatar"><img src="${image}" alt="" /></div>
@@ -398,7 +399,7 @@ document.querySelector('.reviewed-chefs').innerHTML = `
             <div class="star-rating" data-rating="5"></div>
           </div>
           <p>Commodo est luctus eget. Proin in nunc laoreet justo volutpat blandit enim. Sem felis, ullamcorper vel aliquam non, varius eget justo. Duis quis nunc tellus sollicitudin mauris.</p>
-          <a href="#" class="rate-review"><i class="sl sl-icon-note"></i> Edit</a>
+          <a href="#small-dialog" class="rate-review popup-with-zoom-anim"><i class="sl sl-icon-note"></i> Edit</a>
         </div>
 
       </li>
