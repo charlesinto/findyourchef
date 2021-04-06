@@ -86,10 +86,11 @@ const loadAllRecipes = () => {
     const lng = inputAddress.lng;
     const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
     const data = {
-      location,
-      radius,
-      coords: `${lat},${lng}`
-    };
+      coords: '17586 County Rd T5, Fort Morgan, CO 80701, United States',
+      radius: '300',
+      location: 'Ikeja, Lagos',
+      name: 'Daniel',
+    }
     console.log(data);
     if(input) {
       data.input = input;
@@ -158,7 +159,7 @@ const loadAllRecipes = () => {
         }
         page = e.target.innerText;
         e.target.classList.add('current-pag e');
-        axios.get(`${baseURL}/chefs/search?page=${page}`).then((res) => {
+        axios.get(`${baseURL}/recipes/search?page=${page}`).then((res) => {
           console.log(res.data.payload.data);
           const recipes = res.data.payload.data.data;
           popAllChefs(recipes);

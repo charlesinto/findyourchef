@@ -1042,6 +1042,7 @@ const findChef = () => {
   }
   sessionStorage.setItem('fyc-search', JSON.stringify(data));
   location.href='/explore.html';
+  console.log(data)
 }
 
 const loadLatestChefs = () => {
