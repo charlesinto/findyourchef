@@ -1,9 +1,9 @@
-/* VIEW RECIPES */
+/* VIEW CHEF */
 const loadAllRecipes = () => {
   const searchData = JSON.parse(sessionStorage.getItem('fyc-search'));
   const pagination = document.querySelector('.recipe-pagination');
   let page = 1;
-  /* VIEW ALL RECIPES */
+  /* VIEW ALL CHEF */
 
   if (searchData === null) {
     axios.get(`${baseURL}/chefs?page=${page}`).then((res) => {
@@ -11,7 +11,7 @@ const loadAllRecipes = () => {
       const recipes = res.data.payload.data.data;
       console.log(recipes);
       const recipeCount = res.data.payload.data.dataCount;
-      popAllRecipes(recipes);
+      popAllChefs(recipes);
       paginate(recipeCount);
     }).catch((err) => {
       if (err.response && err.response.data) {
@@ -41,10 +41,10 @@ const loadAllRecipes = () => {
         nxtPage = curPage + 1;
         pageParent[curPage].children[0].classList.remove('current-page');
         pageParent[nxtPage].children[0].classList.add('current-page');
-        axios.get(`${baseURL}/recipes?page=${page}`).then((res) => {
+        axios.get(`${baseURL}/chefs?page=${page}`).then((res) => {
           console.log(res.data.payload.data);
           const recipes = res.data.payload.data.data;
-          popAllRecipes(recipes);
+          popAllChefs(recipes);
         }).catch((err) => {
           if (err.response && err.response.data) {
             toastr.error(err.response.data.error.message);
@@ -63,9 +63,9 @@ const loadAllRecipes = () => {
         }
         page = e.target.innerText;
         e.target.classList.add('current-page');
-        axios.get(`${baseURL}/recipes?page=${page}`).then((res) => {
+        axios.get(`${baseURL}/chefs?page=${page}`).then((res) => {
           const recipes = res.data.payload.data.data;
-          popAllRecipes(recipes);
+          popAllChefs(recipes);
         }).catch((err) => {
           if (err.response && err.response.data) {
             toastr.error(err.response.data.error.message);
@@ -76,7 +76,7 @@ const loadAllRecipes = () => {
       }
     })
   } else {
-    /* VIEW SEARCHED RECIPES */
+    /* VIEW SEARCHED CHEFS */
     const location = searchData.locationInput;
     const radius = searchData.radius;
     const input = searchData.searchInput;
@@ -86,10 +86,11 @@ const loadAllRecipes = () => {
     const lng = inputAddress.lng;
     const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
     const data = {
-      location,
-      radius,
-      coords: `${lat},${lng}`
-    };
+      coords: '17586 County Rd T5, Fort Morgan, CO 80701, United States',
+      radius: '300',
+      location: 'Ikeja, Lagos',
+      name: 'Daniel',
+    }
     console.log(data);
     if(input) {
       data.input = input;
@@ -106,7 +107,7 @@ const loadAllRecipes = () => {
       console.log(res);
       const recipes = res.data.payload.data.data;
       const recipeCount = res.data.payload.data.dataCount;
-      popAllRecipes(recipes);
+      popAllChefs(recipes);
       paginate(recipeCount);
     }).catch((err) => {
       if (err.response && err.response.data) {
@@ -139,7 +140,7 @@ const loadAllRecipes = () => {
         axios.get(`${baseURL}/recipes/search?page=${page}`).then((res) => {
           console.log(res.data.payload.data);
           const recipes = res.data.payload.data.data;
-          popAllRecipes(recipes);
+          popAllChefs(recipes);
         }).catch((err) => {
           if (err.response && err.response.data) {
             toastr.error(err.response.data.error.message);
@@ -158,10 +159,10 @@ const loadAllRecipes = () => {
         }
         page = e.target.innerText;
         e.target.classList.add('current-pag e');
-        axios.get(`${baseURL}/chefs/search?page=${page}`).then((res) => {
+        axios.get(`${baseURL}/recipes/search?page=${page}`).then((res) => {
           console.log(res.data.payload.data);
           const recipes = res.data.payload.data.data;
-          popAllRecipes(recipes);
+          popAllChefs(recipes);
         }).catch((err) => {
           if (err.response && err.response.data) {
             toastr.error(err.response.data.error.message);
@@ -340,14 +341,14 @@ if (recipeContainer) {
     const id = e.target.dataset.id;
     if (e.target.classList.contains('like-icon')) {
       e.stopPropagation();
-      bookmarkRecipe(e, id);
+      bookmarkChef(e, id);
     } else {
       loadChefPage(id);
     }
   })
 }
 
-const popAllRecipes = (recipes) => {
+const popAllChefs = (recipes) => {
   const length = recipes.length;
   let result;
   if (length === 1) {

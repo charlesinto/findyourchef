@@ -887,8 +887,20 @@ const loadAllRecipes = () => {
         nxtPage = curPage + 1
         pageParent[curPage].children[0].classList.remove('current-page')
         pageParent[nxtPage].children[0].classList.add('current-page')
+        const chefID = localStorage.getItem('fyc-chef-id')
+        const data = {
+          chefID,
+        }
         axios
-          .get(`${baseURL}/recipes?page=${page}`)
+          .post(
+            `${baseURL}/chef/recipe/list?status=active&page=${page}`,
+            data,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
           .then((res) => {
             console.log(res.data.payload.data)
             const recipes = res.data.payload.data.data
@@ -912,19 +924,31 @@ const loadAllRecipes = () => {
         }
         page = e.target.innerText
         e.target.classList.add('current-page')
-        axios
-          .get(`${baseURL}/recipes?page=${page}`)
-          .then((res) => {
-            const recipes = res.data.payload.data.data
-            popChefRecipes(recipes)
-          })
-          .catch((err) => {
-            if (err.response && err.response.data) {
-              toastr.error(err.response.data.error.message)
-            } else {
-              toastr.error('Something went wrong, please try again')
-            }
-          })
+          const chefID = localStorage.getItem('fyc-chef-id')
+          const data = {
+            chefID,
+          }
+          axios
+            .post(
+              `${baseURL}/chef/recipe/list?status=active&page=${page}`,
+              data,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            )
+            .then((res) => {
+              const recipes = res.data.payload.data.data
+              popChefRecipes(recipes)
+            })
+            .catch((err) => {
+              if (err.response && err.response.data) {
+                toastr.error(err.response.data.error.message)
+              } else {
+                toastr.error('Something went wrong, please try again')
+              }
+            })
       }
     })
 }

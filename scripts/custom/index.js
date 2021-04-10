@@ -1042,6 +1042,7 @@ const findChef = () => {
   }
   sessionStorage.setItem('fyc-search', JSON.stringify(data));
   location.href='/explore.html';
+  console.log(data)
 }
 
 const loadLatestChefs = () => {
@@ -1293,7 +1294,7 @@ function starRating(ratingElem) {
 //   });
 // } makeSlider();
 
-/* BOOKMARK RECIPE */
+/* BOOKMARK CHEF */
 
 const bookmarkChef = (e, id) => {
 e.preventDefault();
