@@ -34,9 +34,7 @@ const setDetails = () => {
   if(userData.role == "chef") {
     document.querySelector('.user-img').src = userData.profilePic;
     document.getElementById('fn').value = userData.fullname;
-    console.log(document.querySelector('.fullname').value);
     document.querySelector('.phoneNumber').value = userData.phoneNumber;
-    console.log(userData.fullname);
     document.querySelector('.email').value = userData.email;
     document.querySelector('#notes').value = userData.notes;
     document.querySelector('.twitter').value = userData.twitter;
@@ -53,14 +51,14 @@ const setDetails = () => {
     }
     if (userData.images.length > 0) {
       const images = userData.images;
-      images.forEach( image => {
+      images.forEach( (image, index) => {
         document.querySelector('.gallery-listing').innerHTML += `    <li>
         <div class="">
           <div class="list-box-listing-img"><a href="#"><img src="${image}" alt=""></a></div>
         </div>
         <div class="image-delete">
           <!--<a href="#" onclick="deleteChefBookmark(event,'bookmarkersID','chefID')" class="button gray"><i class="sl sl-icon-close"></i> Delete</a>-->
-          <a href="#" class="button gray"><i class="sl sl-icon-close"></i> Delete</a>
+          <a href="#" onclick="delImage(${index})" class="button gray"><i class="sl sl-icon-close"></i> Delete</a>
         </div>
       </li>`
       })
@@ -76,7 +74,7 @@ const setDetails = () => {
         'Authorization': `Bearer ${token}`
       },
     })
-    document.querySelector('body').innerHTML += `<script type="text/javascript" src="scripts/dropzone.js"></script>`;
+    // document.querySelector('body').innerHTML += `<script type="text/javascript" src="scripts/dropzone.js"></script>`;
 
     
   } else {
@@ -371,7 +369,23 @@ if (headername) {
 
 }
 
-
 const updateGallery = () => {
   myDropzone.processQueue();
+}
+
+const delImage = (index) => {
+  axios.delete(`${baseURL}/chef/images/${index}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+  }).then((res) => {
+    console.log(res);
+    toastr.success(res.data.payload.data.message);
+  }).catch((err) => {
+    if (err.response && err.response.data) {
+      toastr.error(err.response.data.error.message);
+    } else {
+      toastr.error('Something went wrong, please try again');
+    }
+  }); 
 }

@@ -20,7 +20,7 @@ const fetchAllMessages = () => {
     }).then((res) => {
       const dashData = res.data.payload.data;
       popMessages(dashData);
-      console.log(dashData);
+      console.log(res);
     }).catch((err) => {
       if (err.response && err.response.data) {
         toastr.error(err.response.data.error.message);
@@ -70,7 +70,7 @@ const popMessages = (dashData) => {
 
       <div class="message-by">
         <div class="message-by-headline">
-          <h5>Kathy Brown <i>Unread</i></h5>
+          <h5>${data.fromName} <i>Unread</i></h5>
           <span>2 hours ago</span>
         </div>
         <p>${message}</p>
