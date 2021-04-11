@@ -54,7 +54,7 @@ var infoBox_ratingType = 'star-rating'
     var locations = [
       [
         locationData(
-          'listings-single-page.html',
+          'chef-details.html',
           'images/listing-item-01.jpg',
           "Tom's Restaurant",
           '964 School Street, New York',
@@ -68,7 +68,7 @@ var infoBox_ratingType = 'star-rating'
       ],
       [
         locationData(
-          'listings-single-page.html',
+          'chef-details.html',
           'images/listing-item-02.jpg',
           'Sticky Band',
           'Bishop Avenue, New York',
@@ -82,7 +82,7 @@ var infoBox_ratingType = 'star-rating'
       ],
       [
         locationData(
-          'listings-single-page.html',
+          'chef-details.html',
           'images/listing-item-03.jpg',
           'Hotel Govendor',
           '778 Country Street, New York',
@@ -96,7 +96,7 @@ var infoBox_ratingType = 'star-rating'
       ],
       [
         locationData(
-          'listings-single-page.html',
+          'chef-details.html',
           'images/listing-item-04.jpg',
           'Burger House',
           '2726 Shinn Street, New York',
@@ -110,7 +110,7 @@ var infoBox_ratingType = 'star-rating'
       ],
       [
         locationData(
-          'listings-single-page.html',
+          'chef-details.html',
           'images/listing-item-05.jpg',
           'Airport',
           '1512 Duncan Avenue, New York',
@@ -124,7 +124,7 @@ var infoBox_ratingType = 'star-rating'
       ],
       [
         locationData(
-          'listings-single-page.html',
+          'chef-details.html',
           'images/listing-item-06.jpg',
           'Think Coffee',
           '215 Terry Lane, New York',
@@ -138,7 +138,7 @@ var infoBox_ratingType = 'star-rating'
       ],
       [
         locationData(
-          'listings-single-page.html',
+          'chef-details.html',
           'images/listing-item-04.jpg',
           'Burger House',
           '2726 Shinn Street, New York',
@@ -153,7 +153,7 @@ var infoBox_ratingType = 'star-rating'
 
       [
         locationData(
-          'listings-single-page.html',
+          'chef-details.html',
           'images/listing-item-04.jpg',
           'Burger House',
           '2726 Shinn Street, New York',
@@ -167,7 +167,7 @@ var infoBox_ratingType = 'star-rating'
       ],
       [
         locationData(
-          'listings-single-page.html',
+          'chef-details.html',
           'images/listing-item-04.jpg',
           'Burger House',
           '2726 Shinn Street, New York',
