@@ -40,7 +40,7 @@ const setDetails = () => {
     document.querySelector('.twitter').value = userData.twitter;
     document.querySelector('.facebook').value = userData.facebook;
     document.querySelector('.google').value = userData.google;
-    document.querySelector('#my-awesome-dropzone').action = `${baseURL}/chef/images/${userData._id}`;
+    // document.querySelector('#my-awesome-dropzone').action = `${baseURL}/chef/images/${userData._id}`;
     if (userData.location != "") {
       document.querySelector('#autocomplete-input').value = userData.location;
     }
@@ -57,23 +57,22 @@ const setDetails = () => {
           <div class="list-box-listing-img"><a href="#"><img src="${image}" alt=""></a></div>
         </div>
         <div class="image-delete">
-          <!--<a href="#" onclick="deleteChefBookmark(event,'bookmarkersID','chefID')" class="button gray"><i class="sl sl-icon-close"></i> Delete</a>-->
-          <a href="#" onclick="delImage(${index})" class="button gray"><i class="sl sl-icon-close"></i> Delete</a>
+          <a href="#" onclick="delImage(event, ${index})" class="button gray"><!--<i class="sl sl-icon-close">--></i> Delete</a>
         </div>
       </li>`
       })
       
     }
-    Dropzone.autoDiscover = false;
+    // Dropzone.autoDiscover = false;
     
-    myDropzone = new Dropzone(".dropzone", {
-      autoProcessQueue: false,
-      addRemoveLinks: true,
-      parallelUploads: 10,
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-    })
+    // myDropzone = new Dropzone(".dropzone", {
+    //   autoProcessQueue: false,
+    //   addRemoveLinks: true,
+    //   parallelUploads: 10,
+    //   headers: {
+    //     'Authorization': `Bearer ${token}`
+    //   },
+    // })
     // document.querySelector('body').innerHTML += `<script type="text/javascript" src="scripts/dropzone.js"></script>`;
 
     
@@ -303,9 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const formData = new FormData(this);
     console.log(formData);
     formData.append('Data', data);
-    const body = {
-      data: formData
-    }
+
     if (userData.role == 'chef') {
       let options = {
         method: 'POST',
@@ -373,14 +370,17 @@ const updateGallery = () => {
   myDropzone.processQueue();
 }
 
-const delImage = (index) => {
+const delImage = (e, index) => {
+  e.preventDefault();
   axios.delete(`${baseURL}/chef/images/${index}`, {
     headers: {
       Authorization: `Bearer ${token}`
     },
   }).then((res) => {
     console.log(res);
-    toastr.success(res.data.payload.data.message);
+    toastr.success("Image Deleted!");
+    sessionStorage.setItem('fyc-user', JSON.stringify(res.data.payload.data));
+    e.target.parentElement.parentElement.remove();
   }).catch((err) => {
     if (err.response && err.response.data) {
       toastr.error(err.response.data.error.message);
@@ -388,4 +388,102 @@ const delImage = (index) => {
       toastr.error('Something went wrong, please try again');
     }
   }); 
+}
+
+//? UPLOADING IMAGES FOR CHEF
+let dropArea = document.getElementById('drop-area');
+let filesDone = 0;
+let filesToDo = 0;
+let progressBar = document.getElementById('progress-bar');
+
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+  dropArea.addEventListener(eventName, preventDefaults, false)
+})
+
+function preventDefaults (e) {
+  e.preventDefault();
+  e.stopPropagation();
+}
+
+['dragenter', 'dragover'].forEach(eventName => {
+  dropArea.addEventListener(eventName, highlight, false);
+})
+
+// ['dragleave', 'drop'].forEach(eventName => {
+//   dropArea.addEventListener(eventName, unhighlight, false);
+// })
+
+function highlight(e) {
+  dropArea.classList.add('highlight');
+}
+
+function unhighlight(e) {
+  dropArea.classList.remove('highlight');
+}
+
+dropArea.addEventListener('drop', handleDrop, false);
+
+function handleDrop(e) {
+  let dt = e.dataTransfer
+  let files = dt.files
+
+  handleFiles(files)
+}
+
+function handleFiles(files) {
+  files = [...files];
+  files.forEach(uploadFile);
+  files.forEach(previewFile)
+}
+
+function uploadFile(file) {
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  let formData = new FormData();
+  formData.append('file', file);
+  let options = {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    body: formData
+  }
+
+  fetch(`${baseURL}/chef/images/${userData._id}`, options)
+  .then(res => res.json())
+  .then((res) => {
+    console.log(res);
+    addImagetoDOM(res.payload.data);
+    sessionStorage.setItem('fyc-user', JSON.stringify(res.payload.data));
+  }).catch((err) => {
+    if (err.response && err.response.data) {
+      toastr.error(err.response.data.error.message);
+    } else {
+      toastr.error('Something went wrong, please try again');
+    }
+  });
+}
+
+function previewFile(file) {
+  let reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onloadend = function() {
+    let img = document.createElement('img');
+    img.src = reader.result;
+    document.getElementById('gallery').appendChild(img)
+  }
+}
+
+function addImagetoDOM(data) {
+  document.querySelector('.gallery-listing').innerHTML = "";
+  const images = data.images;
+      images.forEach( (image, index) => {
+        document.querySelector('.gallery-listing').innerHTML += `    <li>
+        <div class="">
+          <div class="list-box-listing-img"><a href="#"><img src="${image}" alt=""></a></div>
+        </div>
+        <div class="image-delete">
+          <a href="#" onclick="delImage(event, ${index})" class="button gray"><!--<i class="sl sl-icon-close">--></i> Delete</a>
+        </div>
+      </li>`
+      })
 }

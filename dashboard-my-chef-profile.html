@@ -231,9 +231,16 @@
 				<div class="row gallery">
 					<div class="dashboard-list-box">
 						<h4>Gallery</h4>
-						<form action="/file-upload"
+						<!-- <form action="/file-upload"
 						class="dropzone"
-						id="my-awesome-dropzone"></form>
+						id="my-awesome-dropzone"></form> -->
+						<div id="drop-area">
+							<form class="my-pic-form">
+								<input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
+								<label class="button-file" for="fileElem">Select some files</label>
+							</form>
+							<div id="gallery"></div>
+						</div>
 						<button onclick="updateGallery()" class="button gallery-update margin-bottom-20 margin-top-15">Update Gallery</button>
 						</div>
 				</div>
