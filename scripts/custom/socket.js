@@ -1,4 +1,4 @@
-  const userData = sessionStorage.getItem('fyc-user') || localStorage.getItem('fyc-user');
+const userData = sessionStorage.getItem('fyc-user') || localStorage.getItem('fyc-user');
   const jwt = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   let socketChef, socketUser;
   if (jwt) {
@@ -71,9 +71,10 @@
   }
 
   const sendMessage = () => {
+    const messageData = JSON.parse(sessionStorage.getItem('fyc-message'));
     let message = document.querySelector('#message');
     const data = {
-      userID: "602a48f4ad93cd0017a1c60a",
+      userID: messageData.userID,
       message: message.value
     }
     socketChef.emit('chef/message', data);
@@ -83,10 +84,11 @@
   }
 
   const replyMessage = () => {
+    const messageData = JSON.parse(sessionStorage.getItem('fyc-message'));
     let message = document.querySelector("#message");
     const data = {
       message: message.value,
-      chefID: "60298fd861bf100017f70d55"
+      chefID: messageData.chefID
     };
     socketUser.emit('user/message', data);
     console.log("Sending a message.....");
@@ -95,15 +97,25 @@
   }
 
   const popMessage = (message) => {
+    let d = new Date();
+    let hours = d.getHours();
+    let minutes = d.getMinutes();
+    const time = check(hours % 12) + ":" + check(minutes) + `${hours >= 12 ? " PM" : " AM"}`;
+    
     const messageContainer = document.querySelector('.message-container');
     messageContainer.innerHTML += `<div class="message-bubble me">
-      <div class="message-avatar"><img src="http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&amp;s=70" alt="" /></div>
-      <div class="message-text"><p>${message}</p></div>
+      <div class="message-avatar"><img src="${userData.image}" alt="" /></div>
+      <div class="message-text"><p>${message}</p><span>${time}</span></div>
     </div>`;
 
   }
 
   const addMessage = (role, data) => {
+    let d = new Date(created);
+    let hours = d.getHours();
+    let minutes = d.getMinutes();
+    const time = check(hours % 12) + ":" + check(minutes) + `${hours >= 12 ? " PM" : " AM"}`;
+    
     console.log(data);
     const messageContainer = document.querySelector('.message-container');
     const message = data.payload.message;
@@ -111,13 +123,13 @@
       const image = data.payload.chefData.image;
       messageContainer.innerHTML += `<div class="message-bubble">
         <div class="message-avatar"><img src="${image}" alt="" /></div>
-        <div class="message-text"><p>${message}</p></div>
+        <div class="message-text"><p>${message}</p><span>${time}</span></div>
       </div>`;
     } else {
       const image = data.payload.userData.image;
       messageContainer.innerHTML += `<div class="message-bubble">
         <div class="message-avatar"><img src="${image}" alt="" /></div>
-        <div class="message-text"><p>${message}</p></div>
+        <div class="message-text"><p>${message}</p><span>${time}</span></div>
       </div>`;
     }
   }

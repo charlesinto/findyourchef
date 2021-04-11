@@ -34,9 +34,7 @@ const setDetails = () => {
   if(userData.role == "chef") {
     document.querySelector('.user-img').src = userData.profilePic;
     document.getElementById('fn').value = userData.fullname;
-    console.log(document.querySelector('.fullname').value);
     document.querySelector('.phoneNumber').value = userData.phoneNumber;
-    console.log(userData.fullname);
     document.querySelector('.email').value = userData.email;
     document.querySelector('#notes').value = userData.notes;
     document.querySelector('.twitter').value = userData.twitter;
@@ -53,14 +51,14 @@ const setDetails = () => {
     }
     if (userData.images.length > 0) {
       const images = userData.images;
-      images.forEach( image => {
+      images.forEach( (image, index) => {
         document.querySelector('.gallery-listing').innerHTML += `    <li>
         <div class="">
           <div class="list-box-listing-img"><a href="#"><img src="${image}" alt=""></a></div>
         </div>
         <div class="image-delete">
           <!--<a href="#" onclick="deleteChefBookmark(event,'bookmarkersID','chefID')" class="button gray"><i class="sl sl-icon-close"></i> Delete</a>-->
-          <a href="#" class="button gray"><i class="sl sl-icon-close"></i> Delete</a>
+          <a href="#" onclick="delImage(${index})" class="button gray"><i class="sl sl-icon-close"></i> Delete</a>
         </div>
       </li>`
       })
@@ -76,7 +74,7 @@ const setDetails = () => {
         'Authorization': `Bearer ${token}`
       },
     })
-    document.querySelector('body').innerHTML += `<script type="text/javascript" src="scripts/dropzone.js"></script>`;
+    // document.querySelector('body').innerHTML += `<script type="text/javascript" src="scripts/dropzone.js"></script>`;
 
     
   } else {
@@ -317,28 +315,77 @@ document.addEventListener('DOMContentLoaded', () => {
         body: formData
     }
 
-      fetch('https://thepotters-api.herokuapp.com/api/v1/user/profile-image', options)
+      fetch(`${baseURL}/chef/profile-image`, options)
       .then(res => res.json())
-  .then(res => console.log("res is ", res))
+  .then(res => {
+    console.log("res is ", res)
+    toastr.success('Picture uploaded!');
+    const userData = res.payload.data;
+    setData(userData);
+  })
   .catch(err => console.error(err));
     } else {
-      let options = {
-        method: 'POST',
-        headers: {
-              Authorization: `Bearer ${token}`
-        },
-        body: formData
-    }
+  let options = {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    body: formData
+  }
 
-      fetch('https://thepotters-api.herokuapp.com/api/v1/user/profile-image', options)
-      .then(res => res.json())
-  .then(res => console.log("res is ", res))
+    fetch(`${baseURL}/user/profile-image`, options)
+    .then(res => res.json())
+    .then(res => {
+      console.log("res is ", res)
+      toastr.success('Picture uploaded!');
+      const userData = res.payload.data;
+      setData(userData);
+    })
   .catch(err => console.error(err));
     }
   })
 })
 
+const setData = (data) => {
+  const username = document.querySelector('.logged-username');
+if (username) {
+  const userData = data;
+  document.querySelector('.user-img').src = userData.profilePic;
+  const user = userData.username;
+  let image;
+  if (userData.role == "chef") {
+    image = userData.profilePic;
+  } else {
+    image = userData.image;
+  }
+  username.innerHTML = `<span><img src="${image}" alt=""></span>Hi, ${user}!`;
+}
+const headername = document.querySelector('.header-name');
+if (headername) {
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  const user = userData.username;
+  headername.innerHTML = `Howdy, ${user}!`;
+}
+
+}
 
 const updateGallery = () => {
   myDropzone.processQueue();
+}
+
+const delImage = (index) => {
+  axios.delete(`${baseURL}/chef/images/${index}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+  }).then((res) => {
+    console.log(res);
+    toastr.success(res.data.payload.data.message);
+  }).catch((err) => {
+    if (err.response && err.response.data) {
+      toastr.error(err.response.data.error.message);
+    } else {
+      toastr.error('Something went wrong, please try again');
+    }
+  }); 
 }

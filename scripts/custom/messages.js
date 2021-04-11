@@ -1,3 +1,9 @@
+const check = (val) => {
+  if (val === 0) return "12";
+  if (val < 10) return `0${val}`;
+  return val;
+};
+
 const fetchAllMessages = () => {
   let page = 1;
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
@@ -14,7 +20,7 @@ const fetchAllMessages = () => {
     }).then((res) => {
       const dashData = res.data.payload.data;
       popMessages(dashData);
-      console.log(dashData);
+      console.log(res);
     }).catch((err) => {
       if (err.response && err.response.data) {
         toastr.error(err.response.data.error.message);
@@ -64,7 +70,7 @@ const popMessages = (dashData) => {
 
       <div class="message-by">
         <div class="message-by-headline">
-          <h5>Kathy Brown <i>Unread</i></h5>
+          <h5>${data.fromName} <i>Unread</i></h5>
           <span>2 hours ago</span>
         </div>
         <p>${message}</p>
@@ -114,15 +120,29 @@ const fetchCurrentMessages = () => {
 }
 
 const popChats = (messages) => {
+  const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   console.log(messages);
   const messageContainer = document.querySelector('.message-container');
   document.querySelector('.messages-headline').innerHTML = `<h4>${messages[0].fromName}</h4>`;
   messages.forEach(data => {
     const pic = data.fromImage;
     const text = data.message;
-    messageContainer.innerHTML += `<div class="message-bubble">
+    const created = data.created;
+    let d = new Date(created);
+    let hours = d.getHours();
+    let minutes = d.getMinutes();
+    const time = check(hours % 12) + ":" + check(minutes) + `${hours >= 12 ? " PM" : " AM"}`;
+    
+    if (userData.role === data.from) {
+      messageContainer.innerHTML += `<div class="message-bubble me">
       <div class="message-avatar"><img src="${pic}" alt="" /></div>
-      <div class="message-text"><p>${text}</p></div>
+      <div class="message-text"><p>${text}</p><span>${time}</span></div>
     </div>`;
+    } else {
+      messageContainer.innerHTML += `<div class="message-bubble">
+      <div class="message-avatar"><img src="${pic}" alt="" /></div>
+      <div class="message-text"><p>${text}</p><span>${time}</span></div>
+    </div>`;
+    }
   })
 }
