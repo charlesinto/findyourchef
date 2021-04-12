@@ -232,15 +232,21 @@
                                 <div class="add-listing-headline">
                                     <h3><i class="sl sl-icon-picture"></i> Gallery</h3>
                                 </div>
-
-                                <!-- Dropzone -->
-                                <div class="submit-section">
-                                    <form action="/file-upload" id="dropzone" class="dropzone"></form>
+                                <div id="drop-area">
+                                    <form class="my-pic-form">
+                                        <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
+                                        <label class="button-file" for="fileElem">Select some files</label>
+                                    </form>
+                                    <div id="gallery"></div>
                                 </div>
-
                             </div>
                             <!-- Section / End -->
-
+                                <div class="dashboard-list-box margin-top-0">
+                                    <h4>Gallery Images</h4>
+                                    <ul class="gallery-listing">
+                                    </ul>
+                                </div>
+                            </div>
 
                             <!-- Section -->
                             <div class="add-listing-section margin-top-45">
@@ -305,6 +311,8 @@
         <script type="text/javascript" src="scripts/maps.js"></script>
         <script type="text/javascript" src="scripts/custom.js"></script>
         <script type="text/javascript" src="scripts/custom/socket.js"></script>
+        <script type="text/javascript" src="scripts/custom/editRecipe.js"></script>
+
 
 
     <!-- Leaflet // Docs: https://leafletjs.com/ -->
@@ -321,7 +329,7 @@
     <script>
         /* GET CURRENT POSITION */
     window.addEventListener('load', function() {
-		    loadSidebar();
+		loadSidebar();
         setCategory();
         setRecipeData();
     });

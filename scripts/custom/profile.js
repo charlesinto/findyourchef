@@ -366,10 +366,6 @@ if (headername) {
 
 }
 
-const updateGallery = () => {
-  myDropzone.processQueue();
-}
-
 const delImage = (e, index) => {
   e.preventDefault();
   axios.delete(`${baseURL}/chef/images/${index}`, {

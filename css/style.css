@@ -18527,10 +18527,11 @@ ul.gallery-listing li {
   #drop-area {
   border: 2px dashed #ccc;
   border-radius: 20px;
-  width: 480px;
+  min-width: 480px;
   font-family: sans-serif;
-  margin: 100px auto;
+  margin: 20px auto;
   padding: 20px;
+	min-height: 200px;
 }
 #drop-area.highlight {
   border-color: greenyellow;
