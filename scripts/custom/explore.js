@@ -367,7 +367,7 @@ const popAllChefs = (recipes) => {
     const chefName = recipe.chefName;
     const image = recipe.profilePic
     const price = recipe.price;
-    const location = recipe.coords;
+    const location = recipe.location;
     const notes = recipe.notes;
     const id = recipe._id;
     const event = window.Event;
