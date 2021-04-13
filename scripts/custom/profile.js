@@ -174,6 +174,7 @@ const updateProfile = () => {
     }
     button.innerHTML = '<div class="loader"></div>';
     button.setAttribute('disabled', true);
+    console.log(data)
 
     axios.put(`${baseURL}/signup/chef`, data, {
       headers: {
@@ -275,6 +276,7 @@ const getCoords = (showPosition) => {
     lat,
     lng
   }
+  sessionStorage.setItem('fyc-profile-coords', JSON.parse(latlng))
   const geocoder = new google.maps.Geocoder();
   geocoder.geocode({location: latlng}, (results, status) => {
     if (status === "OK") {
@@ -282,7 +284,6 @@ const getCoords = (showPosition) => {
         const city = results[0].address_components[3].long_name;
         const state = results[0].address_components[6].short_name;
         const coords = `${city}, ${state}`;
-        sessionStorage.setItem('fyc-profile-coords', coords);
       } else {
         window.alert("No results found");
       }

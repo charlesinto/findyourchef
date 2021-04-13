@@ -50,137 +50,245 @@ var infoBox_ratingType = 'star-rating'
       )
     }
 
+    
+
     // Locations
-    var locations = [
-      [
-        locationData(
-          'chef-details.html',
-          'images/listing-item-01.jpg',
-          "Tom's Restaurant",
-          '964 School Street, New York',
-          '3.5',
-          '12'
-        ),
-        40.94401669296697,
-        -74.16938781738281,
-        1,
-        '<i class="im im-icon-Chef-Hat"></i>',
-      ],
-      [
-        locationData(
-          'chef-details.html',
-          'images/listing-item-02.jpg',
-          'Sticky Band',
-          'Bishop Avenue, New York',
-          '5.0',
-          '23'
-        ),
-        40.77055783505125,
-        -74.26002502441406,
-        2,
-        '<i class="im im-icon-Electric-Guitar"></i>',
-      ],
-      [
-        locationData(
-          'chef-details.html',
-          'images/listing-item-03.jpg',
-          'Hotel Govendor',
-          '778 Country Street, New York',
-          '2.0',
-          '17'
-        ),
-        40.7427837,
-        -73.11445617675781,
-        3,
-        '<i class="im im-icon-Home-2"></i>',
-      ],
-      [
-        locationData(
-          'chef-details.html',
-          'images/listing-item-04.jpg',
-          'Burger House',
-          '2726 Shinn Street, New York',
-          '5.0',
-          '31'
-        ),
-        40.70437865245596,
-        -73.98674011230469,
-        4,
-        '<i class="im im-icon-Hamburger"></i>',
-      ],
-      [
-        locationData(
-          'chef-details.html',
-          'images/listing-item-05.jpg',
-          'Airport',
-          '1512 Duncan Avenue, New York',
-          '3.5',
-          '46'
-        ),
-        40.641311,
-        -73.778139,
-        5,
-        '<i class="im im-icon-Plane"></i>',
-      ],
-      [
-        locationData(
-          'chef-details.html',
-          'images/listing-item-06.jpg',
-          'Think Coffee',
-          '215 Terry Lane, New York',
-          '4.5',
-          '15'
-        ),
-        41.080938,
-        -73.535957,
-        6,
-        '<i class="im im-icon-Coffee"></i>',
-      ],
-      [
-        locationData(
-          'chef-details.html',
-          'images/listing-item-04.jpg',
-          'Burger House',
-          '2726 Shinn Street, New York',
-          '5.0',
-          '31'
-        ),
-        41.079386,
-        -73.519478,
-        7,
-        '<i class="im im-icon-Hamburger"></i>',
-      ],
+    
+    // var locations = [
+    //   // [
+    //   //   locationData(
+    //   //     'chef-details.html',
+    //   //     'images/listing-item-01.jpg',
+    //   //     "Tom's Restaurant",
+    //   //     '964 School Street, New York',
+    //   //     '3.5',
+    //   //     '12'
+    //   //   ),
+    //   //   40.94401669296697,
+    //   //   -74.16938781738281,
+    //   //   1,
+    //   //   '<i class="im im-icon-Chef-Hat"></i>',
+    //   // ]
+    //   // [
+    //   //   locationData(
+    //   //     'chef-details.html',
+    //   //     'images/listing-item-02.jpg',
+    //   //     'Sticky Band',
+    //   //     'Bishop Avenue, New York',
+    //   //     '5.0',
+    //   //     '23'
+    //   //   ),
+    //   //   40.77055783505125,
+    //   //   -74.26002502441406,
+    //   //   2,
+    //   //   '<i class="im im-icon-Electric-Guitar"></i>',
+    //   // ],
+    //   // [
+    //   //   locationData(
+    //   //     'chef-details.html',
+    //   //     'images/listing-item-03.jpg',
+    //   //     'Hotel Govendor',
+    //   //     '778 Country Street, New York',
+    //   //     '2.0',
+    //   //     '17'
+    //   //   ),
+    //   //   40.7427837,
+    //   //   -73.11445617675781,
+    //   //   3,
+    //   //   '<i class="im im-icon-Home-2"></i>',
+    //   // ],
+    //   // [
+    //   //   locationData(
+    //   //     'chef-details.html',
+    //   //     'images/listing-item-04.jpg',
+    //   //     'Burger House',
+    //   //     '2726 Shinn Street, New York',
+    //   //     '5.0',
+    //   //     '31'
+    //   //   ),
+    //   //   40.70437865245596,
+    //   //   -73.98674011230469,
+    //   //   4,
+    //   //   '<i class="im im-icon-Hamburger"></i>',
+    //   // ],
+    //   // [
+    //   //   locationData(
+    //   //     'chef-details.html',
+    //   //     'images/listing-item-05.jpg',
+    //   //     'Airport',
+    //   //     '1512 Duncan Avenue, New York',
+    //   //     '3.5',
+    //   //     '46'
+    //   //   ),
+    //   //   40.641311,
+    //   //   -73.778139,
+    //   //   5,
+    //   //   '<i class="im im-icon-Plane"></i>',
+    //   // ],
+    //   // [
+    //   //   locationData(
+    //   //     'chef-details.html',
+    //   //     'images/listing-item-06.jpg',
+    //   //     'Think Coffee',
+    //   //     '215 Terry Lane, New York',
+    //   //     '4.5',
+    //   //     '15'
+    //   //   ),
+    //   //   41.080938,
+    //   //   -73.535957,
+    //   //   6,
+    //   //   '<i class="im im-icon-Coffee"></i>',
+    //   // ],
+    //   // [
+    //   //   locationData(
+    //   //     'chef-details.html',
+    //   //     'images/listing-item-04.jpg',
+    //   //     'Burger House',
+    //   //     '2726 Shinn Street, New York',
+    //   //     '5.0',
+    //   //     '31'
+    //   //   ),
+    //   //   41.079386,
+    //   //   -73.519478,
+    //   //   7,
+    //   //   '<i class="im im-icon-Hamburger"></i>',
+    //   // ],
 
-      [
-        locationData(
-          'chef-details.html',
-          'images/listing-item-04.jpg',
-          'Burger House',
-          '2726 Shinn Street, New York',
-          '5.0',
-          '31'
-        ),
-        52.36863,
-        4.895782,
-        7,
-        '<i class="im im-icon-Hamburger"></i>',
-      ],
-      [
-        locationData(
-          'chef-details.html',
-          'images/listing-item-04.jpg',
-          'Burger House',
-          '2726 Shinn Street, New York',
-          '5.0',
-          '31'
-        ),
-        52.350179,
-        4.634857,
-        7,
-        '<i class="im im-icon-Hamburger"></i>',
-      ],
-    ]
+    //   // [
+    //   //   locationData(
+    //   //     'chef-details.html',
+    //   //     'images/listing-item-04.jpg',
+    //   //     'Burger House',
+    //   //     '2726 Shinn Street, New York',
+    //   //     '5.0',
+    //   //     '31'
+    //   //   ),
+    //   //   52.36863,
+    //   //   4.895782,
+    //   //   7,
+    //   //   '<i class="im im-icon-Hamburger"></i>',
+    //   // ],
+    //   // [
+    //   //   locationData(
+    //   //     'chef-details.html',
+    //   //     'images/listing-item-04.jpg',
+    //   //     'Burger House',
+    //   //     '2726 Shinn Street, New York',
+    //   //     '5.0',
+    //   //     '31'
+    //   //   ),
+    //   //   52.350179,
+    //   //   4.634857,
+    //   //   7,
+    //   //   '<i class="im im-icon-Hamburger"></i>',
+    //   // ],
+    // ]
 
+    
+    
+    var locations = []
+
+    const  getChefLocation = () => {
+      let page = 1
+      axios
+        .get(`${baseURL}/chefs?page=${page}`)
+        .then((res) => {
+          console.log(res)
+          const recipes = res.data.payload.data.data
+          console.log(recipes)
+          const recipeCount = res.data.payload.data.dataCount
+             const locationURL = 'chef-details.html'
+      
+      recipes.forEach((chef) => {
+        const locationImg = chef.profilePic
+        const locationTitle = chef.username
+        const locationAddress = chef.coords
+        const locationRating = chef.stars
+        const locationRatingCounter = chef.reviewCount
+
+        let arr = [
+          locationData(
+            locationURL,
+            locationImg,
+            locationTitle,
+            locationAddress,
+            locationRating,
+            locationRatingCounter
+          ),
+         locationAddress,
+          recipeCount,
+          '<i class="im im-icon-Chef-Hat"></i>',
+        ]
+
+        console.log(arr)
+        locations.push(arr)
+
+         var markerIco
+         for (i = 0; i < locations.length; i++) {
+           markerIco = locations[i][3]
+
+           console.log(markerIco, locations[i][1])
+
+           var overlaypositions = new google.maps.LatLng(
+               locations[i][1]
+             ),
+             overlay = new CustomMarker(
+               overlaypositions,
+               map,
+               {
+                 marker_id: i,
+               },
+               markerIco
+             )
+
+           allMarkers.push(overlay)
+
+           google.maps.event.addDomListener(
+             overlay,
+             'click',
+             (function (overlay, i) {
+               return function () {
+                 ib.setOptions(boxOptions)
+                 boxText.innerHTML = locations[i][0]
+                 ib.close()
+                 ib.open(map, overlay)
+                 currentInfobox = locations[i][3]
+                 var latLng = new google.maps.LatLng(
+                   locations[i][1],
+                   locations[i][2]
+                 )
+                 map.panTo(latLng)
+                 map.panBy(0, -90)
+
+                 google.maps.event.addListener(ib, 'domready', function () {
+                   $('.infoBox-close').click(function (e) {
+                     e.preventDefault()
+                     ib.close()
+                     $('.map-marker-container').removeClass(
+                       'clicked infoBox-opened'
+                     )
+                   })
+                 })
+               }
+             })(overlay, i)
+           )
+         }
+
+      })
+          // getLocation(recipes, recipeCount)
+        })
+        .catch((err) => {
+          if (err.response && err.response.data) {
+            toastr.error(err.response.data.error.message)
+          } else {
+            toastr.error('Something went wrong, please try again')
+          }
+        })
+    }
+    
+    getChefLocation()
+
+    console.log(locations)
     // Chosen Rating Type
     google.maps.event.addListener(ib, 'domready', function () {
       if ((infoBox_ratingType = 'numerical-rating')) {
@@ -385,51 +493,7 @@ var infoBox_ratingType = 'star-rating'
       },
     ]
 
-    var markerIco
-    for (i = 0; i < locations.length; i++) {
-      markerIco = locations[i][4]
-
-      var overlaypositions = new google.maps.LatLng(
-          locations[i][1],
-          locations[i][2]
-        ),
-        overlay = new CustomMarker(
-          overlaypositions,
-          map,
-          {
-            marker_id: i,
-          },
-          markerIco
-        )
-
-      allMarkers.push(overlay)
-
-      google.maps.event.addDomListener(
-        overlay,
-        'click',
-        (function (overlay, i) {
-          return function () {
-            ib.setOptions(boxOptions)
-            boxText.innerHTML = locations[i][0]
-            ib.close()
-            ib.open(map, overlay)
-            currentInfobox = locations[i][3]
-            // var latLng = new google.maps.LatLng(locations[i][1], locations[i][2]);
-            // map.panTo(latLng);
-            // map.panBy(0,-90);
-
-            google.maps.event.addListener(ib, 'domready', function () {
-              $('.infoBox-close').click(function (e) {
-                e.preventDefault()
-                ib.close()
-                $('.map-marker-container').removeClass('clicked infoBox-opened')
-              })
-            })
-          }
-        })(overlay, i)
-      )
-    }
-
+   
     // Marker Clusterer Init
     // ----------------------------------------------- //
 

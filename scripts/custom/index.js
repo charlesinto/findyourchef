@@ -1019,7 +1019,7 @@ const popLatestRecipes = (recipes) => {
     const chefName = recipe.fullname
     const image = recipe.profilePic;
     const price = recipe.price;
-    const location = recipe.coords;
+    const location = recipe.location;
     const id = recipe._id;
     const stars = recipe.stars;
     const count = recipe.reviewCount;
@@ -1292,6 +1292,7 @@ const getLocation = (showPosition) => {
           const state = results[0].address_components[6].short_name;
           const address = `${city}, ${state}`
           const locationInput = document.querySelector('#autocomplete-input');
+          sessionStorage.setItem('fyc-location', address);
           locationInput.value = address;
         } else {
           window.alert('No results found');
