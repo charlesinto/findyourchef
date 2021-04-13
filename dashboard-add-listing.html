@@ -159,7 +159,7 @@
                                 <!-- Title -->
                                 <div class="row with-forms">
                                     <div class="col-md-12">
-                                        <h5>Title <i class="tip" data-tip-content="Name of your Recipe"></i></h5>
+                                        <h5>Title <i class="tip" data-tip-content="enter the name of your recipe"></i></h5>
                                         <input class="search-field" type="text" id="recipe-title" value="" />
                                     </div>
                                 </div>
@@ -169,9 +169,9 @@
 
                                     <!-- Status -->
                                     <div class="col-md-6">
-                                        <h5>Category</h5>
-                                        <select id="category" class="chosen-select-no-single">
-									<option label="blank">Select Category</option>
+                                        <h5>Category <i class="tip" data-tip-content="select the category of your recipe"></i></h5>
+                                        <select id="category" class="chosen-select" multiple>
+									    <option label="blank" disabled>Select Category</option>
 								</select>
                                     </div>
 
@@ -244,15 +244,19 @@
 
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="default col-md-6 d-flex justify-content-between">
-                                                <div class="fm-input pricing-name"><input type="text" placeholder="Default Price" /></div>
-                                                <div class="fm-input pricing-price"><input class="default-price" type="text" placeholder="Price" data-unit="USD" /></div>
-                                            </div>
                                             <table id="pricing-list-container">
                                                 <tr class="pricing-list-item pattern">
                                                     <td>
-                                                        <!-- <div class="fm-move"><i class="sl sl-icon-cursor-move"></i></div> -->
-                                                        <div class="fm-input pricing-name"><input type="text" placeholder="Title" /></div>
+                                                        <div class="fm-move"><i class="sl sl-icon-cursor-move"></i></div>
+                                                        <div class="fm-input pricing-name"><input type="text" placeholder="No of guests" /></div>
+                                                        <div class="fm-input">                                                
+                                                            <select data-placeholder="Select Item" class="chosen-select">
+                                                                <option label="blank">Special Instructions</option>	
+                                                                <option>No Ingredient</option>
+                                                                <option>Standard Ingredient</option>
+                                                                <option>Premium Ingredient</option>
+                                                            </select>
+                                                        </div>
                                                         <div class="fm-input pricing-ingredients"><input type="text" placeholder="Description" /></div>
                                                         <div class="fm-input pricing-price"><input type="text" placeholder="Price" data-unit="USD" /></div>
                                                         <div class="fm-close"><a class="delete" href="#"><i class="fa fa-remove"></i></a></div>
@@ -260,7 +264,7 @@
                                                 </tr>
                                             </table>
                                             <a href="#" class="button add-pricing-list-item">Add Item</a>
-                                            <a href="#" class="button add-pricing-submenu">Add Category</a>
+                                            <!-- <a href="#" class="button add-pricing-submenu">Add Category</a> -->
                                         </div>
                                     </div>
 
