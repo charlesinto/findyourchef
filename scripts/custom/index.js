@@ -942,7 +942,7 @@ if (adjacentElement) {
     // targetElement = `<a href="dashboard.html"><i class="sl sl-icon-settings"></i> Dashboard</a>`;
     targetElement.href = "dashboard.html";
     targetElement.classList.add('dynamic-dashboard');
-    targetElement.innerHTML = '<i class="im im-icon-Dashboard"></i> Dashboard';
+    targetElement.innerHTML = '<i class="sl sl-icon-settings"></i> Dashboard';
   } else {
     // targetElement = `<a href="login.html" class="sign-in popup-with-zoom-anim"><i class="sl sl-icon-login"></i> Sign In</a>`;
     targetElement.href = "login.html";
