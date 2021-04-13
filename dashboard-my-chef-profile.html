@@ -231,22 +231,29 @@
 				<div class="row gallery">
 					<div class="dashboard-list-box">
 						<h4>Gallery</h4>
-						<form action="/file-upload"
+						<!-- <form action="/file-upload"
 						class="dropzone"
-						id="my-awesome-dropzone"></form>
-						<button onclick="updateGallery()" class="button gallery-update margin-bottom-20 margin-top-15">Update Gallery</button>
+						id="my-awesome-dropzone"></form> -->
+						<div id="drop-area">
+							<form class="my-pic-form">
+								<input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
+								<label class="button-file" for="fileElem">Select some files</label>
+							</form>
+							<div id="gallery"></div>
 						</div>
+						<!-- <button onclick="updateGallery()" class="button gallery-update margin-bottom-20 margin-top-15">Update Gallery</button>
+						</div> -->
+					</div>
 				</div>
-			</div>
-			<div class="col-lg-6 col-md-12">
-				<div class="dashboard-list-box margin-top-0">
-					<h4>Gallery Images</h4>
-					<ul class="gallery-listing">
-					</ul>
+				<div class="col">
+					<div class="dashboard-list-box margin-top-0">
+						<h4>Gallery Images</h4>
+						<ul class="gallery-listing">
+						</ul>
+					</div>
 				</div>
-			</div>
 
-			<div class="col-lg-6 col-md-12">
+			<div class="col">
 				<div class="dashboard-list-box availability-div margin-top-0">
 					<!-- Section -->
 					<div class="add-listing-section margin-top-45">
@@ -679,7 +686,7 @@
 			</div>
 
 			<!-- Change Password -->
-			<div class="col-lg-6 col-md-12">
+			<div class="col">
 				<div class="dashboard-list-box password-update">
 					<h4 class="gray">Change Password</h4>
 					<div class="dashboard-list-box-static top ">
