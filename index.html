@@ -71,9 +71,9 @@
                         <div class="header-widget">
                             <!-- User Menu -->
                             <div class="user-menu">
-                                <div class="user-name logged-username"></div>
+                                <!-- <div class="user-name logged-username"></div> -->
                                 <ul>
-                                    <li><a href="dashboard.html"><i class="im im-icon-Dashboard"></i> Dashboard</a></li>
+                                    <li><a href="dashboard.html"><i class="sl sl-icon-Dashboard"></i> Dashboard</a></li>
                                     <li><a href="dashboard-messages.html"><i class="sl sl-icon-envelope-open"></i> Messages</a></li>
                                     <li><a href="dashboard-bookings.html"><i class="fa fa-calendar-check-o"></i> Bookings</a></li>
                                     <li><a href="#" onclick="handleLogout()"><i class="sl sl-icon-power"></i> Logout</a></li>
@@ -502,34 +502,6 @@
     </script>
     <script>
     /* GET CURRENT POSITION */
-        const getLocation = (showPosition) => {
-        const lat = showPosition.coords.latitude;
-        const lng = showPosition.coords.longitude;
-        const latlng = {
-            lat,
-            lng
-        }
-        sessionStorage.setItem('fyc-coords', JSON.stringify(latlng));
-        const geocoder = new google.maps.Geocoder();
-        geocoder.geocode({location: latlng}, (results, status) => {
-            if (status === "OK") {
-                if (results[0]) {
-                console.log(results);
-                const city = results[0].address_components[3].long_name;
-                const state = results[0].address_components[6].short_name;
-                const address = `${city}, ${state}`
-                const locationInput = document.querySelector('#autocomplete-input');
-                sessionStorage.setItem('fyc-location', address);
-                locationInput.value = address;
-                } else {
-                window.alert('No results found');
-                }
-            } else {
-            window.alert(`Geocoder failed due to ${status}`);
-            }
-        });
-        }
-
     window.addEventListener('load', function() {
         navigator.geolocation.getCurrentPosition(getLocation);
         loadLatestChefs();

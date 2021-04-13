@@ -509,6 +509,16 @@ if(element) {
   }) 
 }
 
+
+// add user profile
+// const token =
+//   sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token')
+//   if(token) {
+//     let userName = document.getElementsByClassName('user-menu')
+//     userName.appendChild('<div class="user-name logged-username"></div>')
+//   }
+
+
 /* DASHBOARD ACCOUNT VERIFICATION */
 
 /* SHOW USER'S NAME WHEN THEY LOGIN */
@@ -935,21 +945,43 @@ function starRating(ratingElem) {
 /* REMOVE SIGN IN BUTTON IF THE USER IS SIGNED IN */
 
 adjacentElement = document.querySelector('.with-icon');
-if (adjacentElement) {
-  const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
-  let targetElement = document.createElement('a');
-  if (token) {
+// const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
+if (
+  (adjacentElement && sessionStorage.getItem('fyc-token')) ||
+  localStorage.getItem('fyc-token')
+) {
+  let userMenu = document.querySelector('.user-menu')
+  let targetElement = document.createElement('a')
+  let userName = document.createElement('div')
+  if (
+    sessionStorage.getItem('fyc-token') ||
+    localStorage.getItem('fyc-token')
+  ) {
     // targetElement = `<a href="dashboard.html"><i class="sl sl-icon-settings"></i> Dashboard</a>`;
-    targetElement.href = "dashboard.html";
-    targetElement.classList.add('dynamic-dashboard');
-    targetElement.innerHTML = '<i class="sl sl-icon-settings"></i> Dashboard';
-  } else {
-    // targetElement = `<a href="login.html" class="sign-in popup-with-zoom-anim"><i class="sl sl-icon-login"></i> Sign In</a>`;
-    targetElement.href = "login.html";
-    targetElement.classList.add('sign-in');
-    targetElement.innerHTML = '<i class="sl sl-icon-login"></i> Sign In';
+    // targetElement.href = 'dashboard.html'
+    userName.classList.add('dynamic-dashboard', 'user-name', 'logged-username')
+    userMenu.appendChild(userName)
+    // const username = document.querySelector('.logged-username')
+    // if (username) {
+    const userData =
+      JSON.parse(sessionStorage.getItem('fyc-user')) ||
+      JSON.parse(localStorage.getItem('fyc-user'))
+    const user = userData.username
+    let image
+    if (userData.role == 'chef') {
+      image = userData.profilePic
+    } else {
+      image = userData.image
+    }
+    userName.innerHTML = `<span><img src="${image}" alt=""></span>Hi, ${user}!`
   }
-  adjacentElement.insertAdjacentElement('beforebegin', targetElement);
+} else {
+  let targetElement = document.createElement('a')
+  // targetElement = `<a href="login.html" class="sign-in popup-with-zoom-anim"><i class="sl sl-icon-login"></i> Sign In</a>`;
+  targetElement.href = 'login.html'
+  targetElement.classList.add('sign-in')
+  targetElement.innerHTML = '<i class="sl sl-icon-login"></i> Sign In'
+  adjacentElement.insertAdjacentElement('beforebegin', targetElement)
 }
 
 
