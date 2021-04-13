@@ -951,7 +951,7 @@ if (
   localStorage.getItem('fyc-token')
 ) {
   let userMenu = document.querySelector('.user-menu')
-  let targetElement = document.createElement('a')
+  // let targetElement = document.createElement('a')
   let userName = document.createElement('div')
   if (
     sessionStorage.getItem('fyc-token') ||
@@ -975,13 +975,16 @@ if (
     }
     userName.innerHTML = `<span><img src="${image}" alt=""></span>Hi, ${user}!`
   }
-} else {
+} else if (sessionStorage.getItem('fyc-token') === null)  {
+  let userMenu = document.querySelector('.user-menu')
   let targetElement = document.createElement('a')
+  // adjacentElement.insertAdjacentElement('beforebegin', targetElement)
   // targetElement = `<a href="login.html" class="sign-in popup-with-zoom-anim"><i class="sl sl-icon-login"></i> Sign In</a>`;
   targetElement.href = 'login.html'
   targetElement.classList.add('sign-in')
   targetElement.innerHTML = '<i class="sl sl-icon-login"></i> Sign In'
-  adjacentElement.insertAdjacentElement('beforebegin', targetElement)
+  // adjacentElement.insertAdjacentElement('beforebegin', targetElement)
+  userMenu.appendChild(targetElement)
 }
 
 
