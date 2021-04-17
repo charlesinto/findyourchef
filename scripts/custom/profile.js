@@ -7,6 +7,7 @@ const loadCategories = () => {
     console.log(res);
     const categories = res.data.payload.data;
     popCategories(categories);
+ 
   }).catch((err) => {
     if (err.response && err.response.data) {
       toastr.error(err.response.data.error.message);
@@ -17,14 +18,28 @@ const loadCategories = () => {
 }
 
 const popCategories = (categories) => {
-  const edit = document.querySelector('.category-edit');
+  console.log(categories);
+  const edit = document.querySelector('#category');
   categories.forEach((category, index) => {
     const tag = category.name;
-    edit.innerHTML += `<div class="check-div">
-      <label for="${tag}">${tag}</label>
-      <input type="checkbox" value="${tag}" id="${tag + index}" name="${tag}">
-    </div>`;
-  });
+    edit.innerHTML += `<option value="${tag}">${tag}</option>`;
+  });   
+    var config = {
+      '.chosen-select'           : {disable_search_threshold: 10, width:"100%"},
+      '.chosen-select-deselect'  : {allow_single_deselect:true, width:"100%"},
+      '.chosen-select-no-single' : {disable_search_threshold:100, width:"100%"},
+      '.chosen-select-no-single.no-search' : {disable_search_threshold:10, width:"100%"},
+      '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+      '.chosen-select-width'     : {width:"95%"}
+    };
+
+    for (var selector in config) {
+	   	if (config.hasOwnProperty(selector)) {
+	      $(selector).chosen(config[selector]);
+	  	}
+    }
+
+
 }
 
 let myDropzone;
@@ -37,9 +52,9 @@ const setDetails = () => {
     document.querySelector('.phoneNumber').value = userData.phoneNumber;
     document.querySelector('.email').value = userData.email;
     document.querySelector('#notes').value = userData.notes;
-    document.querySelector('.twitter').value = userData.twitter;
-    document.querySelector('.facebook').value = userData.facebook;
-    document.querySelector('.google').value = userData.google;
+    // document.querySelector('.twitter').value = userData.twitter;
+    // document.querySelector('.facebook').value = userData.facebook;
+    // document.querySelector('.google').value = userData.google;
     // document.querySelector('#my-awesome-dropzone').action = `${baseURL}/chef/images/${userData._id}`;
     if (userData.location != "") {
       document.querySelector('#autocomplete-input').value = userData.location;
@@ -137,9 +152,9 @@ const updateProfile = () => {
     const phoneNumber = document.querySelector('.phoneNumber').value;
     const email = document.querySelector('.email').value;
     const notes = document.querySelector('#notes').value;
-    const twitter = document.querySelector('.twitter').value;
-    const facebook = document.querySelector('.facebook').value;
-    const google = document.querySelector('.google').value;
+    // const twitter = document.querySelector('.twitter').value;
+    // const facebook = document.querySelector('.facebook').value;
+    // const google = document.querySelector('.google').value;
     const coords = sessionStorage.getItem('fyc-profile-coords');
     const location = document.querySelector('#autocomplete-input').value;
     if (categories.length != 0 && userData.categories != categories) {
@@ -157,18 +172,18 @@ const updateProfile = () => {
     if (userData.notes != notes) {
       data.notes = notes;
     }
-    if (userData.twitter != twitter) {
-      data.twitter = twitter;
-    }
+    // if (userData.twitter != twitter) {
+    //   data.twitter = twitter;
+    // }
     if (userData.location != location) {
       data.location = location;
     }
-    if (userData.facebook != facebook) {
-      data.facebook = facebook;
-    }
-    if (userData.google != google) {
-      data.google = google;
-    }
+    // if (userData.facebook != facebook) {
+    //   data.facebook = facebook;
+    // }
+    // if (userData.google != google) {
+    //   data.google = google;
+    // }
     if (userData.coords != coords) {
       data.coords = coords;
     }

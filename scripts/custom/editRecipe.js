@@ -93,7 +93,7 @@ const delImage = (e, index) => {
   }).then((res) => {
     console.log(res);
     toastr.success("Image Deleted!");
-    sessionStorage.setItem('fyc-user', JSON.stringify(res.data.payload.data));
+    // sessionStorage.setItem('fyc-user', JSON.stringify(res.data.payload.data));
     e.target.parentElement.parentElement.remove();
   }).catch((err) => {
     if (err.response && err.response.data) {
@@ -189,14 +189,14 @@ function previewFile(file) {
 function addImagetoDOM(data) {
   document.querySelector('.gallery-listing').innerHTML = "";
   const images = data.images;
-      images.forEach( (image, index) => {
-        document.querySelector('.gallery-listing').innerHTML += `    <li>
-        <div class="">
-          <div class="list-box-listing-img"><a href="#"><img src="${image}" alt=""></a></div>
-        </div>
-        <div class="image-delete">
-          <a href="#" onclick="delImage(event, ${index})" class="button gray"><!--<i class="sl sl-icon-close">--></i> Delete</a>
-        </div>
-      </li>`
-      })
+  images.forEach( (image, index) => {
+    document.querySelector('.gallery-listing').innerHTML += `    <li>
+    <div class="">
+      <div class="list-box-listing-img"><a href="#"><img src="${image}" alt=""></a></div>
+    </div>
+    <div class="image-delete">
+      <a href="#" onclick="delImage(event, ${index})" class="button gray"><!--<i class="sl sl-icon-close">--></i> Delete</a>
+    </div>
+  </li>`
+  })
 }

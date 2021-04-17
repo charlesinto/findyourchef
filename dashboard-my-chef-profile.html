@@ -167,20 +167,16 @@
         <!-- Details -->
         <div class="my-profile edit ">
 					<label>Notes</label>
-					<textarea name="notes" id="notes" cols="30" rows="7">Maecenas quis consequat libero, a feugiat eros. Nunc ut lacinia tortor morbi ultricies laoreet ullamcorper phasellus semper</textarea>
-			
-					<label><i class="fa fa-twitter"></i> Twitter</label>
-					<input class="twitter" placeholder="https://www.twitter.com/" type="text">
-			
-					<label><i class="fa fa-facebook-square"></i> Facebook</label>
-					<input class="facebook" placeholder="https://www.facebook.com/" type="text">
-			
-					<label><i class="fa fa-google-plus"></i> Google+</label>
-					<input class="google" placeholder="https://www.google.com/" type="text">
+					<textarea name="notes" id="notes" cols="30" rows="7"></textarea>
 			
 					<div class="category">
 						<h5 class="bold">Select Category</h5>
-						<div class="category-edit"></div>
+						<select id="category" class="chosen-select" multiple>
+							<option label="blank" disabled>Select Category</option>
+							<!-- <option label="African">African</option>
+							<option label="Chinese">Chinese</option>
+							<option label="American">American</option> -->
+						</select>
 					</div>
 					<div class="radius">
 						<h5 class="bold">Distance Radius</h5>
@@ -475,10 +471,10 @@
 <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
 <script type="text/javascript" src="scripts/tooltips.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<script type="text/javascript" src="scripts/custom.js"></script>
 <script type="text/javascript" src="scripts/maps.js"></script>
 <script type="text/javascript" src="scripts/custom/index.js"></script>
 <script type="text/javascript" src="scripts/custom/socket.js"></script>
+<script type="text/javascript" src="scripts/custom.js"></script>
 <script type="text/javascript" src="scripts/custom/profile.js"></script>
 
 
