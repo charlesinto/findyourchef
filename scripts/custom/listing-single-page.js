@@ -60,7 +60,7 @@ const popChefData = (data, stars, count) => {
   const price = data.price;
   const profileImage = data.profilePic;
   const category = data.categories;
-  const location = data.coords;
+  const location = data.location;
   // const tags = data.tags;   
   const overview = data.notes;
   const availability = data.availability;

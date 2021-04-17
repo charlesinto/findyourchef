@@ -947,22 +947,15 @@ function starRating(ratingElem) {
 adjacentElement = document.querySelector('.with-icon');
 // const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
 if (
-  (adjacentElement && sessionStorage.getItem('fyc-token')) ||
+  (sessionStorage.getItem('fyc-token')) ||
   localStorage.getItem('fyc-token')
 ) {
   let userMenu = document.querySelector('.user-menu')
-  // let targetElement = document.createElement('a')
   let userName = document.createElement('div')
-  if (
-    sessionStorage.getItem('fyc-token') ||
-    localStorage.getItem('fyc-token')
-  ) {
+  // let targetElement = document.createElement('a')
     // targetElement = `<a href="dashboard.html"><i class="sl sl-icon-settings"></i> Dashboard</a>`;
     // targetElement.href = 'dashboard.html'
     userName.classList.add('dynamic-dashboard', 'user-name', 'logged-username')
-    userMenu.appendChild(userName)
-    // const username = document.querySelector('.logged-username')
-    // if (username) {
     const userData =
       JSON.parse(sessionStorage.getItem('fyc-user')) ||
       JSON.parse(localStorage.getItem('fyc-user'))
@@ -974,7 +967,10 @@ if (
       image = userData.image
     }
     userName.innerHTML = `<span><img src="${image}" alt=""></span>Hi, ${user}!`
-  }
+    userMenu.prepend(userName)
+    // const username = document.querySelector('.logged-username')
+    // if (username) {
+
 } else if (sessionStorage.getItem('fyc-token') === null)  {
   let userMenu = document.querySelector('.user-menu')
   let targetElement = document.createElement('a')

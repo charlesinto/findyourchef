@@ -276,7 +276,7 @@ const getCoords = (showPosition) => {
     lat,
     lng
   }
-  sessionStorage.setItem('fyc-profile-coords', JSON.parse(latlng))
+  sessionStorage.setItem('fyc-profile-coords', JSON.stringify(latlng))
   const geocoder = new google.maps.Geocoder();
   geocoder.geocode({location: latlng}, (results, status) => {
     if (status === "OK") {
