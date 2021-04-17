@@ -202,7 +202,8 @@ var infoBox_ratingType = 'star-rating'
       recipes.forEach((chef) => {
         const locationImg = chef.profilePic
         const locationTitle = chef.username
-        const locationAddress = chef.coords
+        const locationCoords = JSON.parse(chef.coords)
+        const locationAddress = chef.location
         const locationRating = chef.stars
         const locationRatingCounter = chef.reviewCount
 
@@ -215,7 +216,7 @@ var infoBox_ratingType = 'star-rating'
             locationRating,
             locationRatingCounter
           ),
-         locationAddress,
+          locationCoords,
           recipeCount,
           '<i class="im im-icon-Chef-Hat"></i>',
         ]
@@ -254,8 +255,7 @@ var infoBox_ratingType = 'star-rating'
                  ib.open(map, overlay)
                  currentInfobox = locations[i][3]
                  var latLng = new google.maps.LatLng(
-                   locations[i][1],
-                   locations[i][2]
+                   locations[i][1]
                  )
                  map.panTo(latLng)
                  map.panBy(0, -90)

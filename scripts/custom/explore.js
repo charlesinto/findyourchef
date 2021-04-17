@@ -82,14 +82,14 @@ const loadAllRecipes = () => {
     const input = searchData.searchInput;
     const category = sessionStorage.getItem('fyc-data-category');
     const inputAddress = JSON.parse(sessionStorage.getItem('fyc-address')) || JSON.parse(sessionStorage.getItem('fyc-coords'));
-    const lat = inputAddress.lat;
-    const lng = inputAddress.lng;
-    const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
+    // const lat = inputAddress.lat;
+    // const lng = inputAddress.lng;
+    // const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
     const data = {
-      coords: '17586 County Rd T5, Fort Morgan, CO 80701, United States',
-      radius: '300',
-      location: 'Ikeja, Lagos',
-      name: 'Daniel',
+      coords: inputAddress,
+      radius: radius,
+      location: location,
+      name: input,
     }
     console.log(data);
     if(input) {
@@ -99,10 +99,7 @@ const loadAllRecipes = () => {
     if(category) {
       data.category = category;
     }
-    axios.post(`${baseURL}/recipes/search?page=${page}`, data, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
+    axios.post(`${baseURL}/chefs/search?page=${page}`, data, {
     }).then((res) => {
       console.log(res);
       const recipes = res.data.payload.data.data;
@@ -137,7 +134,7 @@ const loadAllRecipes = () => {
         nxtPage = curPage + 1;
         pageParent[curPage].children[0].classList.remove('current-page');
         pageParent[nxtPage].children[0].classList.add('current-page');
-        axios.get(`${baseURL}/recipes/search?page=${page}`).then((res) => {
+        axios.get(`${baseURL}/chefs/search?page=${page}`).then((res) => {
           console.log(res.data.payload.data);
           const recipes = res.data.payload.data.data;
           popAllChefs(recipes);
@@ -159,7 +156,7 @@ const loadAllRecipes = () => {
         }
         page = e.target.innerText;
         e.target.classList.add('current-pag e');
-        axios.get(`${baseURL}/recipes/search?page=${page}`).then((res) => {
+        axios.get(`${baseURL}/chefs/search?page=${page}`).then((res) => {
           console.log(res.data.payload.data);
           const recipes = res.data.payload.data.data;
           popAllChefs(recipes);
@@ -369,8 +366,17 @@ const popAllChefs = (recipes) => {
     const price = recipe.price;
     const location = recipe.location;
     const notes = recipe.notes;
+    const stars = recipe.stars
+    const count = recipe.reviewCount
     const id = recipe._id;
     const event = window.Event;
+
+    if (count <= 1) {
+      review = 'review'
+    } else {
+      review = 'reviews'
+    }
+
     let listItem = `
     <div class="col-lg-12 col-md-12">
       <div data-id="${id}" class="listing-item-container list-layout" data-marker-id="1">
@@ -390,9 +396,9 @@ const popAllChefs = (recipes) => {
               <p data-id="${id}">${name}<i class="verified-icon"></i></p>
               <p data-id="${id}"><i class="fa fa-map-marker"></i> ${location}</p>
               <p data-id="${id}">${notes}</p>
-              <div data-id="${id}" class="star-rating" data-rating="3.75">
-                <div class="rating-counter">(12 reviews)</div>
-              </div>
+              <div data-id="${id}" class="star-rating" data-rating="${stars}">
+                <div class="rating-counter">(${count} ${review})</div>
+             </div>
             </div>
 
             <span data-id="${id}" class="like-icon"></span>
