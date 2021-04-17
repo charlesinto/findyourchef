@@ -102,33 +102,31 @@ const validateOTPForm = () => {
 
 const validateAddRecipeForm = () => {
   const name = document.querySelector('#recipe-title')
-  const category = document.querySelector('#category')
   const keywords = document.querySelector('#keywords')
   const overview = document.querySelector('#summary')
-  const price = document.querySelector('.default-price');
   const button = document.querySelector('#post-recipe');
-
+  // const pricingTable = document.querySelector('.ui-sortable').children;
+  // const pricing = pricingTable[0].children[0].children[4].children[1];
+  // console.log(pricingTable);
   // Initially disable the button
   if (
     name.value.length < 1 ||
-    category.value == "Select Category" ||
     keywords.value.length < 1 ||
-    overview.value.length < 1 ||
-    price.value.length < 1
+    overview.value.length < 1 //||
+    // pricing.value.length < 1
   ) {
     button.setAttribute('disabled', true);
   }
 
-  const fields = [name, category, keywords, overview, price];
+  const fields = [name, keywords, overview, /*pricing*/];
 
   fields.forEach((field) => {
     field.addEventListener('input', (el) => {
       if (
         name.value &&
-        category.value &&
         keywords.value &&
-        overview.value &&
-        price.value
+        overview.value /*&&
+        pricing.value*/
       ) {
         button.removeAttribute('disabled');
       }

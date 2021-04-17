@@ -92,6 +92,7 @@ const fetchReviewstoChef = () => {
 //? SHOWS REVIEWS THAT WERE GIVEN TO A CHEF IN THE DOM
 const popReviews = (reviews) => {
   const reviewContainer = document.querySelector('.chef-reviews');
+  reviewContainer.innerHTML = "";
   reviews.forEach(review => {
     const reviewID = review._id;
     fetchReviewReply(reviewID);
@@ -373,6 +374,7 @@ const replyReview = () => {
           reviewID : reviewData.editID,
           review : reply.value
         }
+        console.log(data);
         axios.put(`${baseURL}/reviews/user`, data, {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -492,6 +494,7 @@ const fetchAllReviewstoChef = () => {
 const popAllChefReviews = (reviews) => {
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   const reviewContainer = document.querySelector('.reviews-to-chefs');
+  reviewContainer.innerHTML = "";
   let image;
   if (userData.role === 'chef') {
     image = userData.profilePic;
@@ -856,6 +859,7 @@ const fetchReviewtoRecipes = () => {
 const popRecipeReviews = (reviews) => {
   const reviewContainer = document.querySelector('.reviews-to-recipes');
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
+  reviewContainer.innerHTML = "";
   let image;
   if (userData.role === 'chef') {
     image = userData.profilePic;

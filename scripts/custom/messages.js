@@ -4,15 +4,37 @@ const check = (val) => {
   return val;
 };
 
+
+const hoursAgo = (str) => {
+  const today = new Date();
+  const yesterday = new Date(today.getTime() - 1000 * 60 * 60 * 24);
+  const date = new Date(str);
+  if (date >= yesterday) {
+    if (today.getTime() - date.getTime() < 1000 * 60 * 60) {
+      const mins = today.getMinutes() - date.getMinutes();
+      if (mins < 2) return "1m ago";
+      return mins + "m ago";
+    }
+    if (date.getDate() === today.getDate()) {
+      const t = today.getHours() - date.getHours();
+      return t + "h ago";
+    }
+    return today.getHours() + 24 - date.getHours() + "h ago";
+  }
+
+  return false;
+};
+
+
 const fetchAllMessages = () => {
   let page = 1;
   const token = sessionStorage.getItem('fyc-token') || localStorage.getItem('fyc-token');
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
-  const userID = userData._id;
-  const data = {
-    userID,
-  };
+
   if (userData.role === 'chef') {
+    const data = {
+      chefID: userData._id
+    };
     axios.post(`${baseURL}/messages/chef/recent?page=${page}`, data, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -29,11 +51,15 @@ const fetchAllMessages = () => {
       }
     });
   } else {
+    const data = {
+      userID: userData._id
+    };
     axios.post(`${baseURL}/messages/user/recent?page=${page}`, data, {
       headers: {
         'Authorization': `Bearer ${token}`
       },
     }).then((res) => {
+      console.log(res);
       const dashData = res.data.payload.data;
       popMessages(dashData);
     }).catch((err) => {
@@ -50,28 +76,32 @@ const popMessages = (dashData) => {
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   dashData.forEach(data => {
     console.log(data);
+    const time = hoursAgo(data.created)
     const message = data.message;
     const event = window.Event;
-    let chefID, userID;
-    if (userData.role === 'chef') {
-      if (userData._id === data.toID) {
-        chefID = data.toID;
-        userID = data.fromID;
-      }
+    let chefID, userID, dName;
+    if (userData._id === data.toID) {
+      dName = data.fromName;
+    } else {
+      dName = data.toName;
+    }
+    if (userData.role === 'chef' && userData._id === data.toID) {
+      chefID = data.toID;
+      userID = data.fromID;
     } else {
       chefID = data.fromID;
       userID = data.toID;
     }
 
     const messageContainer = document.querySelector('.message-body');
-    messageContainer.innerHTML = `<li class="unread">
+    messageContainer.innerHTML += `<li class="unread">
     <a href="#" onclick="storeMessageData(event, '${userID}', '${chefID}')">
       <div class="message-avatar"><img src="http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&amp;s=70" alt="" /></div>
 
       <div class="message-by">
         <div class="message-by-headline">
-          <h5>${data.fromName} <i>Unread</i></h5>
-          <span>2 hours ago</span>
+          <h5>${dName} <i>Unread</i></h5>
+          <span>${time}</span>
         </div>
         <p>${message}</p>
       </div>

@@ -7,11 +7,11 @@ const fetchChefDetails = () => {
   const id = localStorage.getItem('fyc-chef-id');
   axios.get(`${baseURL}/chefs/${id}`).then((res) => {
     const recipe = res.data.payload.data.data;
-    console.log(res)
+    console.log(recipe)
     const stars = res.data.payload.data.stars;
     console.log(stars)
     const count = res.data.payload.data.reviewCount;
-    sessionStorage.setItem('fyc-recipe-chefID', recipe.chefID);
+    sessionStorage.setItem('fyc-recipe-chefID', recipe._id);
     popChefData(recipe,  stars, count);
     fetchChefReview(id);
   }).catch((err) => {

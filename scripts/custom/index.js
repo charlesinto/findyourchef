@@ -385,13 +385,15 @@ if (addListingSection) {
       e.target.innerHTML = '<div class="loader"></div>';
       e.target.setAttribute('disabled', true);
       let name = document.querySelector('#recipe-title');
-      let category = document.querySelector('#category');
+      // let category = document.querySelector('#category');
+      const myopt = document.querySelectorAll('.chosen-choices span');
+      let category = [];
+      myopt.forEach(opt => category.push(opt.innerText))
       let keywords = document.querySelector('#keywords');
       let tags = keywords.value.split(',');
       let overview = document.querySelector('#summary');
       let perimeter = ["1.02433,0.84950", "2.4923,1.490493"];
-      let priceVal = document.querySelector('.default-price');
-      let price = parseInt(priceVal.value);
+      //* let priceVal = document.querySelector('.default-price');
       const pricingTable = document.querySelector('.ui-sortable').children;
       let priceShow = [];
       let pricing = [];
@@ -401,23 +403,26 @@ if (addListingSection) {
         }
       })
       priceShow.forEach( price => {
-        if (price[0].children[0].children[0].value != "" &&
-            price[0].children[1].children[0].value != "" &&
-            price[0].children[2].children[1].value != "") {
+        if (price[0].children[1].children[0].value != "" &&
+            price[0].children[2].children[0].value != "" &&
+            price[0].children[3].children[0].value != "" &&
+            price[0].children[4].children[1].value != "") {
               pricing.push({
-                "title" : price[0].children[0].children[0].value,
-                "description" : price[0].children[1].children[0].value,
-                "price" : parseInt(price[0].children[2].children[1].value)
+                // "guests" : parseInt(price[0].children[1].children[0].value),
+                "title" : price[0].children[2].children[0].value,
+                "description" : price[0].children[3].children[0].value,
+                "price" : parseInt(price[0].children[4].children[1].value)
               })
             } else {
               false;
             }
         console.log(pricing);
       })
+      let price = pricing[0].price;
       const data = {
         name: name.value,
         overview: overview.value,
-        category: category.value,
+        category: category,
         perimeter,
         tags,
         price,
@@ -651,7 +656,7 @@ const popRecipe = (recipes) => {
     console.log(recipe);
     const name = recipe.name;
     const location = recipe.location;
-    const image = recipe.image;
+    const image = recipe.images[0];
     const recipeID = recipe._id;
     const chefID = recipe.chefID
     const event = window.Event;
