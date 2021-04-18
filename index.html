@@ -14,36 +14,29 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="css/main-color.css" id="colors">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
     
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjbSwlaIqraERZQGoSOPEnPspCgPsE8y8" defer ></script>
-    <!-- Start of Async Drift Code -->
-<script>
-    "use strict";
-    
-    !function() {
-      var t = window.driftt = window.drift = window.driftt || [];
-      if (!t.init) {
-        if (t.invoked) return void (window.console && console.error && console.error("Drift snippet included twice."));
-        t.invoked = !0, t.methods = [ "identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on" ], 
-        t.factory = function(e) {
-          return function() {
-            var n = Array.prototype.slice.call(arguments);
-            return n.unshift(e), t.push(n), t;
-          };
-        }, t.methods.forEach(function(e) {
-          t[e] = t.factory(e);
-        }), t.load = function(t) {
-          var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script");
-          o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + n + "/" + t + ".js";
-          var i = document.getElementsByTagName("script")[0];
-          i.parentNode.insertBefore(o, i);
-        };
-      }
-    }();
-    drift.SNIPPET_VERSION = '0.3.1';
-    drift.load('y2yv4wnns8sx');
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/607b8874067c2605c0c373a9/1f3h8q253';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+        })();
     </script>
-    <!-- End of Async Drift Code -->
+    <!--End of Tawk.to Script-->
 
 </head>
 
@@ -93,7 +86,6 @@
                     </div>
                     <!-- Left Side Content / End -->
 
-
                     <!-- Right Side Content / End -->
                     <div class="right-side">
                         <div class="header-widget">
@@ -108,7 +100,7 @@
                                 </ul>
                             </div>
 
-                            <a href="explore.html" class="find-chef button border with-icon">Find Chef</a>
+                            <a href="explore.html" class="button border with-icon">Find Chef</a>
                         </div>
                     </div>
                     <!-- Right Side Content / End -->
@@ -420,7 +412,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-5 col-sm-6">
-                        <img class="footer-logo" src="images/logo.png" alt="">
+                        <img class="footer-logo" src="images/sticky_logo.png" alt="">
                         <br><br>
                         <p>At FYC, we believe there is a better way to enjoy food; a more customized, community-based, method to traditional catering. We do this by providing an online platform that instantly connects chefs to local households. Our network at FYC empowers communities by providing instant bookings, flexible timing, and freedom to integrate work and life.</p>
                     </div>
@@ -428,17 +420,17 @@
                     <div class="col-md-4 col-sm-6 ">
                         <h4>Quick Links</h4>
                         <ul class="footer-links">
-                            <li><a href="#">My Account</a></li>
-                            <li><a href="#">Our Partners</a></li>
-                            <li><a href="#">Pricing</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="/dashboard.html">My Account</a></li>
+                            <li><a href="about-us.html">About Us</a></li>
+                            <li><a href="/become-a-chef/">Get Started</a></li>
+                            <li><a href="/privacy-policy.html">Privacy Policy</a></li>
                         </ul>
 
                         <ul class="footer-links">
-                            <li><a href="#">FAQ</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">How It Works</a></li>
-                            <li><a href="contact.hrml">Contact</a></li>
+                            <li><a href="/faq.html">FAQ</a></li>
+                            <li><a href="/blog">Blog</a></li>
+                            <li><a href="/how-it-works.html">How It Works</a></li>
+                            <li><a href="contact.html">Contact</a></li>
                         </ul>
                         <div class="clearfix"></div>
                     </div>
@@ -447,7 +439,7 @@
                         <h4>Contact Us</h4>
                         <div class="text-widget">
                             <span>E-Mail:</span>
-                            <span> <a href="#">support@findyourchef.com</a> </span><br>
+                            <span> <a href="mailto:support@findyourchef.com">support@findyourchef.com</a> </span><br>
                         </div>
 
                         <ul class="social-icons margin-top-20">
@@ -464,7 +456,7 @@
                 <!-- Copyright -->
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="copyrights">© 2020 Find Your Chef. All Rights Reserved.</div>
+                        <div class="copyrights">© <span id="year"></span> Find Your Chef. All Rights Reserved.</div>
                     </div>
                 </div>
 
@@ -514,6 +506,9 @@
     <!-- Leaflet Geocoder + Search Autocomplete // Docs: https://github.com/perliedman/leaflet-control-geocoder -->
     <script src="scripts/leaflet-autocomplete.js"></script>
     <script src="scripts/leaflet-control-geocoder.js"></script>
+    <script>
+        document.getElementById("year").innerHTML = new Date().getFullYear();
+    </script>
 
     <!-- Typed Script -->
     <script type="text/javascript" src="scripts/typed.js"></script>
