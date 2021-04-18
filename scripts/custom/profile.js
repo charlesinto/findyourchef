@@ -100,38 +100,38 @@ const setDetails = () => {
   }
 }
 let availability = {
-  "monday" : [],
-  "tuesday" : [],
-  "wednesday" : [],
-  "thursday" : [],
-  "friday" : [],
-  "saturday" : [],
-  "sunday" : []
+  // "monday" : [],
+  // "tuesday" : [],
+  // "wednesday" : [],
+  // "thursday" : [],
+  // "friday" : [],
+  // "saturday" : [],
+  // "sunday" : []
 };
-const addList = (e) => {
-  let startInput = e.target.parentElement.parentElement.children[0].children[0].value;
-  let endInput = e.target.parentElement.parentElement.children[0].children[3].value;
-  let parent = e.target.parentElement.parentElement.parentElement.children[0].textContent.toLowerCase();
-  let startArr = startInput.split(':');
-  let arrStart = [];
-  startArr.forEach(item => {
-    let timeVal = parseInt(item);
-    arrStart.push(timeVal);
-  });
-  let endArr = endInput.split(':');
-  let arrEnd = [];
-  endArr.forEach(item => {
-    let timeVal = parseInt(item);
-    arrEnd.push(timeVal);
-  });
-  availability[parent].push({
-    "startHours": arrStart[0],
-    "startMinutes": arrStart[1],
-    "endHours": arrEnd[0],
-    "endMinutes": arrEnd[1],
-  });
-  console.log(availability);
-}
+// const addList = (e) => {
+//   let startInput = e.target.parentElement.parentElement.children[0].children[0].value;
+//   let endInput = e.target.parentElement.parentElement.children[0].children[3].value;
+//   let parent = e.target.parentElement.parentElement.parentElement.children[0].textContent.toLowerCase();
+//   let startArr = startInput.split(':');
+//   let arrStart = [];
+//   startArr.forEach(item => {
+//     let timeVal = parseInt(item);
+//     arrStart.push(timeVal);
+//   });
+//   let endArr = endInput.split(':');
+//   let arrEnd = [];
+//   endArr.forEach(item => {
+//     let timeVal = parseInt(item);
+//     arrEnd.push(timeVal);
+//   });
+//   availability[parent].push({
+//     "startHours": arrStart[0],
+//     "startMinutes": arrStart[1],
+//     "endHours": arrEnd[0],
+//     "endMinutes": arrEnd[1],
+//   });
+//   console.log(availability);
+// }
 const updateProfile = () => {
   const userData = JSON.parse(sessionStorage.getItem('fyc-user')) || JSON.parse(localStorage.getItem('fyc-user'));
   const button = document.querySelector('.button-update');
@@ -247,20 +247,52 @@ const updateProfile = () => {
 
 const updateAvailability = () => {
   const button = document.querySelector('.button-available');
-  const data = {};
-  if (availability['monday'].length > 0 &&
-      availability['tuesday'].length > 0 &&
-      availability['wednesday'].length > 0 &&
-      availability['thursday'].length > 0 &&
-      availability['friday'].length > 0 &&
-      availability['saturday'].length > 0 &&
-      availability['sunday'].length > 0 ) {
-        data.availability = availability;
+  const availTable = document.querySelector('.ui-sortable').children;
+  Array.prototype.forEach.call(availTable, function(tab) {
+    const day = tab.children[0].children[1].children[0].value.toLowerCase();
+    if (!availability[day]) {
+      availability[day] = [];
+    }
+    const from = tab.children[0].children[2].children[0].value.split(' ');
+    const finFrom = from.pop();
+    const finalFrom = from[0].split(':');
+    let startHours = Number(finalFrom[0]);
+    let startMinutes = Number(finalFrom[1]);
+    if (finFrom === 'PM' && startHours != 12) {
+      startHours += 12;
+    }
+    const to = tab.children[0].children[3].children[0].value.split(' ');
+    const finTo = to.pop();
+    const finalTo = to[0].split(':');
+    let endHours = Number(finalTo[0]);
+    let endMinutes = Number(finalTo[1]);
+    if (finTo === 'PM' && endHours != 12) {
+      endHours += 12;
+    }
+    console.log(startHours);
+    availability[day].push({
+      startHours,
+      startMinutes,
+      endHours,
+      endMinutes,
+    })
+    console.log(availability);
+  })
+  const data = {
+    availability
+  };
+  // if (availability['monday'].length > 0 &&
+  //     availability['tuesday'].length > 0 &&
+  //     availability['wednesday'].length > 0 &&
+  //     availability['thursday'].length > 0 &&
+  //     availability['friday'].length > 0 &&
+  //     availability['saturday'].length > 0 &&
+  //     availability['sunday'].length > 0 ) {
+  //       data.availability = availability;
         console.log(data);
         button.innerHTML = '<div class="loader"></div>';
         button.setAttribute('disabled', true);
       
-        console.log(data);
         axios.put(`${baseURL}/chef/availability`, data, {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -279,9 +311,9 @@ const updateAvailability = () => {
             toastr.error('Something went wrong, please try again');
           }
         })
-      } else {
-        toastr.error("Please fill in all availability slots");
-      }
+  //     } else {
+  //       toastr.error("Please fill in all availability slots");
+      // }
 }
 
 const getCoords = (showPosition) => {

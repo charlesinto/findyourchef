@@ -1678,7 +1678,7 @@ em.mm-counter+a.mm-fullsubopen+span {
     width: 50px;
     display: none;
     position: relative;
-    margin: 0 0 20px 0;
+    margin: 20px 0 20px 0;
     background-color: #eee;
     border-radius: 4px;
     cursor: pointer;
@@ -1919,7 +1919,7 @@ body .typed-cursor.typed-cursor--blink.typed-fade-out{
 }
 
 @media (max-width: 768px) {
-    .typed-words { display: block; width: 100%; min-height: 46px; }  
+    .typed-words { display: block; width: 100%; min-height: 46px; margin: 50px 0 0;}  
     .typed-cursor { display: none; }
 }
 
@@ -18407,10 +18407,10 @@ body .category-box-btn:hover {
 	/* DYNAMIC DASHBOARD */
 	.dynamic-dashboard {
 		color: #F3761A;
-    width: 24%;
+    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: left;
 	}
 
 	.dynamic-dashboard:hover {
