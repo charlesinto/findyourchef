@@ -955,7 +955,7 @@ if (
   (sessionStorage.getItem('fyc-token')) ||
   localStorage.getItem('fyc-token')
 ) {
-  let userMenu = document.querySelector('.user-menu')
+  let userMenu = document.querySelector('.user-menu-home')
   let userName = document.createElement('div')
   // let targetElement = document.createElement('a')
     // targetElement = `<a href="dashboard.html"><i class="sl sl-icon-settings"></i> Dashboard</a>`;
