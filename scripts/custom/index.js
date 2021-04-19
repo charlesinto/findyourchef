@@ -955,37 +955,45 @@ if (
   (sessionStorage.getItem('fyc-token')) ||
   localStorage.getItem('fyc-token')
 ) {
-  let userMenu = document.querySelector('.user-menu-home')
-  let userName = document.createElement('div')
-  // let targetElement = document.createElement('a')
-    // targetElement = `<a href="dashboard.html"><i class="sl sl-icon-settings"></i> Dashboard</a>`;
-    // targetElement.href = 'dashboard.html'
-    userName.classList.add('dynamic-dashboard', 'user-name', 'logged-username')
-    const userData =
-      JSON.parse(sessionStorage.getItem('fyc-user')) ||
-      JSON.parse(localStorage.getItem('fyc-user'))
-    const user = userData.username
-    let image
-    if (userData.role == 'chef') {
-      image = userData.profilePic
-    } else {
-      image = userData.image
-    }
-    userName.innerHTML = `<span><img src="${image}" alt=""></span>Hi, ${user}!`
-    userMenu.prepend(userName)
-    // const username = document.querySelector('.logged-username')
-    // if (username) {
+  if (
+    document.querySelector('.user-name') === null ||
+    document.querySelector('.user-name') === undefined
+  ) {
+
+    let userMenu = document.querySelector('.user-menu-home')
+    let userName = document.createElement('div')
+    // let targetElement = document.createElement('a')
+      // targetElement = `<a href="dashboard.html"><i class="sl sl-icon-settings"></i> Dashboard</a>`;
+      // targetElement.href = 'dashboard.html'
+      userName.classList.add('dynamic-dashboard', 'user-name', 'logged-username')
+      const userData =
+        JSON.parse(sessionStorage.getItem('fyc-user')) ||
+        JSON.parse(localStorage.getItem('fyc-user'))
+      const user = userData.username
+      let image
+      if (userData.role == 'chef') {
+        image = userData.profilePic
+      } else {
+        image = userData.image
+      }
+      userName.innerHTML = `<span><img src="${image}" alt=""></span>Hi, ${user}!`
+      userMenu.prepend(userName)
+      // const username = document.querySelector('.logged-username')
+      // if (username) {
+  }
 
 } else if (sessionStorage.getItem('fyc-token') === null)  {
-  let userMenu = document.querySelector('.user-menu')
-  let targetElement = document.createElement('a')
-  // adjacentElement.insertAdjacentElement('beforebegin', targetElement)
-  // targetElement = `<a href="login.html" class="sign-in popup-with-zoom-anim"><i class="sl sl-icon-login"></i> Sign In</a>`;
-  targetElement.href = 'login.html'
-  targetElement.classList.add('sign-in')
-  targetElement.innerHTML = '<i class="sl sl-icon-login"></i> Sign In'
-  // adjacentElement.insertAdjacentElement('beforebegin', targetElement)
-  userMenu.appendChild(targetElement)
+  if(document.querySelector('.user-menu')) {
+    let userMenu = document.querySelector('.user-menu')
+    let targetElement = document.createElement('a')
+    // adjacentElement.insertAdjacentElement('beforebegin', targetElement)
+    // targetElement = `<a href="login.html" class="sign-in popup-with-zoom-anim"><i class="sl sl-icon-login"></i> Sign In</a>`;
+    targetElement.href = 'login.html'
+    targetElement.classList.add('sign-in')
+    targetElement.innerHTML = '<i class="sl sl-icon-login"></i> Sign In'
+    // adjacentElement.insertAdjacentElement('beforebegin', targetElement)
+    userMenu.appendChild(targetElement)
+  }
 }
 
 
