@@ -960,7 +960,7 @@ if (
     document.querySelector('.user-name') === undefined
   ) {
 
-    let userMenu = document.querySelector('.user-menu-home')
+    let userMenu = document.querySelector('.user-menu')
     let userName = document.createElement('div')
     // let targetElement = document.createElement('a')
       // targetElement = `<a href="dashboard.html"><i class="sl sl-icon-settings"></i> Dashboard</a>`;
