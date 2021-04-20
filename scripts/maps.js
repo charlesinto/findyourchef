@@ -193,9 +193,9 @@ var infoBox_ratingType = 'star-rating'
       axios
         .get(`${baseURL}/chefs?page=${page}`)
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           const recipes = res.data.payload.data.data
-          console.log(recipes)
+          // console.log(recipes)
           const recipeCount = res.data.payload.data.dataCount
              const locationURL = 'chef-details.html'
       
@@ -221,14 +221,14 @@ var infoBox_ratingType = 'star-rating'
           '<i class="im im-icon-Chef-Hat"></i>',
         ]
 
-        console.log(arr)
+        // console.log(arr)
         locations.push(arr)
 
          var markerIco
          for (i = 0; i < locations.length; i++) {
            markerIco = locations[i][3]
 
-           console.log(markerIco, locations[i][1])
+          //  console.log(markerIco, locations[i][1])
 
            var overlaypositions = new google.maps.LatLng(
                locations[i][1]
@@ -288,7 +288,7 @@ var infoBox_ratingType = 'star-rating'
     
     getChefLocation()
 
-    console.log(locations)
+    // console.log(locations)
     // Chosen Rating Type
     google.maps.event.addListener(ib, 'domready', function () {
       if ((infoBox_ratingType = 'numerical-rating')) {

@@ -7,9 +7,9 @@ const loadAllRecipes = () => {
 
   if (searchData === null) {
     axios.get(`${baseURL}/chefs?page=${page}`).then((res) => {
-      console.log(res);
+      // console.log(res);
       const recipes = res.data.payload.data.data;
-      console.log(recipes);
+      // console.log(recipes);
       const recipeCount = res.data.payload.data.dataCount;
       popAllChefs(recipes);
       paginate(recipeCount);
@@ -358,7 +358,7 @@ const popAllChefs = (recipes) => {
   resultsFound.innerHTML = `<p class="showing-results">${length} ${result} Found </p>`
   recipeContainer.innerHTML = "";
   recipes.forEach(recipe => {
-    console.log(recipe);
+    // console.log(recipe);
     const name = recipe.fullname;
     const category = recipe.categories;
     const chefName = recipe.chefName;
